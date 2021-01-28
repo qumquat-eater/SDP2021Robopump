@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images-Marko</folder>
+	<filename>car-47-1.png</filename>
+	<path>/Users/admin/Desktop/SDP2021Robopump/vision/images-Marko/car-47-1.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>2162</width>
+		<height>1110</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1492</xmin>
+			<ymin>550</ymin>
+			<xmax>1549</xmax>
+			<ymax>675</ymax>
+		</bndbox>
+	</object>
+</annotation>
