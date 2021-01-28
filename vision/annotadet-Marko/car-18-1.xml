@@ -1,0 +1,26 @@
+<annotation>
+	<folder>imgs</folder>
+	<filename>car-21-1.png</filename>
+	<path>/Users/fadlhassan/Desktop/imgs/car-21-1.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>2320</width>
+		<height>1068</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>401</xmin>
+			<ymin>428</ymin>
+			<xmax>536</xmax>
+			<ymax>525</ymax>
+		</bndbox>
+	</object>
+</annotation>

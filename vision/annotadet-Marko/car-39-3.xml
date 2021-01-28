@@ -1,13 +1,13 @@
 <annotation>
-	<folder>carsPics</folder>
-	<filename>car-39-3.png</filename>
-	<path>/Users/admin/Desktop/carsPics/car-39-3.png</path>
+	<folder>images-Marko</folder>
+	<filename>car-46-3.png</filename>
+	<path>/Users/admin/Desktop/SDP2021Robopump/vision/images-Marko/car-46-3.png</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
-		<width>2280</width>
-		<height>1150</height>
+		<width>2130</width>
+		<height>1030</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -17,10 +17,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>1021</xmin>
-			<ymin>452</ymin>
-			<xmax>1158</xmax>
-			<ymax>563</ymax>
+			<xmin>1647</xmin>
+			<ymin>412</ymin>
+			<xmax>1719</xmax>
+			<ymax>500</ymax>
 		</bndbox>
 	</object>
 </annotation>

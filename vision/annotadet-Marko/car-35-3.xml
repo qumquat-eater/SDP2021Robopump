@@ -1,13 +1,13 @@
 <annotation>
 	<folder>carsPics</folder>
-	<filename>car-35-3.png</filename>
-	<path>/Users/admin/Desktop/carsPics/car-35-3.png</path>
+	<filename>car-42-3.png</filename>
+	<path>/Users/admin/Desktop/carsPics/car-42-3.png</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
-		<width>996</width>
-		<height>488</height>
+		<width>582</width>
+		<height>768</height>
 		<depth>3</depth>
 	</size>
 	<segmented>0</segmented>
@@ -17,10 +17,10 @@
 		<truncated>0</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>144</xmin>
-			<ymin>192</ymin>
-			<xmax>179</xmax>
-			<ymax>229</ymax>
+			<xmin>188</xmin>
+			<ymin>327</ymin>
+			<xmax>274</xmax>
+			<ymax>392</ymax>
 		</bndbox>
 	</object>
 </annotation>
