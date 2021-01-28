@@ -1,0 +1,26 @@
+<annotation>
+	<folder>database-cars</folder>
+	<filename>car-16-3.jpg</filename>
+	<path>/Users/babe/Desktop/database-cars/car-16-3.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>540</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>737</xmin>
+			<ymin>221</ymin>
+			<xmax>761</xmax>
+			<ymax>241</ymax>
+		</bndbox>
+	</object>
+</annotation>
