@@ -7,21 +7,91 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/premiumDiesel"
         android:layout_width="136dp"
         android:layout_height="72dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="35dp"
         android:background="@drawable/circle1"
+        android:elevation="2dp"
         android:text="Premium Diesel"
         android:textColor="#000000"
         app:backgroundTint="#00FFFFFF"
         app:backgroundTintMode="add"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/diesel"
+        android:layout_width="136dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/diesel"
+        android:text="Diesel"
+        android:textColor="#FFF"
+        app:backgroundTint="#000000"
+        app:backgroundTintMode="add"
+        app:layout_constraintBottom_toTopOf="@+id/premiumDiesel"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/petrol"
+        android:layout_width="131dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/petrol"
+        android:text="Petrol"
+        app:backgroundTint="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/premiumPetrol"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/premiumPetrol"
+        android:layout_width="131dp"
+        android:layout_height="63dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/premiumpetrol"
+        android:text="Premium Petrol"
+        android:textColor="#000000"
+        app:backgroundTint="#000000"
+        app:backgroundTintMode="add"
+        app:layout_constraintBottom_toTopOf="@+id/diesel"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="153dp"
+        android:layout_height="464dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/backgroundrectangle"
+        tools:ignore="VectorDrawableCompat" />
 
-        />
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="215dp"
+        android:layout_height="299dp"
+        android:background="@drawable/greylinerect"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="42dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="215dp"
+        android:layout_height="50dp"
+        android:textColor="#000000"
+        android:text="ORDER SUMMARY:"
+        app:autoSizeTextType="uniform"
+        app:backgroundTint="#000000"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="42dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
