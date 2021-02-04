@@ -155,7 +155,7 @@
         android:scaleType="fitStart"
         android:src="@drawable/ic_gas_station"
         android:tint="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/fule_amount_slider"
+        app:layout_constraintBottom_toTopOf="@+id/fuel_amount_slider"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -171,16 +171,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <SeekBar
-        android:id="@+id/fule_amount_slider"
+        android:id="@+id/fuel_amount_slider"
         android:layout_width="359dp"
         android:layout_height="33dp"
         android:layout_marginStart="26dp"
         android:layout_marginLeft="26dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
         android:layout_marginBottom="10dp"
+        android:max="100"
+        android:progress="0"
         app:layout_constraintBottom_toTopOf="@+id/text_Settings"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -204,7 +203,7 @@
         android:text="Amount:"
         android:textColor="#ff000000"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/fule_amount_slider"
+        app:layout_constraintBottom_toTopOf="@+id/fuel_amount_slider"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -219,5 +218,17 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/text_fuel_amount"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/current_amount"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginRight="27dp"
+        android:text="0L"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
