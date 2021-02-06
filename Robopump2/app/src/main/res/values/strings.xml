@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Robopump2</string>
+    <string name="popup_message">Make Sure Your Engine is Off and the Fuel Hatch is Unlocked</string>
 </resources>
