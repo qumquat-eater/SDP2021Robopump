@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,6 +54,23 @@ public class MainActivity extends AppCompatActivity {
     public void openSettingsPage() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+    public void switchFuel(View view) { //this is the method for highlighting the clicked fuel button and unhighlighting the others
+        Button clickedButton = (Button) view; //gets the button that was clicked
+
+        ArrayList<Button> fuelButtons = new ArrayList<Button>(); //get all fuel buttons
+        fuelButtons.add((Button) findViewById(R.id.premium_diesel));
+        fuelButtons.add((Button) findViewById(R.id.diesel));
+        fuelButtons.add((Button) findViewById(R.id.premium_petrol2));
+        fuelButtons.add((Button) findViewById(R.id.petrol));
+
+        for(int i=0; i<fuelButtons.size();i++){ //fade all fuel buttons
+            fuelButtons.get(i).setAlpha((float) 0.4);
+        }
+
+        clickedButton.setAlpha(1); //highlight clicked fuel button
+
+        //TODO: Actually have it change fuel selection
     }
 
 }

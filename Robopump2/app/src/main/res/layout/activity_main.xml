@@ -45,6 +45,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/petrol"
+        android:onClick="switchFuel"
         android:text="Petrol"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
@@ -60,8 +61,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="112dp"
-        android:alpha="0.5"
+
         android:background="@drawable/premium_petrol"
+        android:onClick="switchFuel"
         android:text="PREMIUM PETROL"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/name"
@@ -76,9 +78,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="196dp"
-        android:alpha="0.4"
+
         android:background="@drawable/diesel"
-        android:text="PREMIUM PETROL"
+        android:onClick="switchFuel"
+        android:text="DIESEL"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toTopOf="@+id/name" />
@@ -91,8 +94,9 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="280dp"
         android:background="@drawable/premium_diesel"
-        android:text="Premium Diesel"
+        android:onClick="switchFuel"
 
+        android:text="Premium Diesel"
         android:textColor="#000000"
         app:backgroundTint="#00FFFFFF"
         app:backgroundTintMode="add"
