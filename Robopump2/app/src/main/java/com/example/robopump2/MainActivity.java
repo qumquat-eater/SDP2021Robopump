@@ -20,8 +20,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //begin: define local variable of seekbar and amount;
         TextView textView= (TextView)findViewById(R.id.current_amount);
         SeekBar seekBar= (SeekBar)findViewById(R.id.fuel_amount_slider);
+        //end: define local variable of seekbar and amount;
         settingsButton = (ImageButton) findViewById(R.id.Settings);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 openSettingsPage();
             }
         });
-
+        //begin: change seekbar, change amount
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             int progressChangedValue = 0;
             @Override
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
+        //end: change seekbar, change amount
     }
 
     public void openSettingsPage() {

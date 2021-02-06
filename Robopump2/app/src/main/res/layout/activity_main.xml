@@ -9,8 +9,8 @@
 
     <TextView
         android:id="@+id/order_summary"
-        android:layout_width="197dp"
-        android:layout_height="232dp"
+        android:layout_width="190dp"
+        android:layout_height="241dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
@@ -234,5 +234,15 @@
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="163dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/order_summary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
