@@ -16,10 +16,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private ImageButton returnButton;
     private Button commitButton;
-    private EditText name;
-    private EditText email;
-    private EditText postcode;
-    private EditText card_number;
+    private EditText name1;
+    private EditText email1;
+    private EditText postcode1;
+    private EditText card_number1;
     private TextView summary;
     public static final String SHARED_PREF = "shared";
     public static final String TEXT = "text";
@@ -39,23 +39,23 @@ public class SettingsActivity extends AppCompatActivity {
 
         //commit changes and output changes into Account Summary
         commitButton = (Button)findViewById(R.id.commit_changes);
-        name = (EditText)findViewById(R.id.name);
-        email = (EditText)findViewById(R.id.email);
-        postcode = (EditText)findViewById(R.id.postcode);
-        card_number = (EditText)findViewById(R.id.card_number);
+        name1 = (EditText)findViewById(R.id.name);
+        email1 = (EditText)findViewById(R.id.email);
+        postcode1 = (EditText)findViewById(R.id.postcode);
+        card_number1 = (EditText)findViewById(R.id.card_number);
         summary = (TextView)findViewById(R.id.account_summary);
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name1 = name.getText().toString();
-                String email1 = email.getText().toString();
-                String postcode1 = postcode.getText().toString();
-                String card_number1 = card_number.getText().toString();
+                String name2 = name1.getText().toString();
+                String email2 = email1.getText().toString();
+                String postcode2 = postcode1.getText().toString();
+                String card_number2 = card_number1.getText().toString();
                 summary.setText("Account Summary:"+
-                                "\n\nName: "+name1+
-                                "\nEmail: "+email1+
-                                "\nPostcode: "+postcode1+
-                                "\nCard Number: "+card_number1);
+                                "\n\nName: "+name2+
+                                "\nEmail: "+email2+
+                                "\nPostcode: "+postcode2+
+                                "\nCard Number: "+card_number2);
 
                 //save values in viewText and prevent values disappearing once users click back to main page
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
