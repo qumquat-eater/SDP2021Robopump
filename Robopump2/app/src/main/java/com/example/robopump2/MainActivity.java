@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 showPopupWindow(v);
             }
         });
-        //begin: change seekbar, change amount
+        //begin: slide seekbar, and change amount
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             int progressChangedValue = 0;
             @Override
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        //end: change seekbar, change amount
+        //end: slide seekbar,and change amount
     }
 
     //opens the settings page
