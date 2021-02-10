@@ -1,0 +1,26 @@
+<annotation>
+	<folder>fakingDeli</folder>
+	<filename>car-8-3.jpg</filename>
+	<path>/Users/admin/Desktop/fakingDeli/car-8-3.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1613</width>
+		<height>920</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>549</xmin>
+			<ymin>407</ymin>
+			<xmax>620</xmax>
+			<ymax>466</ymax>
+		</bndbox>
+	</object>
+</annotation>
