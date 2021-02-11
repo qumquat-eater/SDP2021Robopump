@@ -163,7 +163,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/text_Assistance"
+        android:id="@+id/user3Text"
         android:layout_width="158dp"
         android:layout_height="37dp"
         android:layout_marginStart="26dp"

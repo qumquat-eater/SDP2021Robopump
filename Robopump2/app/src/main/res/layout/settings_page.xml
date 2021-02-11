@@ -5,7 +5,7 @@
     android:id="@+id/premium_petrol"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SettingsActivity">
 
     <EditText
         android:id="@+id/expiry_date"
@@ -129,10 +129,11 @@
         android:src="@drawable/ic_add_user"
         android:tint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="addUserClick"/>
 
     <ImageButton
-        android:id="@+id/Settings2"
+        android:id="@+id/user1Button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
@@ -145,10 +146,80 @@
         android:src="@drawable/ic_user"
         android:tint="#000000"
         app:layout_constraintEnd_toStartOf="@+id/Settings"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="switchUser"
+        />
+
+    <ImageButton
+        android:id="@+id/user2Button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/settings"
+        android:scaleType="center"
+        android:src="@drawable/ic_user"
+        android:tint="#000000"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/user1Button"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="switchUser"/>
+
+    <ImageButton
+        android:id="@+id/user3Button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/settings"
+        android:scaleType="center"
+        android:src="@drawable/ic_user"
+        android:tint="#000000"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/user2Button"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="switchUser"/>
+
+    <TextView
+        android:id="@+id/user3Text"
+        android:layout_width="55dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginLeft="144dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="10dp"
+        android:text="User3"
+        android:textColor="#ff000000"
+        android:textSize="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/Assistance"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_Assistance"
+        android:id="@+id/user2Text"
+        android:layout_width="55dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginLeft="208dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="10dp"
+        android:text="User2"
+        android:textColor="#ff000000"
+        android:textSize="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/Assistance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/user1Text"
         android:layout_width="55dp"
         android:layout_height="37dp"
         android:layout_marginStart="268dp"
@@ -331,7 +402,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
