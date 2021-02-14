@@ -17,17 +17,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     private ImageButton returnButton;
     private Button commitButton;
-    private EditText name1;
-    private EditText email1;
-    private EditText postcode1;
-    private EditText card_number1;
     private TextView summary;
     public static final String SHARED_PREF = "shared";
     public static final String TEXT = "text";
     public String text;
     private EditText nameInput, emailInput, postcodeInput, cardInput, CVCInput, expiryInput;
     private String name, email, postcode, cardNumber, expiryDate;
-    private int CVC;
+    private String CVC;
     private int selectedUser = 1; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
     private int numUsers = 1; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
@@ -46,23 +42,16 @@ public class SettingsActivity extends AppCompatActivity {
 
         //commit changes and output changes into Account Summary
         commitButton = (Button)findViewById(R.id.commit_changes);
-        name1 = (EditText)findViewById(R.id.name);
-        email1 = (EditText)findViewById(R.id.email);
-        postcode1 = (EditText)findViewById(R.id.postcode);
-        card_number1 = (EditText)findViewById(R.id.card_number);
         summary = (TextView)findViewById(R.id.account_summary);
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name2 = name1.getText().toString();
-                String email2 = email1.getText().toString();
-                String postcode2 = postcode1.getText().toString();
-                String card_number2 = card_number1.getText().toString();
+                parseUserInput();
                 summary.setText("Account Summary:"+
-                                "\n\nName: "+name2+
-                                "\nEmail: "+email2+
-                                "\nPostcode: "+postcode2+
-                                "\nCard Number: "+card_number2);
+                                "\n\nName: "+name+
+                                "\nEmail: "+email+
+                                "\nPostcode: "+postcode+
+                                "\nCard Number: "+cardNumber);
 
                 //save values in viewText and prevent values disappearing once users click back to main page
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
@@ -89,10 +78,8 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Method to create a user record from the users input
-    // This will probably be called when add user button is clicked
-    public UserInformation addUser() {
-
+    // Method to read and parse user input into variables
+    public void parseUserInput(){
         // Read text input
         nameInput = (EditText) findViewById(R.id.name);
         emailInput = (EditText) findViewById(R.id.email);
@@ -106,18 +93,60 @@ public class SettingsActivity extends AppCompatActivity {
         email = emailInput.getText().toString();
         postcode = postcodeInput.getText().toString();
         cardNumber = cardInput.getText().toString();
-        CVC = Integer.valueOf(CVCInput.getText().toString());
+        CVC = CVCInput.getText().toString();
         expiryDate = expiryInput.getText().toString();
+    }
 
+    // Method to validate user input
+    public boolean checkUserInfoValid() {
+        parseUserInput();
+
+        if (name.length() == 0 || name.length() > 40){
+            nameInput.requestFocus();
+            nameInput.setError("Name must be between 1 and 40 characters");
+            return false;
+        }
+        if (email.length() == 0 || email.length() > 40){
+            emailInput.requestFocus();
+            emailInput.setError("Email must be between 1 and 40 characters");
+            return false;
+        }
+        if (postcode.length() == 0 || postcode.length() > 40){
+            postcodeInput.requestFocus();
+            postcodeInput.setError("Postcode must be between 1 and 40 characters");
+            return false;
+        }
+        if (cardNumber.length() == 0 || cardNumber.length() > 20 || cardNumber.length() < 7 //check constraints
+                || (!cardNumber.matches("[0-9]+"))) {
+            cardInput.requestFocus();
+            cardInput.setError("Card Number must be between 1 and 20 characters");
+            return false;
+        }
+        if (expiryDate.length() == 0 || !expiryDate.matches("(?:0[1-9]|1[0-2])/[0-9]{2}")){
+            expiryInput.requestFocus();
+            expiryInput.setError("Expiry date must be in the form MM/YY");
+            return false;
+        }
+        if (CVC.length() != 3) {
+            CVCInput.requestFocus();
+            CVCInput.setError("CVC must be 3 digits long");
+            return false;
+        }
+
+        return true;
+    }
+    // Method to create a user record from the users input
+    public UserInformation addUser(){
+        // Create a new instance of card information from the user input
+        CardInformation cardInfo = new CardInformation(cardNumber, CVC, expiryDate);
         // Create a new use from the inputted information
-        UserInformation user = new UserInformation(name,email,postcode,
-                new CardInformation(cardNumber, CVC, expiryDate));
+        UserInformation user = new UserInformation(name,email,postcode, cardInfo);
 
         return user;
     }
 
     public void addUserClick(View view){ //function called when add user button is pressed
-        if(numUsers<MAXUSERS){
+        if(numUsers<MAXUSERS && checkUserInfoValid()){ //check max users not exceeded and user input valid
             numUsers++; //increment number of user profiles by 1
             selectedUser = numUsers; //id switches to new button
 
@@ -128,7 +157,7 @@ public class SettingsActivity extends AppCompatActivity {
             texts.get(numUsers-1).setVisibility(View.VISIBLE); //unhide that buttons text
 
             //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
-            //UserInformation newUser = addUser(); //get inputted user info
+            UserInformation newUser = addUser(); //get inputted user info
             //writeUserRecord(newUser);
 
             switchUser((View) buttons.get(selectedUser-1));
