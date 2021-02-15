@@ -71,6 +71,25 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
         update();
+
+        //This block is for restoring the profile buttons state
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        ArrayList<ImageButton> profileButtons = getUserButtons();
+        ArrayList<TextView> profileTexts = getUserButtonTexts();
+
+        for(int i =1; i<profileButtons.size();i++){ //set profile button and text visibility
+            profileButtons.get(i).setVisibility(sharedPreferences.getInt((i+1)+"Vis", View.INVISIBLE));
+            profileTexts.get(i).setVisibility(sharedPreferences.getInt((i+1)+"Vis", View.INVISIBLE));
+        }
+
+        for(int i=0; i<profileButtons.size();i++){ //set profile button and text opacity
+            profileButtons.get(i).setAlpha(sharedPreferences.getFloat((i+1)+"Opa", (float) 1));
+            profileTexts.get(i).setAlpha(sharedPreferences.getFloat((i+1)+"Opa", (float) 1));
+        }
+
+        selectedUser = sharedPreferences.getInt("selectedUser", 1);
+        numUsers = sharedPreferences.getInt("numUsers", 1);
+
     }
     //helper function
     private void update() {
@@ -155,12 +174,21 @@ public class SettingsActivity extends AppCompatActivity {
         if(numUsers<MAXUSERS && checkUserInfoValid()){
             numUsers++; //increment number of user profiles by 1
             selectedUser = numUsers; //id switches to new button
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+
+            sharedPreferences.edit().putInt("numUsers", numUsers).commit();
+            sharedPreferences.edit().putInt("selectedUser", selectedUser).commit();
+
 
             ArrayList<ImageButton> buttons = getUserButtons();
             ArrayList<TextView> texts = getUserButtonTexts();
 
             buttons.get(numUsers-1).setVisibility(View.VISIBLE); //unhide new button
             texts.get(numUsers-1).setVisibility(View.VISIBLE); //unhide that buttons text
+
+            String key = numUsers + "Vis";
+
+            sharedPreferences.edit().putInt(key, View.VISIBLE).commit(); //store new visibility
 
             //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
             UserInformation newUser = addUser(); //get inputted user info
@@ -176,6 +204,9 @@ public class SettingsActivity extends AppCompatActivity {
         ArrayList<ImageButton> buttons = getUserButtons();
         ArrayList<TextView> texts = getUserButtonTexts();
         ImageButton clickedButton = (ImageButton) view;
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+
         //update selected user here
 
         for(int i=0; i<buttons.size();i++){ //set opacity low for all
@@ -185,11 +216,18 @@ public class SettingsActivity extends AppCompatActivity {
             if(buttons.get(i).equals(clickedButton)){ //get the id for the clicked button
                 selectedUser = i+1;
             }
+
+            sharedPreferences.edit().putFloat((i+1) + "Opa", (float) 0.4).apply(); //store new opacity
+
         }
 
 
         clickedButton.setAlpha((float) 1);
         texts.get(selectedUser-1).setAlpha((float) 1);
+
+        sharedPreferences.edit().putFloat(selectedUser + "Opa", (float) 1).commit(); //store opacity for selected button
+        sharedPreferences.edit().putInt("selectedUser", selectedUser); //store newly selected user
+
 
         updateSummaryFromRecord(selectedUser);
     }
