@@ -2,6 +2,7 @@ package com.example.robopump2;
 
 public class UserInformation {
 
+    
     private String userName;
     private String email;
     private String postcode;
