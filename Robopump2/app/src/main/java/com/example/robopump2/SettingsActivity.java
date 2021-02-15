@@ -35,15 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
     private int selectedUser = 1; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
     private int numUsers = 1; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
-    private ImageButton addUser;
-    private ImageButton user1Button;
-    private TextView t_user1Button;
-    private ImageButton user2Button;
-    private TextView t_user2Button;
-    private ImageButton user3Button;
-    private TextView t_user3Button;
-    private int clickcount=0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +45,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 returnToMainPage();
-
             }
         });
 
@@ -81,112 +71,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
         update();
-
-
-
-        //save the state of users button when click on addUsers button
-        user1Button=(ImageButton)findViewById(R.id.user1Button);
-        t_user1Button=(TextView)findViewById(R.id.user1Text);
-        user2Button=(ImageButton)findViewById(R.id.user2Button);
-        t_user2Button=(TextView)findViewById(R.id.user2Text);
-        user3Button=(ImageButton)findViewById(R.id.user3Button);
-        t_user3Button=(TextView)findViewById(R.id.user3Text);
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int isVisible = sharedPreferences.getInt("user2", View.INVISIBLE);
-        user2Button.setVisibility(isVisible);
-        isVisible = sharedPreferences.getInt("t_user2", View.INVISIBLE);
-        t_user2Button.setVisibility(isVisible);
-        isVisible = sharedPreferences.getInt("user3", View.INVISIBLE);
-        user3Button.setVisibility(isVisible);
-        isVisible = sharedPreferences.getInt("t_user3", View.INVISIBLE);
-        t_user3Button.setVisibility(isVisible);
-
-        addUser = (ImageButton)findViewById(R.id.Settings);
-        addUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickcount = clickcount + 1;
-                //when click on addUser button first time, user2 become visible
-                if (clickcount == 1) {
-
-                    user2Button.setVisibility(View.VISIBLE);
-                    t_user2Button.setVisibility(View.VISIBLE);
-                    sharedPreferences.edit().putInt("user2", View.VISIBLE).commit();
-                    sharedPreferences.edit().putInt("t_user2", View.VISIBLE).commit();
-                }
-                //when click on addUser button second time, user3 become visible
-                if (clickcount == 2) {
-                    user3Button.setVisibility(View.VISIBLE);
-                    t_user3Button.setVisibility(View.VISIBLE);
-                    sharedPreferences.edit().putInt("user3", View.VISIBLE).commit();
-                    sharedPreferences.edit().putInt("t_user3", View.VISIBLE).commit();
-                }
-            }
-        });
-
-
-        SharedPreferences sharedPreferences2 = PreferenceManager.getDefaultSharedPreferences(this);
-        float opa= sharedPreferences.getFloat("u1", (float) 1.0);
-        user1Button.setAlpha(opa);
-        t_user1Button.setAlpha(opa);
-        opa= sharedPreferences.getFloat("u2", (float) 1.0);
-        user2Button.setAlpha(opa);
-        t_user2Button.setAlpha(opa);
-        opa= sharedPreferences.getFloat("u3", (float) 1.0);
-        user3Button.setAlpha(opa);
-        t_user3Button.setAlpha(opa);
-
-        //when click on the user1 button ,user2 and user3 button fade
-        user1Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user1Button.setAlpha((float)1.0);
-                t_user1Button.setAlpha((float)1.0);
-                user2Button.setAlpha((float)0.4);
-                t_user2Button.setAlpha((float)0.4);
-                user3Button.setAlpha((float)0.4);
-                t_user3Button.setAlpha((float)0.4);
-                sharedPreferences.edit().putFloat("u1", (float)1.0).commit();
-                sharedPreferences.edit().putFloat("u2", (float)0.4).commit();
-                sharedPreferences.edit().putFloat("u3", (float)0.4).commit();
-            }
-        });
-
-        //when click on user2 button ,user1 and user3 button fade
-        user2Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user1Button.setAlpha((float)0.4);
-                t_user1Button.setAlpha((float)0.4);
-                user2Button.setAlpha((float)1.0);
-                t_user2Button.setAlpha((float)1.0);
-                user3Button.setAlpha((float)0.4);
-                t_user3Button.setAlpha((float)0.4);
-                sharedPreferences.edit().putFloat("u1", (float)0.4).commit();
-                sharedPreferences.edit().putFloat("u2", (float)1.0).commit();
-                sharedPreferences.edit().putFloat("u3", (float)0.4).commit();
-            }
-        });
-
-
-        //when click on user3 button, user1 and user2 button fade
-        user3Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                user1Button.setAlpha((float)0.4);
-                t_user1Button.setAlpha((float)0.4);
-                user2Button.setAlpha((float)0.4);
-                t_user2Button.setAlpha((float)0.4);
-                user3Button.setAlpha((float)1.0);
-                t_user3Button.setAlpha((float)1.0);
-                sharedPreferences.edit().putFloat("u1", (float)0.4).commit();
-                sharedPreferences.edit().putFloat("u2", (float)0.4).commit();
-                sharedPreferences.edit().putFloat("u3", (float)1.0).commit();
-            }
-        });
-
-
     }
     //helper function
     private void update() {
@@ -268,7 +152,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void addUserClick(View view){ //function called when add user button is pressed
-        if(numUsers<MAXUSERS){
+        if(numUsers<MAXUSERS && checkUserInfoValid()){
             numUsers++; //increment number of user profiles by 1
             selectedUser = numUsers; //id switches to new button
 
@@ -279,7 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
             texts.get(numUsers-1).setVisibility(View.VISIBLE); //unhide that buttons text
 
             //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
-            //UserInformation newUser = addUser(); //get inputted user info
+            UserInformation newUser = addUser(); //get inputted user info
             //writeUserRecord(newUser);
 
             switchUser((View) buttons.get(selectedUser-1));
