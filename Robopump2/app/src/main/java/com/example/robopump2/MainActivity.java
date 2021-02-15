@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 showPopupWindow(v);
             }
         });
+
+        
         //begin: slide seekbar, and change amount
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             int progressChangedValue = 0;
