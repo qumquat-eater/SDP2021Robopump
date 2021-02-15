@@ -137,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
         user3Button.setAlpha(opa);
         t_user3Button.setAlpha(opa);
 
-        //when click on user1 button ,user2 and user3 button fade
+        //when click on the user1 button ,user2 and user3 button fade
         user1Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
