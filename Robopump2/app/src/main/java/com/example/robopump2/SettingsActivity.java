@@ -59,12 +59,19 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //on app creation create the database
-        try {
-            createCSVFile();
-        } catch (IOException e) {
-            e.printStackTrace();
+        //on app creation, create the database if not already created
+        if (!databaseExists()) {
+            try {
+                createCSVFile();
+                System.out.println("database created");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        else{
+            System.out.println("database exists");
+        }
+
 
         //commit changes and output changes into Account Summary
 
@@ -325,6 +332,8 @@ public class SettingsActivity extends AppCompatActivity {
         for (String str: userInfo) {
             builder.append(str + ",");
         }
+        //this line removes the unnecessary final comma of the last record
+        builder.setLength(builder.length() - 1);
         try {
             // Adds the user information to the end of an existing file
             pw = openFileOutput(fileName, MODE_APPEND);
@@ -355,7 +364,8 @@ public class SettingsActivity extends AppCompatActivity {
             pw = openFileInput(fileName);
             BufferedReader br = new BufferedReader(new InputStreamReader(pw));
             // Reads each line and increments counter while line is not null
-            while(br.readLine() != null){
+            String line;
+            while((line = br.readLine()) != null){
                 count++;
             }
             Toast.makeText(this, "Number of users: " + count, Toast.LENGTH_SHORT).show();
@@ -376,11 +386,12 @@ public class SettingsActivity extends AppCompatActivity {
             pw = openFileInput(fileName);
             BufferedReader br = new BufferedReader(new InputStreamReader(pw));
             StringBuffer sb = new StringBuffer();
-            // Reads each line of file and adds it to a stringbuffer
-            while((br.readLine()) != null){
-                sb.append(br.readLine() + "\n");
-                System.out.println("Details recovered: " + sb.toString());
+            // Reads each line of file and adds it to a string buffer
+            String line;
+            while((line = br.readLine()) != null){
+                sb.append(line + "\n");
             }
+            System.out.println("Details recovered: " + sb.toString());
             Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -394,7 +405,13 @@ public class SettingsActivity extends AppCompatActivity {
     public UserInformation readUserRecord(int whichUser) {
         // TODO: This will read the details of the specified user from the database
         return null;
+    }
 
+    // checks if database has already been created
+    // this possibly replaces need for numberOfRecords?
+    public boolean databaseExists(){
+        File f = new File(getFilesDir(), fileName);
+        return f.exists();
     }
 
     // updates the user record on the specified line
