@@ -262,19 +262,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/scan_card"
-        android:layout_width="75dp"
-        android:layout_height="64dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="54dp"
-        android:layout_marginRight="54dp"
-        android:background="@drawable/scan_card"
-        android:text="Scan Card"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_number" />
 
     <ImageButton
         android:id="@+id/return_button"

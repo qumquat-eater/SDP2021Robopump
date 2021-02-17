@@ -16,6 +16,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 
 
@@ -35,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
     private int selectedUser = 1; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
     private int numUsers = 1; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
+    final String fileName = "userInfo.csv";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +58,13 @@ public class SettingsActivity extends AppCompatActivity {
                 returnToMainPage();
             }
         });
+
+        //on app creation create the database
+        try {
+            createCSVFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //commit changes and output changes into Account Summary
 
@@ -170,7 +188,7 @@ public class SettingsActivity extends AppCompatActivity {
         return user;
     }
 
-    public void addUserClick(View view){ //function called when add user button is pressed
+    public void addUserClick(View view) throws IOException { //function called when add user button is pressed
         if(numUsers<MAXUSERS && checkUserInfoValid()){
             numUsers++; //increment number of user profiles by 1
             selectedUser = numUsers; //id switches to new button
@@ -192,10 +210,13 @@ public class SettingsActivity extends AppCompatActivity {
 
             //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
             UserInformation newUser = addUser(); //get inputted user info
-            //writeUserRecord(newUser);
+            writeUserRecord(newUser);
 
             switchUser((View) buttons.get(selectedUser-1));
-
+        }
+        // Display error message if max users reached
+        else if (numUsers == MAXUSERS){
+            Toast.makeText(this, "Max Users Reached", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -249,8 +270,136 @@ public class SettingsActivity extends AppCompatActivity {
         return userTexts;
     }
 
-    private void writeUserRecord(UserInformation user){
-        //TODO: This will take a user and write the info to the device
+    // Creates a new csv file with the appropriate column names
+    public void createCSVFile() throws IOException {
+        FileOutputStream pw = null;
+        // Build String with column names
+        StringBuilder builder = new StringBuilder();
+        String columnNamesList = "Name, Email, Postcode, Card Number, Card Expiry Date, Card CVC";
+        builder.append(columnNamesList);
+        try {
+            // Creates a new csv file with the correct column names
+            pw = openFileOutput(fileName, MODE_PRIVATE);
+            pw.write(builder.toString().getBytes());
+            System.out.println("File made");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (pw != null) {
+                try {
+                    pw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    private void writeUserRecord(UserInformation user) throws IOException {
+        // Parse UserInformation to a String array
+        String name = user.getUserName();
+        String email = user.getEmail();
+        String postcode = user.getPostcode();
+        CardInformation cardInfo = user.getDetails();
+        String cardNo = cardInfo.getCardNumber();
+        String CVC = cardInfo.getCvcNumber();
+        String expiryDate = cardInfo.getExpiryDate();
+
+        String[] userInfo = new String[] {name, email, postcode, cardNo, expiryDate, CVC};
+
+        addRecord(userInfo);
+        numberOfRecords(); //to see if length of csv file correct
+        testRead(); // see if reading info correctly
+    }
+
+    //adds a record to the last line of the csv file
+    public void addRecord(String[] userInfo) throws IOException {
+        FileOutputStream pw = null;
+        // Builds string from userInfo array
+        StringBuilder builder = new StringBuilder();
+        builder.append("\n");
+        for (String str: userInfo) {
+            builder.append(str + ",");
+        }
+        try {
+            // Adds the user information to the end of an existing file
+            pw = openFileOutput(fileName, MODE_APPEND);
+            pw.write(builder.toString().getBytes());
+            Toast.makeText(this, "User Added", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (pw != null) {
+                try {
+                    pw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // returns the number of lines(records) in the csv file
+    // NOTE: this also counts the first line which are the column titles
+    public int numberOfRecords() {
+        FileInputStream pw = null;
+        int count = 0;
+        try {
+            pw = openFileInput(fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
+            // Reads each line and increments counter while line is not null
+            while(br.readLine() != null){
+                count++;
+            }
+            Toast.makeText(this, "Number of users: " + count, Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    // test method to see if can read whole contents of file and print them
+    public void testRead(){
+        FileInputStream pw = null;
+        String info = "";
+        try {
+            pw = openFileInput(fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
+            StringBuffer sb = new StringBuffer();
+            // Reads each line of file and adds it to a stringbuffer
+            while((br.readLine()) != null){
+                sb.append(br.readLine() + "\n");
+                System.out.println("Details recovered: " + sb.toString());
+            }
+            Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // returns the user record which is on the line whichRecord
+    public UserInformation readUserRecord(int whichUser) {
+        // TODO: This will read the details of the specified user from the database
+        return null;
+
+    }
+
+    // updates the user record on the specified line
+    public void updateUserInformation(int whichUser) {
+        // TODO: This will update an existing record in the database
     }
 
     private void updateSummaryFromRecord(int id){
