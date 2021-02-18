@@ -217,7 +217,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
             UserInformation newUser = addUser(); //get inputted user info
-            writeUserRecord(newUser);
+            String[] userInfoArray = getStringArrayFromUser(newUser);
+            writeUserRecord(userInfoArray);
 
             switchUser((View) buttons.get(selectedUser-1));
         }
@@ -305,8 +306,15 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    // Parses a String into a UserInformation object
+    public UserInformation getUserFromString(String userDetails){
+        String[] row = userDetails.split(",");
+        CardInformation card = new CardInformation(row[3], row[4], row[5]);
+        UserInformation user = new UserInformation(row[0], row[1], row[2], card);
+        return user;
+    }
 
-    private void writeUserRecord(UserInformation user) throws IOException {
+    public String[] getStringArrayFromUser(UserInformation user) {
         // Parse UserInformation to a String array
         String name = user.getUserName();
         String email = user.getEmail();
@@ -316,15 +324,12 @@ public class SettingsActivity extends AppCompatActivity {
         String CVC = cardInfo.getCvcNumber();
         String expiryDate = cardInfo.getExpiryDate();
 
-        String[] userInfo = new String[] {name, email, postcode, cardNo, expiryDate, CVC};
-
-        addRecord(userInfo);
-        numberOfRecords(); //to see if length of csv file correct
-        testRead(); // see if reading info correctly
+        String[] userInfoArray = new String[] {name, email, postcode, cardNo, expiryDate, CVC};
+        return userInfoArray;
     }
 
     //adds a record to the last line of the csv file
-    public void addRecord(String[] userInfo) throws IOException {
+    public void writeUserRecord(String[] userInfo) throws IOException {
         FileOutputStream pw = null;
         // Builds string from userInfo array
         StringBuilder builder = new StringBuilder();
@@ -353,6 +358,25 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         }
+        //////TESTING//////////
+        /* numberOfRecords(); //to see if length of csv file correct
+        //testRead(); // see if reading info correctly
+        if (selectedUser == 1){
+            UserInformation u1 = readUserRecord(1);
+            for (String s: getStringArrayFromUser(u1)){
+                System.out.println(s);
+            }
+        }if (selectedUser == 2){
+            UserInformation u2 = readUserRecord(2);
+            for (String s: getStringArrayFromUser(u2)){
+                System.out.println(s);
+            }
+        }if (selectedUser == 3){
+            UserInformation u3 = readUserRecord(3);
+            for (String s: getStringArrayFromUser(u3)){
+                System.out.println(s);
+            }
+        }*/
     }
 
     // returns the number of lines(records) in the csv file
@@ -403,8 +427,32 @@ public class SettingsActivity extends AppCompatActivity {
 
     // returns the user record which is on the line whichRecord
     public UserInformation readUserRecord(int whichUser) {
-        // TODO: This will read the details of the specified user from the database
-        return null;
+        UserInformation user = null;
+        // First check if passed in arg is within range
+        if (numberOfRecords() < whichUser){
+            Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
+            return user;
+        }
+        FileInputStream pw = null;
+        String record = "";
+        try {
+            pw = openFileInput(fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
+            // Loops through all previous lines before requested line
+            for(int i = 0; i < whichUser - 1; ++i) {
+                br.readLine();
+            }
+            record = br.readLine();
+            System.out.println("Record: " + whichUser + " is: " + record);
+            Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
+            user = getUserFromString(record);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     // checks if database has already been created
