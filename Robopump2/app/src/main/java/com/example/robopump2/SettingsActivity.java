@@ -80,19 +80,21 @@ public class SettingsActivity extends AppCompatActivity {
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                parseUserInput();
-                summary.setText("Account Summary:"+
-                                "\n\nName: "+name+
-                                "\nEmail: "+email+
-                                "\nPostcode: "+postcode+
-                                "\nCard Number: "+cardNumber);
+                if (checkUserInfoValid()){
+                    updateUserInformation(selectedUser);
+                    summary.setText("Account Summary:"+
+                            "\n\nName: "+name+
+                            "\nEmail: "+email+
+                            "\nPostcode: "+postcode+
+                            "\nCard Number: "+cardNumber);
 
-                //save values in viewText and prevent values disappearing once users click back to main page
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(TEXT, summary.getText().toString());
-                editor.apply();
-
+                    //save values in viewText and prevent values disappearing once users click back to main page
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(TEXT, summary.getText().toString());
+                    editor.apply();
+                    // testRead(); uncomment to test if updating data correctly
+                }
             }
         });
         update();
@@ -416,7 +418,7 @@ public class SettingsActivity extends AppCompatActivity {
                 sb.append(line + "\n");
             }
             System.out.println("Details recovered: " + sb.toString());
-            Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -464,7 +466,48 @@ public class SettingsActivity extends AppCompatActivity {
 
     // updates the user record on the specified line
     public void updateUserInformation(int whichUser) {
-        // TODO: This will update an existing record in the database
+        // First check if passed in arg is within range
+        if (numberOfRecords() < whichUser){
+            Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
+        }
+        FileInputStream pw = null;
+        try {
+            pw = openFileInput(fileName);
+            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
+            StringBuffer sb = new StringBuffer();
+            String line;
+            parseUserInput();
+            int count = 0; // to keep track of what reader is on
+            String updatedInfo = (name + "," + email + "," + postcode + "," + cardNumber
+                    + "," + expiryDate + "," + CVC + "\n");
+            // Loops through all lines in file
+            while((line = br.readLine()) != null) {
+                // if reached line we want to update fill in with new string
+                if (count == whichUser) {
+                    sb.append(updatedInfo);
+                }
+                // if not line we want just append to sb normally
+                else {
+                    sb.append(line + "\n");
+                }
+                count++;
+
+            }
+            //System.out.println(sb.toString());
+            // Now write whole string with updated line to file
+            FileOutputStream fos = null;
+            fos = openFileOutput(fileName, MODE_PRIVATE);
+            fos.write(sb.toString().getBytes());
+            fos.close();
+
+            //System.out.println("Record " + whichUser + " updated");
+            Toast.makeText(this, "Updated user:" + whichUser, Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateSummaryFromRecord(int id){
