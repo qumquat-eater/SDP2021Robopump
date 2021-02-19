@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,11 +18,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton settingsButton, fuellingButton;
-
+    private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
+    Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
+    private int selectedUser = 0; //holds the currently selected user profile
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +75,36 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 textView.setText(String.valueOf(progressChangedValue)+"L") ;
+                orderSummary[4] = progressChangedValue + ""; //update selected fuel amount
+                updateOrderSummary();
             }
 
         });
         //end: slide seekbar,and change amount
+
+        //intitialise fuel prices. This approach leans quite heavily on hardcoded values, may need to be changed
+        fuelPrices.put("petrol",(double) 2);
+        fuelPrices.put("premium petrol",(double) 4);
+        fuelPrices.put("diesel",(double) 3);
+        fuelPrices.put("premium diesel",(double) 6);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
+        selectedUser = sharedPreferences.getInt("selectedUser", selectedUser);
+        //TODO: Get new selected user from the settings layout. There should be a way of doing this with the intent code.
+        int newSelectedUser = 0; //replace this 0 with value from setting layout
+        if(selectedUser!=newSelectedUser){
+            selectedUser = newSelectedUser;
+            sharedPreferences.edit().putInt("selectedUser", selectedUser).apply(); //store newly selected user
+            updateUserInfo();
+        }
+
+        TextView orderView = (TextView) findViewById(R.id.order_summary);
+        orderView.setText(sharedPreferences.getString("orderText", "")); //load stored order summary
+
+        for(int i = 0; i<orderSummary.length; i++){ //load stored orderSummary details
+            orderSummary[i] = sharedPreferences.getString(i+"","");
+        }
+
     }
 
     //opens the settings page
@@ -94,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
         clickedButton.setAlpha(1); //highlight clicked fuel button
 
         //TODO: Actually have it change fuel selection
+        orderSummary[3] = ((String) clickedButton.getText()).toLowerCase(); //update fuel selection
+        updateOrderSummary();
     }
 
     //displays popup window
@@ -142,6 +178,51 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });*/
+    }
+
+    private void updateUserInfo(){ //method for updating the user info fields of the orderSummary array
+        SettingsActivity x = new SettingsActivity();
+        UserInformation newUser = x.readUserRecord(selectedUser);
+        orderSummary[0] = newUser.getUserName();
+        orderSummary[1] = newUser.getEmail();
+        orderSummary[2] = newUser.getDetails().getCardNumber();
+        updateOrderSummary();
+    }
+
+    private void updateOrderSummary(){ //method for updating the text of the order summary
+        Double newPrice = (double) 0;
+        if(orderSummary[3]!="" && orderSummary[4]!="") {
+            newPrice = fuelPrices.get(orderSummary[3]) * Double.parseDouble(orderSummary[4]); //calculate new price from fuel type and fuel amount
+        }
+        orderSummary[5] = newPrice +"";
+        TextView orderView = (TextView) findViewById(R.id.order_summary);
+
+        String cardNum = orderSummary[2];
+
+        if(cardNum.length()>=4){
+            cardNum = cardNum.substring(0,4);
+            for(int i=0; i < orderSummary[2].length()-4;i++){
+                cardNum = cardNum +"*";
+            }
+        }
+
+        String displayString = "ORDER SUMMARY:\n\n" +
+                "Name: " + orderSummary[0] +
+                "\nEmail: " + orderSummary[1] +
+                "\nCard number: " + cardNum +
+                "\nFuel Type: " + orderSummary[3] +
+                "\nFuel Amount: " + orderSummary[4] + "L" +
+                "\nTotal Price: £" + orderSummary[5];
+
+        orderView.setText(displayString);
+        System.out.println(displayString);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
+        sharedPreferences.edit().putString("orderText", displayString).apply();
+        for(int i=0; i<orderSummary.length; i++){
+            sharedPreferences.edit().putString(i+"", orderSummary[i]).apply(); //store the details
+        }
+
     }
 
 }
