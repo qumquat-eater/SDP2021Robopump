@@ -7,7 +7,7 @@ public class CardInformation {
     private String cvcNumber;
     private String expiryDate;
 
-    public CardInformation(String cardNumber, String cvcNumber, String expiryDate) {
+    public CardInformation(String cardNumber, String expiryDate, String cvcNumber) {
         this.cardNumber = cardNumber;
         this.cvcNumber = cvcNumber;
         this.expiryDate = expiryDate;

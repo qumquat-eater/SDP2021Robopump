@@ -6,11 +6,15 @@ import tarfile
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 import zipfile
+import collections
+
 
 from collections import defaultdict
 from io import StringIO
 from matplotlib import pyplot as plt
 from PIL import Image
+import time
+import cv2
 
 from object_detection.utils import label_map_util
 
@@ -29,6 +33,32 @@ sys.path.append("..")
 # # Model preparation
 
 # ## Variables
+STANDARD_COLORS = [
+    'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
+    'BlanchedAlmond', 'BlueViolet', 'BurlyWood', 'CadetBlue', 'AntiqueWhite',
+    'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan',
+    'DarkCyan', 'DarkGoldenRod', 'DarkGrey', 'DarkKhaki', 'DarkOrange',
+    'DarkOrchid', 'DarkSalmon', 'DarkSeaGreen', 'DarkTurquoise', 'DarkViolet',
+    'DeepPink', 'DeepSkyBlue', 'DodgerBlue', 'FireBrick', 'FloralWhite',
+    'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod',
+    'Salmon', 'Tan', 'HoneyDew', 'HotPink', 'IndianRed', 'Ivory', 'Khaki',
+    'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue',
+    'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey',
+    'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue',
+    'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime',
+    'LimeGreen', 'Linen', 'Magenta', 'MediumAquaMarine', 'MediumOrchid',
+    'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen',
+    'MediumTurquoise', 'MediumVioletRed', 'MintCream', 'MistyRose', 'Moccasin',
+    'NavajoWhite', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed',
+    'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed',
+    'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple',
+    'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Green', 'SandyBrown',
+    'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue',
+    'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'GreenYellow',
+    'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White',
+    'WhiteSmoke', 'Yellow', 'YellowGreen'
+]
+
 #
 # Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.
 #
@@ -37,7 +67,7 @@ sys.path.append("..")
 
 
 # What model to download.
-MODEL_NAME = 'new_graph'  # change to whatever folder has the new graph
+MODEL_NAME = 'new_graph/hatch_detection'  # change to whatever folder has the new graph
 # MODEL_FILE = MODEL_NAME + '.tar.gz'   # these lines not needed as we are using our own model
 # DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 
@@ -92,6 +122,83 @@ def load_image_into_numpy_array(image):
         (im_height, im_width, 3)).astype(np.uint8)
 
 
+def return_coordinates(
+    image,
+    boxes,
+    classes,
+    scores,
+    category_index,
+    instance_masks=None,
+    instance_boundaries=None,
+    keypoints=None,
+    use_normalized_coordinates=False,
+    max_boxes_to_draw=20,
+    min_score_thresh=.5,
+    agnostic_mode=False,
+    line_thickness=4,
+    groundtruth_box_visualization_color='black',
+    skip_scores=False,
+    skip_labels=False):
+  # Create a display string (and color) for every box location, group any boxes
+  # that correspond to the same location.
+  box_to_display_str_map = collections.defaultdict(list)
+  box_to_color_map = collections.defaultdict(str)
+  box_to_instance_masks_map = {}
+  box_to_instance_boundaries_map = {}
+  box_to_score_map = {}
+  box_to_keypoints_map = collections.defaultdict(list)
+  if not max_boxes_to_draw:
+    max_boxes_to_draw = boxes.shape[0]
+  for i in range(min(max_boxes_to_draw, boxes.shape[0])):
+    if scores is None or scores[i] > min_score_thresh:
+      box = tuple(boxes[i].tolist())
+      if instance_masks is not None:
+        box_to_instance_masks_map[box] = instance_masks[i]
+      if instance_boundaries is not None:
+        box_to_instance_boundaries_map[box] = instance_boundaries[i]
+      if keypoints is not None:
+        box_to_keypoints_map[box].extend(keypoints[i])
+      if scores is None:
+        box_to_color_map[box] = groundtruth_box_visualization_color
+      else:
+        display_str = ''
+        if not skip_labels:
+          if not agnostic_mode:
+            if classes[i] in category_index.keys():
+              class_name = category_index[classes[i]]['name']
+            else:
+              class_name = 'N/A'
+            display_str = str(class_name)
+        if not skip_scores:
+          if not display_str:
+            display_str = '{}%'.format(int(100*scores[i]))
+          else:
+            display_str = '{}: {}%'.format(display_str, int(100*scores[i]))
+        box_to_display_str_map[box].append(display_str)
+        box_to_score_map[box] = scores[i]
+        if agnostic_mode:
+          box_to_color_map[box] = 'DarkOrange'
+        else:
+          box_to_color_map[box] = STANDARD_COLORS[
+              classes[i] % len(STANDARD_COLORS)]
+
+  # Draw all boxes onto image.
+  coordinates_list = []
+  counter_for = 0
+  for box, color in box_to_color_map.items():
+    ymin, xmin, ymax, xmax = box
+    height, width, channels = image.shape
+    ymin = int(ymin*height)
+    ymax = int(ymax*height)
+    xmin = int(xmin*width)
+    xmax = int(xmax*width)
+    coordinates_list.append([ymin, ymax, xmin, xmax, (box_to_score_map[box]*100)])
+    counter_for = counter_for + 1
+
+  return coordinates_list
+
+
+
 
 
 # For the sake of simplicity we will use only 2 images:
@@ -99,11 +206,11 @@ def load_image_into_numpy_array(image):
 # image2.jpg
 # If you want to test the code with your images, just add path to the images to the TEST_IMAGE_PATHS.
 
-print("Hello")
-PATH_TO_TEST_IMAGES_DIR = 'test_image'
+
+PATH_TO_TEST_IMAGES_DIR = 'test_image/hatch_detection'
 #TEST_IMAGE_PATHS = os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image.png')  # adjust range for # of images in folder
 TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.png'.format(i)) for i in range(1, 3)]
-print("Hello")
+
 # Size, in inches, of the output images.
 IMAGE_SIZE = (12, 8)
 
@@ -140,7 +247,41 @@ with detection_graph.as_default():
                 use_normalized_coordinates=True,
                 line_thickness=8)
 
+            coordinates = return_coordinates(
+                        image_np,
+                        np.squeeze(boxes),
+                        np.squeeze(classes).astype(np.int32),
+                        np.squeeze(scores),
+                        category_index,
+                        use_normalized_coordinates=True,
+                        line_thickness=8,
+                        min_score_thresh=0.80)
+
+            # print(coordinates.shape)
+            # width,height = image_np.shape[:2]
+            # ymin = int((boxes[0][0][0]*height))
+            # xmin = int((boxes[0][0][1]*width))
+            # ymax = int((boxes[0][0][2]*height))
+            # xmax = int((boxes[0][0][3]*width))
+
+
+            # file = open("output_coordinates/coordinates{}.txt".format(i),"w")
+            # file.write(str(xmin, ymin, xmax, ymax))
+            # file.close()
+
+            # coordinates = [xmin,ymin,xmax,ymax]
+
+
+            with open("output_coordinates/hatch_detection/coordinates{}.txt".format(i),"w") as file:
+                for item in coordinates[0]:
+                    file.write("%s\n" % item)
+
+
+
             plt.figure(figsize=IMAGE_SIZE)
+            plt.xticks([])
+            plt.yticks([])
             plt.imshow(image_np)    # matplotlib is configured for command line only so we save the outputs instead
-            plt.savefig("test_image/detection_output{}.png".format(i))  # create an outputs folder for the images to be saved
+            plt.savefig("output_image/hatch_detection/detection_output{}.png".format(i))  # create an outputs folder for the images to be saved
             i = i+1  # this was a quick fix for iteration, create a pull request if you'd like
+            
