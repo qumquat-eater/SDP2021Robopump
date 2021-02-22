@@ -192,7 +192,7 @@ def return_coordinates(
     ymax = int(ymax*height)
     xmin = int(xmin*width)
     xmax = int(xmax*width)
-    coordinates_list.append([ymin, ymax, xmin, xmax, (box_to_score_map[box]*100)])
+    coordinates_list.append([ymin, ymax, xmin, xmax])
     counter_for = counter_for + 1
 
   return coordinates_list
