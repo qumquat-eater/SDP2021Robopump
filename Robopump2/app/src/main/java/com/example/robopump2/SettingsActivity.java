@@ -441,6 +441,7 @@ public class SettingsActivity extends AppCompatActivity {
     // returns the user record which is on the line whichRecord
     public UserInformation readUserRecord(int whichUser) {
         UserInformation user = null;
+        whichUser=selectedUser;
         // First check if passed in arg is within range
         if (numberOfRecords() < whichUser){
             Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
@@ -452,7 +453,7 @@ public class SettingsActivity extends AppCompatActivity {
             pw = openFileInput(fileName);
             BufferedReader br = new BufferedReader(new InputStreamReader(pw));
             // Loops through all previous lines before requested line
-            for(int i = 0; i < whichUser - 1; ++i) {
+            for(int i = 0; i < whichUser; i++) {
                 br.readLine();
             }
             record = br.readLine();
@@ -522,7 +523,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void updateSummaryFromRecord(int id){
         //TODO: This will update the order summary from a record on the device
-        id=selectedUser+1; //since first line of CSV is column name, so actual line of record for selectedUser should be selectedUser+1
+        id=selectedUser;
         UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);
