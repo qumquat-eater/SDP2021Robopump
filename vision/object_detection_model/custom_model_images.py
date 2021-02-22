@@ -192,7 +192,7 @@ def return_coordinates(
     ymax = int(ymax*height)
     xmin = int(xmin*width)
     xmax = int(xmax*width)
-    coordinates_list.append([xmin, ymin, xmax, ymax])
+    coordinates_list.append([ymin, xmin, ymax, xmax])
     counter_for = counter_for + 1
 
   return coordinates_list
