@@ -42,8 +42,8 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText nameInput, emailInput, postcodeInput, cardInput, CVCInput, expiryInput;
     private String name, email, postcode, cardNumber, expiryDate;
     private String CVC;
-    private int selectedUser = 1; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
-    private int numUsers = 1; //holds the number of saved profiles. Will eventually have to be read from device.
+    private int selectedUser = 0; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
+    private int numUsers = 0; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
     final String fileName = "userInfo.csv";
 
@@ -104,7 +104,7 @@ public class SettingsActivity extends AppCompatActivity {
         ArrayList<ImageButton> profileButtons = getUserButtons();
         ArrayList<TextView> profileTexts = getUserButtonTexts();
 
-        for(int i =1; i<profileButtons.size();i++){ //set profile button and text visibility
+        for(int i =0; i<profileButtons.size();i++){ //set profile button and text visibility
             profileButtons.get(i).setVisibility(sharedPreferences.getInt((i+1)+"Vis", View.INVISIBLE));
             profileTexts.get(i).setVisibility(sharedPreferences.getInt((i+1)+"Vis", View.INVISIBLE));
         }
@@ -114,8 +114,8 @@ public class SettingsActivity extends AppCompatActivity {
             profileTexts.get(i).setAlpha(sharedPreferences.getFloat((i+1)+"Opa", (float) 1));
         }
 
-        selectedUser = sharedPreferences.getInt("selectedUser", 1);
-        numUsers = sharedPreferences.getInt("numUsers", 1);
+        selectedUser = sharedPreferences.getInt("selectedUser", 0);
+        numUsers = sharedPreferences.getInt("numUsers", 0);
 
     }
     //helper function
