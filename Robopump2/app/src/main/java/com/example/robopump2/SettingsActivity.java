@@ -94,15 +94,10 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.putString(TEXT, summary.getText().toString());
                     editor.apply();
                     // testRead(); uncomment to test if updating data correctly
-                    CardInformation card = new CardInformation(cardNumber,expiryDate,CVC);
-                    UserInformation user = new UserInformation(name,email,postcode,card);
-                    String[] userInfo =getStringArrayFromUser(user);
-                    try {
-                        updateUserInformation(selectedUser);
-                        writeUserRecord(userInfo);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    updateUserInformation(selectedUser);
+                    //writeUserRecord(userInfo);
+                    testRead();
+
                 }
             }
         });
@@ -201,7 +196,7 @@ public class SettingsActivity extends AppCompatActivity {
     // Method to create a user record from the users input
     public UserInformation addUser(){
         // Create a new instance of card information from the user input
-        CardInformation cardInfo = new CardInformation(cardNumber, CVC, expiryDate);
+        CardInformation cardInfo = new CardInformation(cardNumber, expiryDate, CVC);
         // Create a new use from the inputted information
         UserInformation user = new UserInformation(name,email,postcode, cardInfo);
 
@@ -234,6 +229,8 @@ public class SettingsActivity extends AppCompatActivity {
             writeUserRecord(userInfoArray);
 
             switchUser((View) buttons.get(selectedUser-1));
+
+            testRead();
         }
         // Display error message if max users reached
         else if (numUsers == MAXUSERS){
@@ -412,6 +409,8 @@ public class SettingsActivity extends AppCompatActivity {
         catch (IOException e) {
             e.printStackTrace();
         }
+        //to account for first row
+        count--;
         return count;
     }
 
@@ -441,7 +440,6 @@ public class SettingsActivity extends AppCompatActivity {
     // returns the user record which is on the line whichRecord
     public UserInformation readUserRecord(int whichUser) {
         UserInformation user = null;
-        whichUser=selectedUser;
         // First check if passed in arg is within range
         if (numberOfRecords() < whichUser){
             Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
@@ -457,7 +455,7 @@ public class SettingsActivity extends AppCompatActivity {
                 br.readLine();
             }
             record = br.readLine();
-            System.out.println("Record: " + whichUser + " is: " + record);
+            System.out.println("Record: " + selectedUser + " is: " + record);
             Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
             user = getUserFromString(record);
         } catch (FileNotFoundException e) {
@@ -523,19 +521,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void updateSummaryFromRecord(int id){
         //TODO: This will update the order summary from a record on the device
-        id=selectedUser;
         UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);
-        name=userInfo[0];
-        email=userInfo[1];
-        postcode=userInfo[2];
-        cardNumber=userInfo[3];
         summary.setText("Account Summary:"+
-                "\n\nName: "+name+
-                "\nEmail: "+email+
-                "\nPostcode: "+postcode+
-                "\nCard Number: "+cardNumber);
+                "\n\nName: "+userInfo[0]+
+                "\nEmail: "+userInfo[1]+
+                "\nPostcode: "+userInfo[2]+
+                "\nCard Number: "+userInfo[3]);
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(TEXT, summary.getText().toString());
