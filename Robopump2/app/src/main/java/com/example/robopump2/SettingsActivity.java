@@ -42,8 +42,8 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText nameInput, emailInput, postcodeInput, cardInput, CVCInput, expiryInput;
     private String name, email, postcode, cardNumber, expiryDate;
     private String CVC;
-    private int selectedUser = 1; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
-    private int numUsers = 1; //holds the number of saved profiles. Will eventually have to be read from device.
+    private int selectedUser = 0; //holds the id for the currently selected user profile. Will eventually have to be stored to and read from device.
+    private int numUsers = 0; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
     final String fileName = "userInfo.csv";
 
@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkUserInfoValid()){
-                    updateUserInformation(selectedUser);
+//                    updateUserInformation(selectedUser);
                     summary.setText("Account Summary:"+
                             "\n\nName: "+name+
                             "\nEmail: "+email+
@@ -94,6 +94,15 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.putString(TEXT, summary.getText().toString());
                     editor.apply();
                     // testRead(); uncomment to test if updating data correctly
+                    CardInformation card = new CardInformation(cardNumber,expiryDate,CVC);
+                    UserInformation user = new UserInformation(name,email,postcode,card);
+                    String[] userInfo =getStringArrayFromUser(user);
+                    try {
+                        updateUserInformation(selectedUser);
+                        writeUserRecord(userInfo);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -104,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
         ArrayList<ImageButton> profileButtons = getUserButtons();
         ArrayList<TextView> profileTexts = getUserButtonTexts();
 
-        for(int i =1; i<profileButtons.size();i++){ //set profile button and text visibility
+        for(int i =0; i<profileButtons.size();i++){ //set profile button and text visibility
             profileButtons.get(i).setVisibility(sharedPreferences.getInt((i+1)+"Vis", View.INVISIBLE));
             profileTexts.get(i).setVisibility(sharedPreferences.getInt((i+1)+"Vis", View.INVISIBLE));
         }
@@ -114,8 +123,8 @@ public class SettingsActivity extends AppCompatActivity {
             profileTexts.get(i).setAlpha(sharedPreferences.getFloat((i+1)+"Opa", (float) 1));
         }
 
-        selectedUser = sharedPreferences.getInt("selectedUser", 1);
-        numUsers = sharedPreferences.getInt("numUsers", 1);
+        selectedUser = sharedPreferences.getInt("selectedUser", 0);
+        numUsers = sharedPreferences.getInt("numUsers", 0);
 
     }
     //helper function
@@ -509,11 +518,27 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     private void updateSummaryFromRecord(int id){
         //TODO: This will update the order summary from a record on the device
+        id=selectedUser+1; //since first line of CSV is column name, so actual line of record for selectedUser should be selectedUser+1
+        UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
+        String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
+        summary = (TextView) findViewById(R.id.account_summary);
+        name=userInfo[0];
+        email=userInfo[1];
+        postcode=userInfo[2];
+        cardNumber=userInfo[3];
+        summary.setText("Account Summary:"+
+                "\n\nName: "+name+
+                "\nEmail: "+email+
+                "\nPostcode: "+postcode+
+                "\nCard Number: "+cardNumber);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(TEXT, summary.getText().toString());
+        editor.apply();
+        update();
     }
 
 
 }
-
