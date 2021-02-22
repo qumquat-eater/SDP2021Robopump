@@ -91,18 +91,28 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         selectedUser = sharedPreferences.getInt("selectedUser", selectedUser);
         //TODO: Get new selected user from the settings layout. There should be a way of doing this with the intent code.
-        int newSelectedUser = 0; //replace this 0 with value from setting layout
-        if(selectedUser!=newSelectedUser){
-            selectedUser = newSelectedUser;
-            sharedPreferences.edit().putInt("selectedUser", selectedUser).apply(); //store newly selected user
-            updateUserInfo();
-        }
+
+
+
 
         TextView orderView = (TextView) findViewById(R.id.order_summary);
         orderView.setText(sharedPreferences.getString("orderText", "")); //load stored order summary
 
         for(int i = 0; i<orderSummary.length; i++){ //load stored orderSummary details
             orderSummary[i] = sharedPreferences.getString(i+"","");
+        }
+
+        int newSelectedUser = getIntent().getIntExtra("selectedUser",selectedUser); //replace this 0 with value from setting layout
+        System.out.println("Main activity thinks: " + newSelectedUser);
+
+
+
+        if(selectedUser!=newSelectedUser){
+            selectedUser = newSelectedUser;
+            sharedPreferences.edit().putInt("selectedUser", selectedUser).apply(); //store newly selected user
+
+            updateUserInfo();
+
         }
 
     }
@@ -181,8 +191,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUserInfo(){ //method for updating the user info fields of the orderSummary array
-        SettingsActivity x = new SettingsActivity();
-        UserInformation newUser = x.readUserRecord(selectedUser);
+        //SettingsActivity x = new SettingsActivity();
+        DatabaseReader x = new DatabaseReader();
+        UserInformation newUser = x.readUserRecord(selectedUser,getApplicationContext());
         orderSummary[0] = newUser.getUserName();
         orderSummary[1] = newUser.getEmail();
         orderSummary[2] = newUser.getDetails().getCardNumber();

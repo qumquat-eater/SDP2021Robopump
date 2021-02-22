@@ -127,6 +127,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void returnToMainPage() {
         Intent intent = new Intent(this, MainActivity.class);
+        System.out.println("Settings thinks selected user is: " + selectedUser);
+        intent.putExtra("selectedUser", selectedUser);
         startActivity(intent);
     }
 
@@ -257,7 +259,7 @@ public class SettingsActivity extends AppCompatActivity {
         texts.get(selectedUser-1).setAlpha((float) 1);
 
         sharedPreferences.edit().putFloat(selectedUser + "Opa", (float) 1).commit(); //store opacity for selected button
-        sharedPreferences.edit().putInt("selectedUser", selectedUser); //store newly selected user
+        sharedPreferences.edit().putInt("selectedUser", selectedUser).commit(); //store newly selected user
 
 
         updateSummaryFromRecord(selectedUser);
