@@ -1,0 +1,26 @@
+<annotation>
+	<folder>CAR-TOP</folder>
+	<filename>top23.jpg</filename>
+	<path>/Users/babe/Desktop/CAR-TOP/top23.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>480</width>
+		<height>270</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>carroof</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>62</xmin>
+			<ymin>49</ymin>
+			<xmax>409</xmax>
+			<ymax>223</ymax>
+		</bndbox>
+	</object>
+</annotation>

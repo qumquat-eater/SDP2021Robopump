@@ -66,4 +66,8 @@ public class DatabaseReader {
         UserInformation user = new UserInformation(row[0], row[1], row[2], card);
         return user;
     }
+
 }
+
+
+
