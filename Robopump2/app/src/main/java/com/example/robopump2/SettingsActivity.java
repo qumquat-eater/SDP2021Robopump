@@ -411,6 +411,8 @@ public class SettingsActivity extends AppCompatActivity {
         catch (IOException e) {
             e.printStackTrace();
         }
+        //to account for first row
+        count--;
         return count;
     }
 
