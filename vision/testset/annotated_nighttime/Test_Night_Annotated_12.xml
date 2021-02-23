@@ -1,0 +1,26 @@
+<annotation>
+	<folder>TestSet_Night</folder>
+	<filename>Test_Night_12.jpg</filename>
+	<path>/Users/babe/Desktop/TestSet_Night/Test_Night_12.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>4032</width>
+		<height>3024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>2109</xmin>
+			<ymin>1571</ymin>
+			<xmax>2673</xmax>
+			<ymax>1972</ymax>
+		</bndbox>
+	</object>
+</annotation>
