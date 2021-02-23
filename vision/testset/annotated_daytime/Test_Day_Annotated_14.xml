@@ -1,0 +1,26 @@
+<annotation>
+	<folder>白天</folder>
+	<filename>Test_Day_14.jpg</filename>
+	<path>/Users/babe/Desktop/白天/Test_Day_14.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>3024</width>
+		<height>4032</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>hatch</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1626</xmin>
+			<ymin>2094</ymin>
+			<xmax>2055</xmax>
+			<ymax>2499</ymax>
+		</bndbox>
+	</object>
+</annotation>
