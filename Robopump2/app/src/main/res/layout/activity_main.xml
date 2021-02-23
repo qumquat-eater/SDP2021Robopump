@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/order_summary"
-        android:layout_width="190dp"
-        android:layout_height="241dp"
+        android:layout_width="182dp"
+        android:layout_height="276dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="84dp"
         android:background="@drawable/order_summary"
         android:text="     Order Summary:"
         android:textSize="20dp"
@@ -148,13 +148,13 @@
 
     <ImageButton
         android:id="@+id/start_fuelling"
-        android:layout_width="192dp"
-        android:layout_height="91dp"
+        android:layout_width="184dp"
+        android:layout_height="84dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/start_fuelling"
         android:scaleType="fitStart"
         android:src="@drawable/ic_gas_station"
@@ -202,8 +202,8 @@
         android:id="@+id/text_fuel_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="113dp"
-        android:layout_marginRight="113dp"
+        android:layout_marginEnd="84dp"
+        android:layout_marginRight="84dp"
         android:text="Amount:"
         android:textColor="#ff000000"
         android:textSize="30dp"
@@ -214,26 +214,28 @@
         android:id="@+id/text_start_fuel"
         android:layout_width="108dp"
         android:layout_height="96dp"
-        android:layout_marginEnd="192dp"
-        android:layout_marginRight="192dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="196dp"
+        android:layout_marginRight="196dp"
         android:text=" Start Fuelling"
         android:textColor="#ff000000"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/text_fuel_amount"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/start_fuelling" />
 
     <TextView
         android:id="@+id/current_amount"
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginRight="27dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
         android:text="0L"
         android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/fuel_amount_slider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/image_logo"
