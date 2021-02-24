@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         selectedUser = sharedPreferences.getInt("selectedUser", selectedUser);
-        //TODO: Get new selected user from the settings layout. There should be a way of doing this with the intent code.
 
 
 
@@ -115,6 +114,17 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //this block is for setting fuel button opacity
+        ArrayList<Button> fuelButtons = new ArrayList<Button>(); //get all fuel buttons
+        fuelButtons.add((Button) findViewById(R.id.premium_diesel));
+        fuelButtons.add((Button) findViewById(R.id.diesel));
+        fuelButtons.add((Button) findViewById(R.id.premium_petrol2));
+        fuelButtons.add((Button) findViewById(R.id.petrol));
+
+        for(int i=0; i<fuelButtons.size();i++){
+            fuelButtons.get(i).setAlpha(sharedPreferences.getFloat((String) fuelButtons.get(i).getText(),1));
+        }
+
     }
 
     //opens the settings page
@@ -124,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void switchFuel(View view) { //this is the method for highlighting the clicked fuel button and unhighlighting the others
         Button clickedButton = (Button) view; //gets the button that was clicked
+        SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
 
         ArrayList<Button> fuelButtons = new ArrayList<Button>(); //get all fuel buttons
         fuelButtons.add((Button) findViewById(R.id.premium_diesel));
@@ -133,9 +144,11 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i=0; i<fuelButtons.size();i++){ //fade all fuel buttons
             fuelButtons.get(i).setAlpha((float) 0.4);
+            sharedPreferences.edit().putFloat((String) fuelButtons.get(i).getText(),(float) 0.4).apply();
         }
 
         clickedButton.setAlpha(1); //highlight clicked fuel button
+        sharedPreferences.edit().putFloat((String) clickedButton.getText(),(float) 1).apply();
 
         //TODO: Actually have it change fuel selection
         orderSummary[3] = ((String) clickedButton.getText()).toLowerCase(); //update fuel selection
