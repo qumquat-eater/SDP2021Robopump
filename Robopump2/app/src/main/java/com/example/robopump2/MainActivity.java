@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageButton settingsButton, fuellingButton;
+    private ImageButton settingsButton, fuellingButton, assitanceButton;
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         //define buttons
         settingsButton = (ImageButton) findViewById(R.id.Settings);
         fuellingButton = (ImageButton) findViewById(R.id.start_fuelling);
+        assitanceButton = (ImageButton) findViewById(R.id.Assistance);
 
         //settings button onClick
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showPopupWindow(v);
+            }
+        });
+        //assistance button onClick
+        assitanceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAssistanceWindow(v);
             }
         });
 
@@ -201,6 +209,34 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });*/
+    }
+
+    public void showAssistanceWindow(View view) {
+
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.assistance_popup_window, null);
+
+        // create the popup window
+        int width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+        int height = ConstraintLayout.LayoutParams.MATCH_PARENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window token
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        // make ok button close popup- will later be used to initiate fuelling
+        Button okButton = (Button) popupView.findViewById(R.id.ok_button);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                popupWindow.dismiss();
+            }
+        });
     }
 
     private void updateUserInfo(){ //method for updating the user info fields of the orderSummary array
