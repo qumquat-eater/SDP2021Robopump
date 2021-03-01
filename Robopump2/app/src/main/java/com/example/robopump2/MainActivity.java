@@ -133,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
             fuelButtons.get(i).setAlpha(sharedPreferences.getFloat((String) fuelButtons.get(i).getText(),1));
         }
 
+        // if no user data found automatically switch user to settings page
+        DatabaseReader x = new DatabaseReader();
+        if (x.numberOfRecords(getApplicationContext()) < 2){
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     //opens the settings page

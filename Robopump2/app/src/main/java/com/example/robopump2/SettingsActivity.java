@@ -55,7 +55,11 @@ public class SettingsActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToMainPage();
+                if (numberOfRecords() < 2) {
+                    Toast.makeText(getApplicationContext(), "Must create a user", Toast.LENGTH_SHORT).show();
+                } else {
+                    returnToMainPage();
+                }
             }
         });
 
