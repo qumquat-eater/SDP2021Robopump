@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberOfRecords() < 2) {
+                if (numberOfRecords() < 1) {
                     Toast.makeText(getApplicationContext(), "Must create a user", Toast.LENGTH_SHORT).show();
                 } else {
                     returnToMainPage();
@@ -84,7 +84,10 @@ public class SettingsActivity extends AppCompatActivity {
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkUserInfoValid()){
+                if (numberOfRecords() < 1) {
+                    Toast.makeText(getApplicationContext(), "Must create a user first", Toast.LENGTH_SHORT).show();
+                }
+                if (checkUserInfoValid() && numberOfRecords() >= 1){
 //                    updateUserInformation(selectedUser);
                     summary.setText("Account Summary:"+
                             "\n\nName: "+name+

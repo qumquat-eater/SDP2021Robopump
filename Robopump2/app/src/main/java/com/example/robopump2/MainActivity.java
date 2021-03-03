@@ -17,6 +17,8 @@ import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
+    private boolean fuelChosen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +58,14 @@ public class MainActivity extends AppCompatActivity {
         fuellingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupWindow(v);
+                if (fuelChosen) {
+                    showPopupWindow(v);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Choose Fuel type first", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
         });
         //assistance button onClick
@@ -149,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void switchFuel(View view) { //this is the method for highlighting the clicked fuel button and unhighlighting the others
         Button clickedButton = (Button) view; //gets the button that was clicked
+
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
 
         ArrayList<Button> fuelButtons = new ArrayList<Button>(); //get all fuel buttons
@@ -168,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO: Actually have it change fuel selection
         orderSummary[3] = ((String) clickedButton.getText()).toLowerCase(); //update fuel selection
         updateOrderSummary();
+        fuelChosen = true;
     }
 
     //displays popup window
