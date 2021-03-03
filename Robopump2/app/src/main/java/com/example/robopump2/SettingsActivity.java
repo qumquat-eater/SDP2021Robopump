@@ -527,7 +527,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     private void updateSummaryFromRecord(int id){
-        //TODO: This will update the order summary from a record on the device
         UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);

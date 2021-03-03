@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
     private boolean fuelChosen = false;
+    public static final String SHARED_PREF = "shared";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +59,22 @@ public class MainActivity extends AppCompatActivity {
         fuellingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fuelChosen) {
+                if (fuelChosen&&seekBar.getProgress()!=0) {
                     showPopupWindow(v);
+                    SharedPreferences prefs = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
+                    prefs.edit().putBoolean("fuelChosen",fuelChosen).apply();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Choose Fuel type first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please choose fuel type and amount first", Toast.LENGTH_SHORT).show();
 
                 }
 
             }
         });
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+        fuelChosen= prefs.getBoolean("fuelChosen", false);
+
+
         //assistance button onClick
         assitanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         String displayString = "ORDER SUMMARY:\n\n" +
                 "Name: " + orderSummary[0] +
                 "\nEmail: " + orderSummary[1] +
-                "\nCard number: " + cardNum +
+                "\nCard Number: " + cardNum +
                 "\nFuel Type: " + orderSummary[3] +
                 "\nFuel Amount: " + orderSummary[4] + "L" +
                 "\nTotal Price: £" + orderSummary[5];
