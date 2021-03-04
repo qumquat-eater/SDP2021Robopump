@@ -28,6 +28,7 @@ baseSensor = robot.getDevice('base_sensor')
 wristSensor = robot.getDevice('wrist_sensor')
 rotationalwristSensor = robot.getDevice('rotational_wrist_sensor')
 
+###REDUNDANT CODE SO FAR###
 def setPositionSync(motor, sensor, target, delay):
     DELTA = 0.001
     motor.setPosition(target)
@@ -41,6 +42,7 @@ def setPositionSync(motor, sensor, target, delay):
         if abs(target - effective) <= DELTA or delay <= 0:
             break
     sensor.disable()
+###REDUNDANT CODE SO FAR###
 
 def jacobian(q):
     fk = sym.Matrix(FKWB())
@@ -64,7 +66,7 @@ def get_ee(q):
 
 def get_new_angles(q):
     pg = 0.8
-    dg = 0.5
+    dg = 0.3
     K_p = np.array([[pg, 0, 0], [0, pg, 0], [0, 0, pg]])
     K_d = np.array([[dg, 0, 0], [0, dg, 0], [0, 0, dg]])
     current_time = time.time()
@@ -72,7 +74,7 @@ def get_new_angles(q):
     global error
     global final_joints
     global pos_ee, pos_targ, pos_base_abs
-    global x_biased, y_biased
+    global x_biased, y_biased, z
     dt = current_time - previous_time
     previous_time = current_time
     pos_ee = get_ee(q)
@@ -80,7 +82,7 @@ def get_new_angles(q):
     #last link = 0.13
     #distance from tank = 0.05
     pos_base = pos_base_abs
-    pos_targ = np.array([x_biased, y_biased, -0.098071])
+    pos_targ = np.array([x_biased, y_biased, z])
     pos_targ = pos_targ - pos_base
     error_d = ((pos_targ - pos_ee) - error) / dt
     error = pos_targ - pos_ee
@@ -93,19 +95,15 @@ final_joints = None
 previous_time = time.time()
 error = np.array([0.0, 0.0, 0.0])
 pos_base_abs = np.array([0.0765488, 0.2035, -0.208071])
-x_biased = 0.43 - 0.13 - 0.03
-y_biased = 0.1485 + 0.19
+targ1 = np.array([0.427, 0.273, -0.28])
+###CURRENT TARGET###
+targ_now = targ1
+####################
+x_biased = targ_now[0] - 0.13 - 0.05
+y_biased = targ_now[1] + 0.1485
+z = targ_now[2]
 
 #STAGE1#
-
-#pos_base2d = np.array([pos_base_abs[0], pos_base_abs[2]])
-#pos_targ2d = np.array([x_biased, -0.288071])
-#opposite = pos_targ2d[1] - pos_base2d[1]
-#adjacent = pos_targ2d[0] - pos_base2d[0]
-#joint1 = math.atan(opposite / adjacent)
-#setPositionSync(baseMotor, baseSensor, joint1*-1, 10000)
-
-#STAGE2#
 
 q = np.array([0.0, 0.0, 0.0])
 pos_ee = np.array([0.0, 0.0, 0.0])
@@ -116,27 +114,17 @@ while robot.step(TIME_STEP) != -1 and np.linalg.norm(pos_targ - pos_ee) > 0.001:
     baseMotor.setPosition(joints[0])
     upperarmMotor.setPosition(joints[1])
     forearmMotor.setPosition(joints[2])
+    forth = (joints[1] + joints[2]) * -1
+    wristMotor.setPosition(forth)
+    rotationalwristMotor.setPosition(joints[0])
     q = joints
     final_joints = joints
 
+print("Fin1")
+
+#STAGE2#
+
+sliderMotor.setPosition(float(0.05))
+
 print("Fin2")
-
-#STAGE3#
-
-joint3 = (final_joints[1] + final_joints[2]) * -1
-setPositionSync(wristMotor, wristSensor, joint3, 10000)
-  
-print("Fin3")
-
-#STAGE4#
-
-setPositionSync(rotationalwristMotor, rotationalwristSensor, final_joints[0], 10000)
-
-#STAGE5#
-
-sliderMotor.setPosition(float(0.03))
-
-print("Fin4")
-
-
 
