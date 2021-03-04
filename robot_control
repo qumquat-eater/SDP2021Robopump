@@ -95,10 +95,14 @@ final_joints = None
 previous_time = time.time()
 error = np.array([0.0, 0.0, 0.0])
 pos_base_abs = np.array([0.0765488, 0.2035, -0.208071])
+
+###EDIT THIS TO THE POSITION OF TARGET###################
+###INPUT THE "TRANSLATION" VALUES OF TARGET INTO TARG1###
 targ1 = np.array([0.427, 0.273, -0.28])
-###CURRENT TARGET###
 targ_now = targ1
-####################
+#########################################################
+#########################################################
+
 x_biased = targ_now[0] - 0.13 - 0.05
 y_biased = targ_now[1] + 0.1485
 z = targ_now[2]
@@ -127,4 +131,5 @@ print("Fin1")
 sliderMotor.setPosition(float(0.05))
 
 print("Fin2")
+
 
