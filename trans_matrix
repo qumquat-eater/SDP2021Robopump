@@ -16,6 +16,16 @@ def TM01():
     matrix = matrix.subs(a, 0)
     matrix = matrix.subs(alpha, 0)
     return matrix
+    
+def WB():
+    matrix = transMatrix()
+    thetaB = sym.symbols('thetaB')
+    theta, d, a, alpha = sym.symbols('theta, d, a, alpha')
+    matrix = matrix.subs(theta, 0)
+    matrix = matrix.subs(d, 0)
+    matrix = matrix.subs(a, 0)
+    matrix = matrix.subs(alpha, thetaB)
+    return matrix
 
 def TM12():
     matrix = transMatrix()
@@ -35,40 +45,6 @@ def TM23():
     matrix = matrix.subs(d, 0)
     matrix = matrix.subs(a, 0.139)
     matrix = matrix.subs(alpha, 0)
-    return matrix
-
-#def TM34():
-#    matrix = transMatrix()
-#    theta3 = sym.symbols('theta3')
-#    theta, d, a, alpha = sym.symbols('theta, d, a, alpha')
-#    matrix = matrix.subs(theta, theta3)
-#    matrix = matrix.subs(d, 0)
-#    matrix = matrix.subs(a, 0.1485)
-#    matrix = matrix.subs(alpha, 0)
-#    return matrix
-
-def TM02():
-    return TM01() * TM12()
-
-def TM03():
-    return TM02() * TM23()
-
-def FK1and2():
-    final_col = TM03().col(-1)
-    x = final_col.row(0)
-    y = final_col.row(1)
-    z = final_col.row(2)
-    return sym.Array([x, y, z])
-    
-#with base
-def WB():
-    matrix = transMatrix()
-    thetaB = sym.symbols('thetaB')
-    theta, d, a, alpha = sym.symbols('theta, d, a, alpha')
-    matrix = matrix.subs(theta, 0)
-    matrix = matrix.subs(d, 0)
-    matrix = matrix.subs(a, 0)
-    matrix = matrix.subs(alpha, thetaB)
     return matrix
 
 def WB1():
