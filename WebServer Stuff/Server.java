@@ -23,9 +23,8 @@ String request;
 int x;
 int temp1,temp2;
 String part1,part2,part3;
-int rollNumber;
-String name;
-String gender;
+String fuelType;
+String fuelAmount;
 //getting input stream and its reader, for reading request or acknowledgement
 inputStream=socket.getInputStream(); 
 inputStreamReader=new InputStreamReader(inputStream);
@@ -42,18 +41,15 @@ System.out.println("Request : "+request);
 temp1=request.indexOf(",");
 temp2=request.indexOf(",",temp1+1);
 part1=request.substring(0,temp1);
-part2=request.substring(temp1+1,temp2);
-part3=request.substring(temp2+1);
-rollNumber=Integer.parseInt(part1);
-name=part2;
-gender=part3;
-System.out.println("Roll number : "+rollNumber);
-System.out.println("Name : "+name);
-System.out.println("Gender : "+gender);
+part2=request.substring(temp1+1);
+fuelType=part1;
+fuelAmount=part2;
+System.out.println("fuelType : "+fuelType);
+System.out.println("fuelAmount : "+fuelAmount);
  
 // handle data
 //sending response
-response="Data saved#";
+response=fuelType + "," + fuelAmount + "," + "Data saved#";
 //get output stream and its writer, for sending response or acknowledgement
 outputStream=socket.getOutputStream();
 outputStreamWriter=new OutputStreamWriter(outputStream);

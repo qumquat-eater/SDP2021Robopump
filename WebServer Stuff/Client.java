@@ -7,10 +7,9 @@ public static void main(String data[])
 //data is taken as command line argument
 String ipAddress=data[0];
 int portNumber=Integer.parseInt(data[1]);
-int rollNumber=Integer.parseInt(data[2]);
+String rollNumber=data[2];
 String name=data[3];
-String gender=data[4];
-String request=rollNumber+","+name+","+gender+"#"; 
+String request=rollNumber+","+name+"#"; 
 //"#" acts as a terminator
 try
 {
