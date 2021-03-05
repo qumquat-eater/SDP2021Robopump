@@ -212,7 +212,15 @@ public class MainActivity extends AppCompatActivity {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                // Run network connection on new thread as Android doesn't allow it on main thread
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        // Send request to server
+                        String request = 101+","+"Bob"+","+"Male"+"#";
+                        AppClient.connect(request);
+                    }
+                }).start();
                 popupWindow.dismiss();
             }
         });
