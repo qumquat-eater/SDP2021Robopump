@@ -99,9 +99,15 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                textView.setText(String.valueOf(progressChangedValue)+"L") ;
-                orderSummary[4] = progressChangedValue + ""; //update selected fuel amount
+                if (progressChangedValue>99){
+                    textView.setText(String.valueOf("Full"));
+                    orderSummary[4] = "Full"; //update selected fuel amount
+                }else {
+                    textView.setText(String.valueOf(progressChangedValue) + "L");
+                    orderSummary[4] = progressChangedValue + ""; //update selected fuel amount
+                }
                 updateOrderSummary();
+
             }
 
         });
@@ -285,10 +291,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateOrderSummary(){ //method for updating the text of the order summary
         Double newPrice = (double) 0;
-        if(orderSummary[3]!="" && orderSummary[4]!="") {
+        if(orderSummary[3]!="" && orderSummary[4]!="" && orderSummary[4] != "Full") {
             newPrice = fuelPrices.get(orderSummary[3]) * Double.parseDouble(orderSummary[4]); //calculate new price from fuel type and fuel amount
         }
+
+
+
         orderSummary[5] = newPrice +"";
+
         TextView orderView = (TextView) findViewById(R.id.order_summary);
 
         String cardNum = orderSummary[2];
@@ -300,12 +310,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        String fuelAmount;
+        if(orderSummary[4].equals("Full")){
+            fuelAmount = "Full Tank";
+            orderSummary[5] = fuelPrices.get(orderSummary[3]) + "/L Full Tank";
+        }else{
+            fuelAmount = orderSummary[4] + "L";
+        }
+
         String displayString = "ORDER SUMMARY:\n\n" +
                 "Name: " + orderSummary[0] +
                 "\nEmail: " + orderSummary[1] +
                 "\nCard Number: " + cardNum +
                 "\nFuel Type: " + orderSummary[3] +
-                "\nFuel Amount: " + orderSummary[4] + "L" +
+                "\nFuel Amount: " + fuelAmount +
                 "\nTotal Price: £" + orderSummary[5];
 
         orderView.setText(displayString);
