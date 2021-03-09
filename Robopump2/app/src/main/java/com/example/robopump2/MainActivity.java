@@ -6,11 +6,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -29,6 +31,8 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton settingsButton, fuellingButton, assitanceButton;
+    private TextView current_amount;
+    private CheckBox checkFull;
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
@@ -42,11 +46,16 @@ public class MainActivity extends AppCompatActivity {
         //begin: define local variable of seekbar and amount;
         TextView textView= (TextView)findViewById(R.id.current_amount);
         seekBar= (SeekBar)findViewById(R.id.fuel_amount_slider);
+        checkFull = (CheckBox)findViewById(R.id.checkBox);
         //end: define local variable of seekbar and amount;
         //define buttons
         settingsButton = (ImageButton) findViewById(R.id.Settings);
         fuellingButton = (ImageButton) findViewById(R.id.start_fuelling);
         assitanceButton = (ImageButton) findViewById(R.id.Assistance);
+        //scroll order summary
+        TextView orderSum = findViewById(R.id.order_summary);
+        orderSum.setMovementMethod(new ScrollingMovementMethod());
+
 
         //settings button onClick
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         fuellingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fuelChosen&&seekBar.getProgress()!=0) {
+                if (fuelChosen&&seekBar.getProgress()!=0 || fuelChosen&&checkFull.isChecked()) {
                     showPopupWindow(v);
                     SharedPreferences prefs = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
                     prefs.edit().putBoolean("fuelChosen",fuelChosen).apply();
@@ -83,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 showAssistanceWindow(v);
             }
         });
+
 
 
         //begin: slide seekbar, and change amount
@@ -164,6 +174,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+    }
+
+    //tick check-box to add full fuel
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        current_amount = findViewById(R.id.current_amount);
+        if (view.getId() == R.id.checkBox) {
+            if (checked) {
+                current_amount.setText("Full");
+                orderSummary[4] = "Full"; //update selected fuel amount
+                updateOrderSummary();
+            }
+        }
     }
 
     //opens the settings page

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +52,10 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_page);
+        //scroll account summary
+//        TextView accountSum = findViewById(R.id.account_summary);
+//        accountSum.setMovementMethod(new ScrollingMovementMethod());
+
         returnButton = (ImageButton) findViewById(R.id.return_button);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +95,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if (checkUserInfoValid() && numberOfRecords() >= 1){
 //                    updateUserInformation(selectedUser);
                     summary.setText("Account Summary:"+
-                            "\n\nName: "+name+
+                            "\nName: "+name+
                             "\nEmail: "+email+
                             "\nPostcode: "+postcode+
                             "\nCard Number: "+cardNumber);
@@ -181,10 +186,10 @@ public class SettingsActivity extends AppCompatActivity {
             postcodeInput.setError("Postcode must be between 1 and 40 characters");
             return false;
         }
-        if (cardNumber.length() == 0 || cardNumber.length() > 20 || cardNumber.length() < 7 //check constraints
+        if (cardNumber.length() == 0 || cardNumber.length() > 20 || cardNumber.length() < 8 //check constraints
                 || (!cardNumber.matches("[0-9]+"))) {
             cardInput.requestFocus();
-            cardInput.setError("Card Number must be between 1 and 20 characters");
+            cardInput.setError("Card Number must be between 8 and 20 characters");
             return false;
         }
         if (expiryDate.length() == 0 || !expiryDate.matches("(?:0[1-9]|1[0-2])/[0-9]{2}")){
@@ -531,7 +536,7 @@ public class SettingsActivity extends AppCompatActivity {
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);
         summary.setText("Account Summary:"+
-                "\n\nName: "+userInfo[0]+
+                "\nName: "+userInfo[0]+
                 "\nEmail: "+userInfo[1]+
                 "\nPostcode: "+userInfo[2]+
                 "\nCard Number: "+userInfo[3]);

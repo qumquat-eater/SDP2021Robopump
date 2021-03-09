@@ -19,6 +19,7 @@
         android:background="@drawable/order_summary"
         android:text="     Order Summary:"
         android:textSize="20dp"
+        android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,12 +29,12 @@
         android:layout_height="366dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="20dp"
         android:background="@drawable/rectangle_1"
-        app:layout_constraintBottom_toTopOf="@+id/text_fuel_amount"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/petrol"
@@ -152,9 +153,9 @@
         android:layout_height="84dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/start_fuelling"
         android:scaleType="fitStart"
         android:src="@drawable/ic_gas_station"
@@ -176,11 +177,11 @@
 
     <SeekBar
         android:id="@+id/fuel_amount_slider"
-        android:layout_width="359dp"
-        android:layout_height="33dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="292dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="5dp"
         android:max="100"
         android:progress="0"
         app:layout_constraintBottom_toTopOf="@+id/text_Settings"
@@ -202,13 +203,14 @@
         android:id="@+id/text_fuel_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="84dp"
-        android:layout_marginRight="84dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
         android:text="Amount:"
         android:textColor="#ff000000"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/fuel_amount_slider"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <TextView
         android:id="@+id/text_start_fuel"
@@ -225,17 +227,13 @@
 
     <TextView
         android:id="@+id/current_amount"
-        android:layout_width="70dp"
+        android:layout_width="54dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:text="0L"
         android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/fuel_amount_slider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -247,5 +245,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo2" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="64dp"
+        android:layout_height="23dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:text="FULL"
+        app:layout_constraintBottom_toTopOf="@+id/text_Settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="onCheckboxClicked"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
