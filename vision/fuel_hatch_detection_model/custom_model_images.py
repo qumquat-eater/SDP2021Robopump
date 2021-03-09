@@ -26,6 +26,8 @@ from object_detection.utils import label_map_util
 
 from object_detection.utils import visualization_utils as vis_util
 
+import detect_shapes as ds
+
 # This is needed since the notebook is stored in the object_detection folder.
 sys.path.append("..")
 
@@ -37,6 +39,7 @@ sys.path.append("..")
 
 
 # # Model preparation
+
 
 # ## Variables
 STANDARD_COLORS = [
@@ -65,8 +68,6 @@ STANDARD_COLORS = [
     'WhiteSmoke', 'Yellow', 'YellowGreen'
 ]
 
-
-
 # What model to download.
 MODEL_NAME = 'perfect_test_model'  # change to whatever folder has the new graph
 # MODEL_FILE = MODEL_NAME + '.tar.gz'   # these lines not needed as we are using our own model
@@ -80,27 +81,24 @@ PATH_TO_LABELS = os.path.join('training', 'label_map.pbtxt')  # our labels are i
 
 NUM_CLASSES = 1  # we only are using one class at the moment (mask at the time of edit)
 
+# Size, in inches, of the output images.
+IMAGE_SIZE = (12, 8)
 
 
 # ## Load a (frozen) Tensorflow model into memory.
-
 detection_graph = tf.Graph()
 with detection_graph.as_default():
-    od_graph_def = tf.GraphDef()
-    with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
-        serialized_graph = fid.read()
-        od_graph_def.ParseFromString(serialized_graph)
-        tf.import_graph_def(od_graph_def, name='')
-
+  od_graph_def = tf.GraphDef()
+  with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
+      serialized_graph = fid.read()
+      od_graph_def.ParseFromString(serialized_graph)
+      tf.import_graph_def(od_graph_def, name='')
 
 # ## Loading label map
 # Label maps map indices to category names, so that when our convolution network predicts `5`, we know that this corresponds to `airplane`.  Here we use internal utility functions, but anything that returns a dictionary mapping integers to appropriate string labels would be fine
-
-
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
-
 
 
 
@@ -425,8 +423,10 @@ def return_coordinates(
       max = scores[i]
   if not max_boxes_to_draw:
     max_boxes_to_draw = boxes.shape[0]
-  for i in range(min(max_boxes_to_draw, boxes.shape[0])):
-    if scores is None or scores[i]==max:
+  for i in range(boxes.shape[0]):
+    if max_boxes_to_draw == len(box_to_color_map):
+      break
+    if scores is None or scores[i] == max:
       box = tuple(boxes[i].tolist())
       if instance_masks is not None:
         box_to_instance_masks_map[box] = instance_masks[i]
@@ -473,70 +473,68 @@ def return_coordinates(
 
   return coordinates_list
 
-
-
-#Need to edit path to images directory
-PATH_TO_TEST_IMAGES_DIR = 'test_image/perfect_testing'
-#TEST_IMAGE_PATHS = os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image.png')  # adjust range for # of images in folder
-
-TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, 'car{}.png'.format(i)) for i in range(1, 26)]
-
-# Size, in inches, of the output images.
-IMAGE_SIZE = (12, 8)
-
-
-with detection_graph.as_default():
+def run(image_path):
+ with detection_graph.as_default():
     with tf.Session(graph=detection_graph) as sess:
         i = 1
-        for image_path in TEST_IMAGE_PATHS:
-            image = Image.open(image_path).convert('RGB')
-            # the array based representation of the image will be used later in order to prepare the
-            # result image with boxes and labels on it.
-            image_np = load_image_into_numpy_array(image)
-            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-            image_np_expanded = np.expand_dims(image_np, axis=0)
-            image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-            # Each box represents a part of the image where a particular object was detected.
-            boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-            # Each score represent how level of confidence for each of the objects.
-            # Score is shown on the result image, together with the class label.
-            scores = detection_graph.get_tensor_by_name('detection_scores:0')
-            classes = detection_graph.get_tensor_by_name('detection_classes:0')
-            num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-            # Actual detection.
-            (boxes, scores, classes, num_detections) = sess.run(
-                [boxes, scores, classes, num_detections],
-                feed_dict={image_tensor: image_np_expanded})
-            # Visualization of the results of a detection.
-            visualize_boxes_and_labels_on_image_array(
-                image_np,
-                np.squeeze(boxes),
-                np.squeeze(classes).astype(np.int32),
-                np.squeeze(scores),
-                category_index,
-                use_normalized_coordinates=True,
-                line_thickness=8,
-                min_score_thresh=0.50)
+        image = Image.open(image_path).convert('RGB')
+        # the array based representation of the image will be used later in order to prepare the
+        # result image with boxes and labels on it.
+        image_np = load_image_into_numpy_array(image)
+        # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
+        image_np_expanded = np.expand_dims(image_np, axis=0)
+        image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+        # Each box represents a part of the image where a particular object was detected.
+        boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+        # Each score represent how level of confidence for each of the objects.
+        # Score is shown on the result image, together with the class label.
+        scores = detection_graph.get_tensor_by_name('detection_scores:0')
+        classes = detection_graph.get_tensor_by_name('detection_classes:0')
+        num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+        # Actual detection.
+        (boxes, scores, classes, num_detections) = sess.run(
+            [boxes, scores, classes, num_detections],
+            feed_dict={image_tensor: image_np_expanded})
+        # Visualization of the results of a detection.
+        visualize_boxes_and_labels_on_image_array(
+            image_np,
+            np.squeeze(boxes),
+            np.squeeze(classes).astype(np.int32),
+            np.squeeze(scores),
+            category_index,
+            use_normalized_coordinates=True,
+            line_thickness=8,
+            min_score_thresh=0.50)
 
-            coordinates = return_coordinates(
-                        image_np,
-                        np.squeeze(boxes),
-                        np.squeeze(classes).astype(np.int32),
-                        np.squeeze(scores),
-                        category_index,
-                        use_normalized_coordinates=True,
-                        line_thickness=8,
-                        min_score_thresh=0.50)
-            #Need to edit path to output coordinates directory
-            if(len(coordinates)!=0):
-                with open("output_coordinates/perfect_testing/coordinates{}.txt".format(i),"w") as file:
-                    for item in coordinates[0]:
-                        file.write("%s\n" % item)
-            #Need to edit path to output images directory
-            plt.figure(figsize=IMAGE_SIZE)
-            plt.xticks([])
-            plt.yticks([])
-            plt.imshow(image_np)    # matplotlib is configured for command line only so we save the outputs instead
-            plt.savefig("output_image/perfect_testing/detection_output{}.png".format(i))  # create an outputs folder for the images to be saved
-            i = i+1  # this was a quick fix for iteration, create a pull request if you'd like
-            
+        coordinates = return_coordinates(
+                    image_np,
+                    np.squeeze(boxes),
+                    np.squeeze(classes).astype(np.int32),
+                    np.squeeze(scores),
+                    category_index,
+                    use_normalized_coordinates=True,
+                    line_thickness=8,
+                    min_score_thresh=0.50)
+        #Need to edit path to output coordinates directory
+        img_coords = []
+        if(len(coordinates)!=0):
+            with open("output/output_coordinates.txt".format(i),"w") as file:
+                for item in coordinates[0]:
+                    img_coords.append(item)
+                    file.write("%s\n" % item)
+        #Need to edit path to output images directory
+        plt.figure(figsize=IMAGE_SIZE)
+        plt.xticks([])
+        plt.yticks([])
+        plt.imshow(image_np)    # matplotlib is configured for command line only so we save the outputs instead
+        plt.savefig("output/output_image.png".format(i))  # create an outputs folder for the images to be saved
+
+
+        return image_np,img_coords
+
+
+
+
+
+
+              
