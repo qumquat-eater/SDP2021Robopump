@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
     private boolean fuelChosen = false;
+    private SeekBar seekBar;
     public static final String SHARED_PREF = "shared";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //begin: define local variable of seekbar and amount;
         TextView textView= (TextView)findViewById(R.id.current_amount);
-        SeekBar seekBar= (SeekBar)findViewById(R.id.fuel_amount_slider);
+        seekBar= (SeekBar)findViewById(R.id.fuel_amount_slider);
         //end: define local variable of seekbar and amount;
         //define buttons
         settingsButton = (ImageButton) findViewById(R.id.Settings);
@@ -223,7 +224,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         // Send request to server
-                        String request = 101+","+"Bob"+","+"Male"+"#";
+                        String fuelAmount =String.valueOf(seekBar.getProgress());
+                        String fuelType = orderSummary[3];
+                        String request = fuelType + "," + fuelAmount+"#";
                         AppClient.connect(request);
                     }
                 }).start();
