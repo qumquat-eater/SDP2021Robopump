@@ -3,6 +3,7 @@ package com.example.robopump2;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton settingsButton, fuellingButton, assitanceButton;
     private TextView current_amount;
     private CheckBox checkFull;
+    boolean isChecked = false;
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textView= (TextView)findViewById(R.id.current_amount);
         seekBar= (SeekBar)findViewById(R.id.fuel_amount_slider);
         checkFull = (CheckBox)findViewById(R.id.checkBox);
+        current_amount = (TextView)findViewById(R.id.current_amount);
         //end: define local variable of seekbar and amount;
         //define buttons
         settingsButton = (ImageButton) findViewById(R.id.Settings);
@@ -173,19 +177,42 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+        current_amount.setText(sharedPref.getString("amount",""));
+        isChecked = sharedPref.getBoolean("checked", false);
+        if(isChecked){
+            checkFull.setChecked(true);
+        }else{
+            checkFull.setChecked(false);
+        }
     }
 
-    //tick check-box to add full fuel
+ //check-box to add full fuel
     public void onCheckboxClicked(View view) {
-        boolean checked = ((CheckBox) view).isChecked();
+        SharedPreferences sharedPref =getSharedPreferences("mypref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        isChecked = ((CheckBox) view).isChecked();
         current_amount = findViewById(R.id.current_amount);
         if (view.getId() == R.id.checkBox) {
-            if (checked) {
+            if (isChecked) {
                 current_amount.setText("Full");
                 orderSummary[4] = "Full"; //update selected fuel amount
                 updateOrderSummary();
+                editor.putBoolean("checked", checkFull.isChecked());
+                editor.putString("amount",orderSummary[4]);
+                editor.apply();
+            }else{
+                current_amount.setText("0");
+                orderSummary[4] = "0"; //update selected fuel amount
+                updateOrderSummary();
+                editor.putBoolean("checked", checkFull.isChecked());
+                editor.putString("amount",orderSummary[4]);
+                editor.apply();
             }
+
+
         }
+
     }
 
     //opens the settings page
