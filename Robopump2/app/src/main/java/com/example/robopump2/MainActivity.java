@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         TextView orderSum = findViewById(R.id.order_summary);
         orderSum.setMovementMethod(new ScrollingMovementMethod());
 
-
         //settings button onClick
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -345,11 +344,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String displayString = "ORDER SUMMARY:\n\n" +
-                "Name: " + orderSummary[0] +
-                "\nEmail: " + orderSummary[1] +
-                "\nCard Number: " + cardNum +
-                "\nFuel Type: " + orderSummary[3] +
-                "\nFuel Amount: " + fuelAmount +
+                "Name: " + orderSummary[0] + "\n" +
+                "\nEmail: " + orderSummary[1] + "\n" +
+                "\nCard Number: " + cardNum + "\n" +
+                "\nFuel Type: " + orderSummary[3] + "\n" +
+                "\nFuel Amount: " + fuelAmount + "\n" +
                 "\nTotal Price: £" + orderSummary[5];
 
         orderView.setText(displayString);

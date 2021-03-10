@@ -252,7 +252,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="40dp"
         android:background="@drawable/commit_changes"
-        android:text="Commit Changes"
+        android:text="Update User"
         android:textColor="#000000"
         android:textSize="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -368,16 +368,16 @@
 
     <EditText
         android:id="@+id/card_number"
-        android:inputType="number"
-        android:hint="1234 5678 9876 0123"
-        android:layout_width="251dp"
+        android:layout_width="230dp"
         android:layout_height="19dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
         android:background="@drawable/information"
+        android:hint="1234 5678 9876 0123"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
