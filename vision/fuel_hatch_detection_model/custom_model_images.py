@@ -69,7 +69,7 @@ STANDARD_COLORS = [
 ]
 
 # What model to download.
-MODEL_NAME = 'perfect_test_model'  # change to whatever folder has the new graph
+MODEL_NAME = 'perfect_test_model_2'  # change to whatever folder has the new graph
 # MODEL_FILE = MODEL_NAME + '.tar.gz'   # these lines not needed as we are using our own model
 # DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 
@@ -77,7 +77,7 @@ MODEL_NAME = 'perfect_test_model'  # change to whatever folder has the new graph
 PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
 
 # List of the strings that is used to add correct label for each box.
-PATH_TO_LABELS = os.path.join('training', 'label_map.pbtxt')  # our labels are in training/object-detection.pbkt
+PATH_TO_LABELS = os.path.join('training', 'cap_label_map.pbtxt')  # our labels are in training/object-detection.pbkt
 
 NUM_CLASSES = 1  # we only are using one class at the moment (mask at the time of edit)
 
@@ -163,7 +163,7 @@ def draw_bounding_box_on_image(image,
               width=thickness,
               fill=color)
   try:
-    font = ImageFont.truetype('arial.ttf', 24)
+    font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 36)
   except IOError:
     font = ImageFont.load_default()
 
@@ -322,7 +322,7 @@ def visualize_boxes_and_labels_on_image_array(
               class_name = category_index[classes[i]]['name']
             else:
               class_name = 'N/A'
-            display_str = str(class_name)
+            display_str = 'hatch'
         if not skip_scores:
           if not display_str:
             display_str = '{}%'.format(round(100*scores[i]))
@@ -518,7 +518,7 @@ def run(image_path):
         #Need to edit path to output coordinates directory
         img_coords = []
         if(len(coordinates)!=0):
-            with open("output/output_coordinates.txt".format(i),"w") as file:
+            with open("output/output_coordinates.txt","w") as file:
                 for item in coordinates[0]:
                     img_coords.append(item)
                     file.write("%s\n" % item)
@@ -527,7 +527,7 @@ def run(image_path):
         plt.xticks([])
         plt.yticks([])
         plt.imshow(image_np)    # matplotlib is configured for command line only so we save the outputs instead
-        plt.savefig("output/output_image.png".format(i))  # create an outputs folder for the images to be saved
+        plt.savefig("output/output_image.png")  # create an outputs folder for the images to be saved
 
 
         return image_np,img_coords
