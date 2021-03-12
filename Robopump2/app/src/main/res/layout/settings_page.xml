@@ -190,15 +190,13 @@
         android:id="@+id/user3Text"
         android:layout_width="55dp"
         android:layout_height="37dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginLeft="144dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginLeft="124dp"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="10dp"
         android:text="User3"
         android:textColor="#ff000000"
         android:textSize="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/Assistance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -206,15 +204,13 @@
         android:id="@+id/user2Text"
         android:layout_width="55dp"
         android:layout_height="37dp"
-        android:layout_marginStart="208dp"
-        android:layout_marginLeft="208dp"
+        android:layout_marginStart="188dp"
+        android:layout_marginLeft="188dp"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="10dp"
         android:text="User2"
         android:textColor="#ff000000"
         android:textSize="16dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/Assistance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,14 +218,12 @@
         android:id="@+id/user1Text"
         android:layout_width="55dp"
         android:layout_height="37dp"
-        android:layout_marginStart="268dp"
-        android:layout_marginLeft="268dp"
+        android:layout_marginStart="248dp"
+        android:layout_marginLeft="248dp"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="10dp"
         android:text="User1"
         android:textColor="#ff000000"
         android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Assistance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -246,22 +240,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <Button
         android:id="@+id/commit_changes"
         android:layout_width="167dp"
         android:layout_height="67dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="79dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/commit_changes"
-        android:text="Commit Changes"
+        android:text="Update User"
         android:textColor="#000000"
         android:textSize="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CVC" />
 
     <ImageButton
         android:id="@+id/return_button"
@@ -269,15 +265,17 @@
         android:layout_height="67dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginBottom="40dp"
         android:alpha="1"
         android:background="@drawable/commit_changes"
         android:src="@drawable/ic_return"
         android:tint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_CVC" />
 
     <TextView
         android:id="@+id/text_name"
@@ -370,16 +368,16 @@
 
     <EditText
         android:id="@+id/card_number"
-        android:inputType="number"
-        android:hint="1234 5678 9876 0123"
-        android:layout_width="251dp"
+        android:layout_width="230dp"
         android:layout_height="19dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
         android:background="@drawable/information"
+        android:hint="1234 5678 9876 0123"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
@@ -387,8 +385,8 @@
         android:id="@+id/imageView"
         android:layout_width="83dp"
         android:layout_height="83dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

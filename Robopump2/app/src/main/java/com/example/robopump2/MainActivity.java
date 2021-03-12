@@ -3,14 +3,18 @@ package com.example.robopump2;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -29,6 +33,9 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private ImageButton settingsButton, fuellingButton, assitanceButton;
+    private TextView current_amount;
+    private CheckBox checkFull;
+    boolean isChecked = false;
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
@@ -42,11 +49,16 @@ public class MainActivity extends AppCompatActivity {
         //begin: define local variable of seekbar and amount;
         TextView textView= (TextView)findViewById(R.id.current_amount);
         seekBar= (SeekBar)findViewById(R.id.fuel_amount_slider);
+        checkFull = (CheckBox)findViewById(R.id.checkBox);
+        current_amount = (TextView)findViewById(R.id.current_amount);
         //end: define local variable of seekbar and amount;
         //define buttons
         settingsButton = (ImageButton) findViewById(R.id.Settings);
         fuellingButton = (ImageButton) findViewById(R.id.start_fuelling);
         assitanceButton = (ImageButton) findViewById(R.id.Assistance);
+        //scroll order summary
+        TextView orderSum = findViewById(R.id.order_summary);
+        orderSum.setMovementMethod(new ScrollingMovementMethod());
 
         //settings button onClick
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         fuellingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fuelChosen&&seekBar.getProgress()!=0) {
+                if (fuelChosen&&seekBar.getProgress()!=0 || fuelChosen&&checkFull.isChecked()) {
                     showPopupWindow(v);
                     SharedPreferences prefs = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
                     prefs.edit().putBoolean("fuelChosen",fuelChosen).apply();
@@ -83,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 showAssistanceWindow(v);
             }
         });
+
 
 
         //begin: slide seekbar, and change amount
@@ -162,6 +175,42 @@ public class MainActivity extends AppCompatActivity {
         if (x.numberOfRecords(getApplicationContext()) < 2){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        }
+
+        SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+        current_amount.setText(sharedPref.getString("amount",""));
+        isChecked = sharedPref.getBoolean("checked", false);
+        if(isChecked){
+            checkFull.setChecked(true);
+        }else{
+            checkFull.setChecked(false);
+        }
+    }
+
+ //check-box to add full fuel
+    public void onCheckboxClicked(View view) {
+        SharedPreferences sharedPref =getSharedPreferences("mypref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        isChecked = ((CheckBox) view).isChecked();
+        current_amount = findViewById(R.id.current_amount);
+        if (view.getId() == R.id.checkBox) {
+            if (isChecked) {
+                current_amount.setText("Full");
+                orderSummary[4] = "Full"; //update selected fuel amount
+                updateOrderSummary();
+                editor.putBoolean("checked", checkFull.isChecked());
+                editor.putString("amount",orderSummary[4]);
+                editor.apply();
+            }else{
+                current_amount.setText("0");
+                orderSummary[4] = "0"; //update selected fuel amount
+                updateOrderSummary();
+                editor.putBoolean("checked", checkFull.isChecked());
+                editor.putString("amount",orderSummary[4]);
+                editor.apply();
+            }
+
+
         }
 
     }
@@ -322,11 +371,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String displayString = "ORDER SUMMARY:\n\n" +
-                "Name: " + orderSummary[0] +
-                "\nEmail: " + orderSummary[1] +
-                "\nCard Number: " + cardNum +
-                "\nFuel Type: " + orderSummary[3] +
-                "\nFuel Amount: " + fuelAmount +
+                "Name: " + orderSummary[0] + "\n" +
+                "\nEmail: " + orderSummary[1] + "\n" +
+                "\nCard Number: " + cardNum + "\n" +
+                "\nFuel Type: " + orderSummary[3] + "\n" +
+                "\nFuel Amount: " + fuelAmount + "\n" +
                 "\nTotal Price: £" + orderSummary[5];
 
         orderView.setText(displayString);
