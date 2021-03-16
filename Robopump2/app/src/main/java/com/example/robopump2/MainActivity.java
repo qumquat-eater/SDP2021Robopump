@@ -371,12 +371,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String displayString = "ORDER SUMMARY:\n\n" +
-                "Name: " + orderSummary[0] + "\n" +
-                "\nEmail: " + orderSummary[1] + "\n" +
-                "\nCard Number: " + cardNum + "\n" +
-                "\nFuel Type: " + orderSummary[3] + "\n" +
+                "User: " + "\n" + orderSummary[0] + "\n" +
+                "\nCard Number: " + "\n" + cardNum + "\n" +
+                "\nFuel Type: " + "\n" + orderSummary[3] + "\n" +
                 "\nFuel Amount: " + fuelAmount + "\n" +
-                "\nTotal Price: £" + orderSummary[5];
+                "\nTotal Price:" + "£" + orderSummary[5];
 
         orderView.setText(displayString);
         System.out.println(displayString);
