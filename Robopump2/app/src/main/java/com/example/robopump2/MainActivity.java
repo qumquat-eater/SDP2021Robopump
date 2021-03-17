@@ -3,15 +3,18 @@ package com.example.robopump2;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -29,6 +32,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -263,11 +268,20 @@ public class MainActivity extends AppCompatActivity {
         // which view you pass in doesn't matter, it is only used for the window token
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+
         // make ok button close popup- will later be used to initiate fuelling
         Button okButton = (Button)popupView.findViewById(R.id.ok_button);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Change button visibilities
+                popupWindow.getContentView().findViewById(R.id.cancel_button1).setVisibility(View.VISIBLE);
+                popupWindow.getContentView().findViewById(R.id.liveFuel).setVisibility(View.VISIBLE);
+                popupWindow.getContentView().findViewById(R.id.ok_button).setVisibility(View.INVISIBLE);
+                popupWindow.getContentView().findViewById(R.id.popup_message).setVisibility(View.INVISIBLE);
+                popupWindow.getContentView().findViewById(R.id.fuelling_message).setVisibility(View.VISIBLE);
+
+
                 // Run network connection on new thread as Android doesn't allow it on main thread
                 new Thread(new Runnable(){
                     @Override
@@ -279,30 +293,41 @@ public class MainActivity extends AppCompatActivity {
                         AppClient.connect(request);
                     }
                 }).start();
-                popupWindow.dismiss();
+
+                // increment fuel amount by 1l every second
+                Handler h = new Handler();
+                final Runnable r = new Runnable() {
+                    int count = 0;
+                    @Override
+                    public void run() {
+                        if (count < Integer.parseInt(orderSummary[4])) {
+                            count++;
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText(count + "L");
+                            h.postDelayed(this, 1000); //ms
+                        }
+                    }
+                };
+                h.postDelayed(r, 1000); // one second in ms
+                //h.removeCallbacksAndMessages(null);
+                //popupWindow.dismiss();
             }
         });
 
         // make cancel button close popup- will later be used to cancel fuelling
-        Button cancelButton = (Button)popupView.findViewById(R.id.cancel_button1);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        Button stopButton = (Button)popupView.findViewById(R.id.cancel_button1);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 popupWindow.dismiss();
+                //this will need to send a message to the server
+                // TODO
             }
         });
-
-        // dismiss the popup window when touched
-        /*popupView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                popupWindow.dismiss();
-                return true;
-            }
-        });*/
     }
 
+    // displays assistance window
     public void showAssistanceWindow(View view) {
 
         // inflate the layout of the popup window
@@ -320,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
         // which view you pass in doesn't matter, it is only used for the window token
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
-        // make ok button close popup- will later be used to initiate fuelling
+        // make ok button close popup- will
         Button okButton = (Button) popupView.findViewById(R.id.ok_button);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
