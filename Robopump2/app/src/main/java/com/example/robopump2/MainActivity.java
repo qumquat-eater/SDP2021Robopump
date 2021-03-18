@@ -280,6 +280,11 @@ public class MainActivity extends AppCompatActivity {
                 popupWindow.getContentView().findViewById(R.id.ok_button).setVisibility(View.INVISIBLE);
                 popupWindow.getContentView().findViewById(R.id.popup_message).setVisibility(View.INVISIBLE);
                 popupWindow.getContentView().findViewById(R.id.fuelling_message).setVisibility(View.VISIBLE);
+                popupWindow.getContentView().findViewById(R.id.livePrice).setVisibility(View.VISIBLE);
+                popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.VISIBLE);
+                ((TextView) popupWindow.getContentView().findViewById(R.id.liveType)).setText(orderSummary[3]);
+
+
 
 
                 // Run network connection on new thread as Android doesn't allow it on main thread
@@ -302,7 +307,8 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if (count < Integer.parseInt(orderSummary[4])) {
                             count++;
-                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText(count + "L");
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.livePrice)).setText("Price: £ " + fuelPrices.get(orderSummary[3]) * count);
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Amount: " + count + "L");
                             h.postDelayed(this, 1000); //ms
                         }
                     }
