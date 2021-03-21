@@ -330,6 +330,9 @@ public class MainActivity extends AppCompatActivity {
                             popupWindow.getContentView().findViewById(R.id.finish_button).setVisibility(View.VISIBLE);
                             Toast.makeText(getApplicationContext(), "Fuelling Complete", Toast.LENGTH_LONG).show();
                         }
+                        if (errorReceived){
+                            // do something - maybe print message saying error
+                        }
                     }
                 };
                 h.postDelayed(r, 1000); // one second in ms
