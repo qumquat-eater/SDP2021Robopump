@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*;
 
 public class AppClient {
-    public static void connect(String request) {
+    public static String connect(String request) {
         // Request string must match the format expected by server
         //String request=rollNumber+","+name+","+gender+"#";
         //"#" acts as a terminator
@@ -47,9 +47,11 @@ public class AppClient {
             response = stringBuffer.toString();
             System.out.println(response);
             socket.close(); //closing the connection
+            return response;
         } catch (Exception exception) {
 // Raised in case, connection is refused or some other technical issue
             System.out.println(exception);
         }
+        return null;
     }
 }

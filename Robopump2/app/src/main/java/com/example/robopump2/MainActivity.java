@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private int selectedUser = 0; //holds the currently selected user profile
     private boolean fuelChosen = false;
     private SeekBar seekBar;
+    private boolean errorReceived = false;
+    private boolean forceStop = false;
+    private boolean finished = false;
     public static final String SHARED_PREF = "shared";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -284,9 +287,6 @@ public class MainActivity extends AppCompatActivity {
                 popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.VISIBLE);
                 ((TextView) popupWindow.getContentView().findViewById(R.id.liveType)).setText(orderSummary[3]);
 
-
-
-
                 // Run network connection on new thread as Android doesn't allow it on main thread
                 new Thread(new Runnable(){
                     @Override
@@ -294,8 +294,19 @@ public class MainActivity extends AppCompatActivity {
                         // Send request to server
                         String fuelAmount =String.valueOf(seekBar.getProgress());
                         String fuelType = orderSummary[3];
-                        String request = fuelType + "," + fuelAmount+"#";
-                        AppClient.connect(request);
+                        String request = fuelType + "," + orderSummary[4] +"#";
+                        String response = AppClient.connect(request);
+                        //
+                        // THIS PART NOT WORKING FOR SOME REASON CANT DETECT ERROR MESSAGE
+                        //
+                        if (response.equals("error")){
+                            System.out.println("error message received!!");
+                            errorReceived = true;
+                        }
+                        if (response.equals("success")){
+                            System.out.println("success message received!!");
+                            finished = true;
+                        }
                     }
                 }).start();
 
@@ -305,11 +316,19 @@ public class MainActivity extends AppCompatActivity {
                     int count = 0;
                     @Override
                     public void run() {
-                        if (count < Integer.parseInt(orderSummary[4])) {
+                        if ((orderSummary[4].equals("Full") || count < Integer.parseInt(orderSummary[4])) && !finished && !forceStop && !errorReceived) {
                             count++;
                             ((TextView) popupWindow.getContentView().findViewById(R.id.livePrice)).setText("Price: £ " + fuelPrices.get(orderSummary[3]) * count);
                             ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Amount: " + count + "L");
                             h.postDelayed(this, 1000); //ms
+                        }
+                        // change message to complete fuelling when server message success received or when counter reaches fuel amount chosen
+                        if (finished || (!orderSummary[4].equals("Full") && count == Integer.parseInt(orderSummary[4]))) {
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Fuelling Complete");
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.fuelling_message)).setText("Click finish to complete the fuelling process");
+                            popupWindow.getContentView().findViewById(R.id.cancel_button1).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.finish_button).setVisibility(View.VISIBLE);
+                            Toast.makeText(getApplicationContext(), "Fuelling Complete", Toast.LENGTH_LONG).show();
                         }
                     }
                 };
@@ -319,16 +338,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // make cancel button close popup- will later be used to cancel fuelling
+        // make stop button be used to force stop fuelling at any time
         Button stopButton = (Button)popupView.findViewById(R.id.cancel_button1);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                // send stop message
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        // Send stop request to server
+                        String request = "Stop#";
+                        String response = AppClient.connect(request);
+                    }
+                }).start();
+                forceStop = true;
+                //popupWindow.dismiss();
+            }
+        });
+
+        // make stop button be used to force stop fuelling at any time
+        Button finishButton = (Button)popupView.findViewById(R.id.finish_button);
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                // reset all booleans now that fuelling complete and close popup
+                finished = false;
+                forceStop = false;
+                errorReceived = false;
                 popupWindow.dismiss();
-                //this will need to send a message to the server
-                // TODO
             }
         });
     }

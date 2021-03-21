@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/liveFuel"
         android:layout_width="202dp"
-        android:layout_height="66dp"
+        android:layout_height="90dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="40dp"
@@ -35,7 +35,7 @@
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="415dp"
+        android:layout_marginBottom="420dp"
         android:gravity="center"
         android:textColor="#000000"
 
@@ -145,6 +145,23 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/cancel_button"
         android:text="Stop"
+        android:textColor="#000000"
+        android:textSize="50sp"
+        android:visibility="invisible"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_message" />
+    <Button
+        android:id="@+id/finish_button"
+        android:layout_width="230dp"
+        android:layout_height="110dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/cancel_button"
+        android:text="Finish"
         android:textColor="#000000"
         android:textSize="50sp"
         android:visibility="invisible"
