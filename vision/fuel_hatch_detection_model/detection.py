@@ -10,18 +10,16 @@ def detect_fuel_cap(image_path):
     cv2.imwrite("output/cropped.png", crop_img)
 
     try:
-    	vertices, centroid, width, rotate_angle = ds.find_shape(crop_img)
-    except CapNotFoundError:
-    	print('Fuel cap has not been found')
-
-    slant_angle = ds.find_slant_angle(crop_img)
-
-    file = open("fuel_cap_coordinates.txt", "w")
-    file.write("%s\n" % slant_angle)
-    file.write("%s\n" % vertices)
-    file.write("{} {}\n".format(centroid[0],centroid[1]))
-    file.write("%s\n" % width)
-    file.write("%s\n" % rotate_angle)
+        vertices, centroid, width, rotate_angle = ds.find_shape(crop_img)
+        slant_angle = ds.find_slant_angle(crop_img)
+        file = open("fuel_cap_coordinates.txt", "w")
+        file.write("%s\n" % slant_angle)
+        file.write("%s\n" % vertices)
+        file.write("{} {}\n".format(centroid[0],centroid[1]))
+        file.write("%s\n" % width)
+        file.write("%s\n" % rotate_angle)
+    except TypeError:
+        print('Fuel cap has not been found')
 
 
 
