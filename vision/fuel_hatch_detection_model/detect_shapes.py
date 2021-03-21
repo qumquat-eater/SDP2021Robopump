@@ -160,6 +160,13 @@ def find_shape(img):
 			detect_circle = 1
 			print("Found the cap!")
 			break
+		else:
+			raise CapNotFoundError
+
+
+class CapNotFoundError(Exception):
+    """Raised when fuel cap can not be found"""
+    pass
 
 # # construct the argument parse and parse the arguments
 # ap = argparse.ArgumentParser()

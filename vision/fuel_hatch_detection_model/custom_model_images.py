@@ -522,13 +522,17 @@ def run(image_path):
                 for item in coordinates[0]:
                     img_coords.append(item)
                     file.write("%s\n" % item)
-        #Need to edit path to output images directory
-        plt.figure(figsize=IMAGE_SIZE)
-        plt.xticks([])
-        plt.yticks([])
-        plt.imshow(image_np)    # matplotlib is configured for command line only so we save the outputs instead
-        plt.savefig("output/output_image.png")  # create an outputs folder for the images to be saved
+          #Need to edit path to output images directory
+        # plt.figure(figsize=IMAGE_SIZE)
+        # plt.xticks([])
+        # plt.yticks([])
+        # plt.imshow(image_np)    # matplotlib is configured for command line only so we save the outputs instead
+        # plt.savefig("output/output_image.png")  # create an outputs folder for the images to be saved
 
+
+        im= Image.fromarray(image_np)
+        new_im = im.resize((1000, 1000))
+        new_im.save("output/output_image.png")
 
         return image_np,img_coords
 
