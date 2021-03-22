@@ -296,14 +296,11 @@ public class MainActivity extends AppCompatActivity {
                         String fuelType = orderSummary[3];
                         String request = fuelType + "," + orderSummary[4] +"#";
                         String response = AppClient.connect(request);
-                        //
-                        // THIS PART NOT WORKING FOR SOME REASON CANT DETECT ERROR MESSAGE
-                        //
-                        if (response.equals("error")){
+                        if (response.equalsIgnoreCase("error")){
                             System.out.println("error message received!!");
                             errorReceived = true;
                         }
-                        if (response.equals("success")){
+                        if (response.equalsIgnoreCase("success")){
                             System.out.println("success message received!!");
                             finished = true;
                         }
@@ -357,7 +354,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
                 forceStop = true;
-                //popupWindow.dismiss();
+                Toast.makeText(getApplicationContext(), "Fuelling forcefully stopped", Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
             }
         });
 
@@ -427,15 +425,6 @@ public class MainActivity extends AppCompatActivity {
 
         TextView orderView = (TextView) findViewById(R.id.order_summary);
 
-        String cardNum = orderSummary[2];
-
-        if(cardNum.length()>=4){
-            cardNum = cardNum.substring(0,4);
-            for(int i=0; i < orderSummary[2].length()-4;i++){
-                cardNum = cardNum +"*";
-            }
-        }
-
         String fuelAmount;
         if(orderSummary[4].equals("Full")){
             fuelAmount = "Full Tank";
@@ -446,10 +435,9 @@ public class MainActivity extends AppCompatActivity {
 
         String displayString = "ORDER SUMMARY:\n\n" +
                 "User: " + "\n" + orderSummary[0] + "\n" +
-                "\nCard Number: " + "\n" + cardNum + "\n" +
                 "\nFuel Type: " + "\n" + orderSummary[3] + "\n" +
-                "\nFuel Amount: " + fuelAmount + "\n" +
-                "\nTotal Price:" + "£" + orderSummary[5];
+                "\nFuel Amount: " + "\n" + fuelAmount + "\n" +
+                "\nTotal Price:" + "\n" + "£" + orderSummary[5];
 
         orderView.setText(displayString);
         System.out.println(displayString);

@@ -34,8 +34,8 @@ public class AppClient {
                 if (x == '#' || x == -1) {
                     response = stringBuffer.toString();
                     System.out.println(response);
-                    if (response.equals("success")) {
-                        System.out.println("breaking");
+                    if (response.equalsIgnoreCase("success") || response.equalsIgnoreCase("error") || response.equalsIgnoreCase("Stop")) {
+                        //System.out.println("breaking");
                         break;
                     }
                     stringBuffer.delete(0, stringBuffer.length());
