@@ -8,7 +8,6 @@ public static void main(String data[])
 String ipAddress=data[0];
 int portNumber=Integer.parseInt(data[1]);
 String rollNumber=data[2];
-String name=data[3];
 String request=rollNumber+"#"; 
 //"#" acts as a terminator
 try
