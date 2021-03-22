@@ -39,7 +39,7 @@ x=inputStreamReader.read();
 if(x=='#' || x==-1){
 response=stringBuffer.toString();
 System.out.println(response);
-if(response.equals("success")){
+if(response.equals("success")||response.equals("stop")||response.equals("error")){
 System.out.println("breaking");
 break;
 }

@@ -63,7 +63,7 @@ outputStreamWriter=new OutputStreamWriter(outputStream);
 outputStreamWriter.write(response);
 outputStreamWriter.flush(); // response sent
 System.out.println("Response sent" + response);
-if(response.equals("success#")){
+if(response.equals("success#")||response.equals("stop#")||response.equals("error#")){
 openConnections.openConnections.get(i).close();
 openConnections.openConnections.remove(i);
 i=i-1;
