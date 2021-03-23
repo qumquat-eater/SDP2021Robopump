@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         fuelButtons.add((Button) findViewById(R.id.petrol));
 
         for(int i=0; i<fuelButtons.size();i++){ //fade all fuel buttons
-            fuelButtons.get(i).setAlpha((float) 0.4);
+            fuelButtons.get(i).setAlpha((float) 0.2);
             sharedPreferences.edit().putFloat((String) fuelButtons.get(i).getText(),(float) 0.4).apply();
         }
 
