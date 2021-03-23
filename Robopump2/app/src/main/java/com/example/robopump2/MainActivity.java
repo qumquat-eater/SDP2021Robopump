@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
- //check-box to add full fuel
+    //check-box to add full fuel
     public void onCheckboxClicked(View view) {
         SharedPreferences sharedPref =getSharedPreferences("mypref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -282,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 popupWindow.getContentView().findViewById(R.id.liveFuel).setVisibility(View.VISIBLE);
                 popupWindow.getContentView().findViewById(R.id.ok_button).setVisibility(View.INVISIBLE);
                 popupWindow.getContentView().findViewById(R.id.popup_message).setVisibility(View.INVISIBLE);
+                popupWindow.getContentView().findViewById(R.id.warning_sign).setVisibility(View.INVISIBLE);
                 popupWindow.getContentView().findViewById(R.id.fuelling_message).setVisibility(View.VISIBLE);
                 popupWindow.getContentView().findViewById(R.id.livePrice).setVisibility(View.VISIBLE);
                 popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.VISIBLE);
@@ -321,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         // change message to complete fuelling when server message success received or when counter reaches fuel amount chosen
                         if (finished || (!orderSummary[4].equals("Full") && count == Integer.parseInt(orderSummary[4]))) {
-                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Fuelling Complete");
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Fuelling Complete!");
                             ((TextView) popupWindow.getContentView().findViewById(R.id.fuelling_message)).setText("Click finish to complete the fuelling process");
                             popupWindow.getContentView().findViewById(R.id.cancel_button1).setVisibility(View.INVISIBLE);
                             popupWindow.getContentView().findViewById(R.id.finish_button).setVisibility(View.VISIBLE);
