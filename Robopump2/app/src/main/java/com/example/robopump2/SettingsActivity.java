@@ -535,10 +535,10 @@ public class SettingsActivity extends AppCompatActivity {
         UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);
-        summary.setText("Account Summary:"+
-                "\nName: "+userInfo[0]+
-                "\nEmail: "+userInfo[1]+
-                "\nPostcode: "+userInfo[2]+
+        summary.setText("Account Summary:"+ "\n" +
+                "\nName: "+userInfo[0]+ "\n" +
+                "\nEmail: "+userInfo[1]+ "\n" +
+                "\nPostcode: "+userInfo[2]+ "\n" +
                 "\nCard Number: "+userInfo[3]);
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
