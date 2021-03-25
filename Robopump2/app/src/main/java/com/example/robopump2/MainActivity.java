@@ -329,13 +329,19 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Fuelling Complete", Toast.LENGTH_LONG).show();
                         }
                         if (errorReceived){
-                            // do something - maybe print message saying error
+                            // showing error message and hide other info
+                            popupWindow.getContentView().findViewById(R.id.liveFuel).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.popup_message).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.fuelling_message).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.livePrice).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.error_message).setVisibility(View.VISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.warning_sign).setVisibility(View.VISIBLE);
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.cancel_button1)).setText("Abort");
                         }
                     }
                 };
                 h.postDelayed(r, 1000); // one second in ms
-                //h.removeCallbacksAndMessages(null);
-                //popupWindow.dismiss();
             }
         });
 
@@ -355,7 +361,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
                 forceStop = true;
-                Toast.makeText(getApplicationContext(), "Fuelling forcefully stopped", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Fuelling Stopped!", Toast.LENGTH_SHORT).show();
+                forceStop = false;
                 popupWindow.dismiss();
             }
         });
