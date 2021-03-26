@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (fuelChosen&&seekBar.getProgress()!=0 || fuelChosen&&checkFull.isChecked()) {
+                    errorReceived = false;
+                    forceStop = false;
+                    finished = false;
                     showPopupWindow(v);
                     SharedPreferences prefs = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
                     prefs.edit().putBoolean("fuelChosen",fuelChosen).apply();
@@ -89,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please choose fuel type and amount first", Toast.LENGTH_SHORT).show();
 
                 }
-
             }
         });
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
@@ -155,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int newSelectedUser = getIntent().getIntExtra("selectedUser",selectedUser); //replace this 0 with value from setting layout
-        System.out.println("Main activity thinks: " + newSelectedUser);
+        //System.out.println("Main activity thinks: " + newSelectedUser);
 
 
 
@@ -247,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
         clickedButton.setAlpha(1); //highlight clicked fuel button
         sharedPreferences.edit().putFloat((String) clickedButton.getText(),(float) 1).apply();
 
-        //TODO: Actually have it change fuel selection
         orderSummary[3] = ((String) clickedButton.getText()).toLowerCase(); //update fuel selection
         updateOrderSummary();
         fuelChosen = true;
@@ -298,11 +299,11 @@ public class MainActivity extends AppCompatActivity {
                         String request = fuelType + "," + orderSummary[4] +"#";
                         String response = AppClient.connect(request);
                         if (response.equalsIgnoreCase("error")){
-                            System.out.println("error message received!!");
+                            //System.out.println("error message received!!");
                             errorReceived = true;
                         }
                         if (response.equalsIgnoreCase("success")){
-                            System.out.println("success message received!!");
+                            //System.out.println("success message received!!");
                             finished = true;
                         }
                     }
@@ -325,7 +326,9 @@ public class MainActivity extends AppCompatActivity {
                             ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Fuelling Complete!");
                             ((TextView) popupWindow.getContentView().findViewById(R.id.fuelling_message)).setText("Click finish to complete the fuelling process");
                             popupWindow.getContentView().findViewById(R.id.cancel_button1).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.INVISIBLE);
                             popupWindow.getContentView().findViewById(R.id.finish_button).setVisibility(View.VISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.checkbox_email).setVisibility(View.VISIBLE);
                             Toast.makeText(getApplicationContext(), "Fuelling Complete", Toast.LENGTH_LONG).show();
                         }
                         if (errorReceived){
@@ -412,7 +415,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUserInfo(){ //method for updating the user info fields of the orderSummary array
-        //SettingsActivity x = new SettingsActivity();
         DatabaseReader x = new DatabaseReader();
         UserInformation newUser = x.readUserRecord(selectedUser,getApplicationContext());
         orderSummary[0] = newUser.getUserName();
@@ -426,8 +428,6 @@ public class MainActivity extends AppCompatActivity {
         if(orderSummary[3]!="" && orderSummary[4]!="" && orderSummary[4] != "Full") {
             newPrice = fuelPrices.get(orderSummary[3]) * Double.parseDouble(orderSummary[4]); //calculate new price from fuel type and fuel amount
         }
-
-
 
         orderSummary[5] = newPrice +"";
 
@@ -448,14 +448,12 @@ public class MainActivity extends AppCompatActivity {
                 "\nTotal Price:" + "\n" + "£" + orderSummary[5];
 
         orderView.setText(displayString);
-        System.out.println(displayString);
+        //System.out.println(displayString);
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         sharedPreferences.edit().putString("orderText", displayString).apply();
         for(int i=0; i<orderSummary.length; i++){
             sharedPreferences.edit().putString(i+"", orderSummary[i]).apply(); //store the details
         }
-
     }
-
 }

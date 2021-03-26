@@ -72,13 +72,13 @@ public class SettingsActivity extends AppCompatActivity {
         if (!databaseExists()) {
             try {
                 createCSVFile();
-                System.out.println("database created");
+                //System.out.println("database created");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         else{
-            System.out.println("database exists");
+            //System.out.println("database exists");
         }
 
 
@@ -93,11 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Must create a user first", Toast.LENGTH_SHORT).show();
                 }
                 if (checkUserInfoValid() && numberOfRecords() >= 1){
-//                    updateUserInformation(selectedUser);
-                    summary.setText("Account Summary:"+
-                            "\nName: "+name+
-                            "\nEmail: "+email+
-                            "\nPostcode: "+postcode+
+                    summary.setText("Account Summary:"+ "\n" +
+                            "\nName: "+ name+ "\n" +
+                            "\nEmail: "+email+ "\n" +
+                            "\nPostcode: "+postcode+ "\n" +
                             "\nCard Number: "+cardNumber);
 
                     //save values in viewText and prevent values disappearing once users click back to main page
@@ -107,9 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
                     // testRead(); uncomment to test if updating data correctly
                     updateUserInformation(selectedUser);
-                    //writeUserRecord(userInfo);
                     testRead();
-
                 }
             }
         });
@@ -143,7 +140,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void returnToMainPage() {
         Intent intent = new Intent(this, MainActivity.class);
-        System.out.println("Settings thinks selected user is: " + selectedUser);
+        //System.out.println("Settings thinks selected user is: " + selectedUser);
         intent.putExtra("selectedUser", selectedUser);
         startActivity(intent);
     }
@@ -235,7 +232,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             sharedPreferences.edit().putInt(key, View.VISIBLE).commit(); //store new visibility
 
-            //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
             UserInformation newUser = addUser(); //get inputted user info
             String[] userInfoArray = getStringArrayFromUser(newUser);
             writeUserRecord(userInfoArray);
@@ -258,8 +254,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 
-        //update selected user here
-
+        // Update selected user here
         for(int i=0; i<buttons.size();i++){ //set opacity low for all
             buttons.get(i).setAlpha((float) 0.4);
             texts.get(i).setAlpha((float) 0.4);
@@ -311,7 +306,7 @@ public class SettingsActivity extends AppCompatActivity {
             // Creates a new csv file with the correct column names
             pw = openFileOutput(fileName, MODE_PRIVATE);
             pw.write(builder.toString().getBytes());
-            System.out.println("File made");
+            //System.out.println("File made");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -380,25 +375,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         }
-        //////TESTING//////////
-        /* numberOfRecords(); //to see if length of csv file correct
-        //testRead(); // see if reading info correctly
-        if (selectedUser == 1){
-            UserInformation u1 = readUserRecord(1);
-            for (String s: getStringArrayFromUser(u1)){
-                System.out.println(s);
-            }
-        }if (selectedUser == 2){
-            UserInformation u2 = readUserRecord(2);
-            for (String s: getStringArrayFromUser(u2)){
-                System.out.println(s);
-            }
-        }if (selectedUser == 3){
-            UserInformation u3 = readUserRecord(3);
-            for (String s: getStringArrayFromUser(u3)){
-                System.out.println(s);
-            }
-        }*/
     }
 
     // returns the number of lines(records) in the csv file
@@ -439,7 +415,7 @@ public class SettingsActivity extends AppCompatActivity {
             while((line = br.readLine()) != null){
                 sb.append(line + "\n");
             }
-            System.out.println("Details recovered: " + sb.toString());
+            //System.out.println("Details recovered: " + sb.toString());
             //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -467,7 +443,7 @@ public class SettingsActivity extends AppCompatActivity {
                 br.readLine();
             }
             record = br.readLine();
-            System.out.println("Record: " + selectedUser + " is: " + record);
+            //System.out.println("Record: " + selectedUser + " is: " + record);
             Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
             user = getUserFromString(record);
         } catch (FileNotFoundException e) {
