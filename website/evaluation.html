@@ -118,7 +118,54 @@
 
            <h2><a href="#usertests">Evaluation Tests - Vision</a></h2>
 
-           <p>VISION ASPECTS HERE!!!!!!!!!!!!!!!!!!</p>
+           <p>The basic goal of computer vision is to recognise the cap so that the robot
+             could open it and continue with the fuelling actions. By considering the safety
+             aspect, we issued two advanced goals: (1) check if there is a car in front of
+             the robot - if not, nothing should be detected, (2) Is the hatch opened and is the
+             cap inside the hatch exposed? - If the hatch is closed (cap is not exposed) then
+             nothing should be detected. Also, there is a streched goal for further increasing the
+             detection accuracy - the development of an angle detection algorithm which can confirm
+             the 3D angle of rotation from the scene that camera captured.<br>
+             For our first few demos, we made an algorithm to achieve our basic goal of cap detection,
+             and now, we have introduced a new algorithm which can reach all the goals that mentioned
+             above. The following images are showing the comparative results of detecting a same group
+             of model with two different algorithms:<br><br>
+             <img src="https://github.com/qumquat-eater/SDP2021Robopump/tree/main/website/oldAlg.jpeg">
+             <img src="https://github.com/qumquat-eater/SDP2021Robopump/tree/main/website/newAlg.jpeg">
+             <br>
+             We used the same set of models to give these results. From the images above, we can find
+             that the detection result with the new algorithm is much better than the one with the old algorithm.
+             Comparing with the old result, we have more test cases that have more than 90% confidence to
+             say we have found the cap, which is impressing.
+            <br><br>
+            We also introduced specific tests about our advanced goals and we separated our test models
+            into three types: (1) hatch not found, (2) hatch found & fuel cap not found and (3) hatch found
+            & fuel cap found. Nothing should be detected with first two types and the cap should be detected
+            with the third type. The following table shows the test result about our advanced goals:
+            <div id="tab"><table>
+            <thead>
+              <tr>
+              <th align="center"></th>
+              <th align="center">Detected</th>
+              <th align="center">Not detected</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+              <th align="center">Should be detected</th>
+              <td align="center">20</td>
+              <td align="center">0</td>
+              </tr>
+              <tr>
+                <th align="center">Shouldn't be detected</th>
+                <td align="center">2</td>
+                <td align="center">19</td>
+              </tr>
+            </tbody>
+            </table> </div>
+            <p>From the results above, we can say that we have mostly achieved our advanced goals,
+            The robot has a high possibility to stop detection when there is nothing to be detected.</p>
+            </p>
 
             <h2><a href="#usertests">Evaluation Tests - User Testing</a></h2>
 			<p>In terms of user testing, we carried out a user survey to evaluate the efficiency of our app, the app is how the user interacts
