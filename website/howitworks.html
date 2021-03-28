@@ -60,12 +60,12 @@
               <br />
               <h3 id="app">1.App</h3>
                 <li id="app_goal">Goal</li>
-                <p>Our system's Android app is desgined for users to control the fueling robot in the gas station.
-                When users drive to gas station, they could activate the gas station assistant robot to fuel up
-                their car from inside of their vehicle using the app.</p>
+                <p>Our system's Android app is designed to let users start the robot which will fuel their car at the gas station.
+                When users arrive at the gas pump, they can activate our gas station assistant robot to fuel up
+                their car from inside of their vehicle via our Robopump app.</p>
 
                 <li id="app_layout">UI Design</li>
-                <p>The layout of the app consists of six fragments: Main Page, Setting Page, Warning Page, Fueling Page,
+                <p>The layout of the app consists of six fragments: Main Page, Setting Page, Warning Page, Fuelling Page,
                   Complete Page and Assistance Page.</p>
                 <div>
                 <center />
@@ -108,13 +108,13 @@
 
               <li id="implementation">Implementation</li>
 
-              <p>To begin the development of our app, we focus on UI design. For the UI mock-up design tool, we use an application called Figma,
+              <p>To begin the development of our app, we focused on the UI design. For the UI mock-up design tool, we used an application called Figma,
                  which allowed us to simulate button functionality.<br />
-                 For app design, we focus working on Android device only. So we settle on programming our app in Android Studio, as it is free and
-                 widely used. Also, Figma gives us ability to easily export our UI design to Android XML.<br />
-                 The app is written in Java, as it is a popular and official language for Android development. Also, all members in software team
-                 have good experience with it.<br />
-                 After we convert UI design from Figma into Android Studio, we mainly focus on implementing necessary functionalities (See previous
+                 For our app, which we decided to use Android, as it's more popular than iOS and it's easier to work with. Since we created an Android app, we used Android Studio as our development tool as it is free and widely used.<br />
+                 The app was coded in Java, as it is a widely supported and is the official language for Android development. Also, all members in software team
+                 were experienced with it.<br />
+                 
+After we converted the UI design from Figma into Android Studio, we mainly focus on implementing the necessary functionalities (See previous
                  pictures in Functionality section). We also use SharedPreference clss to store the state of views so that every view does not
                  disappear when switching between pages or closing the app.<br />
                  Next, we implement a database to store users' information. As an abstraction for simplicity, we stored the data as a CSV file on
@@ -142,22 +142,22 @@
 
                 <ol>
 
-                 <li>When users open the App for the first time, they stay on the setting page and need to create a new user to
-                     access main page for further operations.</li>
-                 <li>Users input their personal information (a relevant errormessage pops up if any input is in incorrect format)
+                 <li>When users open the App for the first time, they start on the setting page and need to create a new user to
+                     access the main page for further operations.</li>
+                 <li>Users input their personal information (with relevant error messages popping up if any input is invalid)
                      and click on Add User button, a new user will be created.</li>
                  <li>If users want to change information details of any created users, they can click on that specific user button
-                     first and then re-input new information, followed by clicking on Update User button. Modified user information
+                     first and then re-input new information, followed by clicking on the Update User button. The currently selected users information
                      will be shown on account summary.</li>
                  <li>Users click on Return button to access main page.</li>
                  <li>Users click on one of Fuel Type buttons and select fuel amount  using  either  “Full”  checkbox or amount slider
                      (depends on how much gas they want), then click on Start Fuelling button to start. A prompt window will pop up for
                      them to confirm everything is ready.</li>
-                 <li>After users confirm fueling, they stay on fueling page and could see a dynamic change of fuel amount and price.
-                     During this process, they can click on Stop button any time to stop fueling.</li>
-                 <li>When  fueling  is  done,  users stay on complete page and could click on Finish button to return main page.
+                 <li>After users confirm fuelling, they stay on fuelling page and can see a dynamic 'live' fuel and price counter, much like one found on a real fuel pump.
+                     During this process, they can click on the Stop button at any time to stop fueling - although this should only occur during emergencies.</li>
+                 <li>When  fueling  is  done,  users are shown a success page confirming that fuelling has been completed and can then click on the Finish button to return main page.
                      Optionally, they could select the checkbox to receive an email receipt.</li>
-                 <li>If users have any problems during fueling, click on Assistance button to ask for human help.</li>
+                 <li>If users have any problems, they can click on Assistance button to ask for human help.</li>
 
                </ol>
             <br /> <br />
