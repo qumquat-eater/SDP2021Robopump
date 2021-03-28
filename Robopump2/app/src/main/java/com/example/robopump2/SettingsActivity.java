@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_page);
-        //scroll account summary
+          //scroll account summary
 //        TextView accountSum = findViewById(R.id.account_summary);
 //        accountSum.setMovementMethod(new ScrollingMovementMethod());
 
