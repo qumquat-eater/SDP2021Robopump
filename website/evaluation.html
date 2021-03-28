@@ -1,36 +1,147 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
-<title>Title</title>	
+<title>Title</title>
 <meta http-equiv="Content-Language" content="English" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 
-<body><div id="wrap">	<div id="header">		
-    <h1><a href="#">RoboPump - Group 12</a></h1>	
-    	<h2>Pump of the Future </h2>	</div>	<div id="menu">	
+<body><div id="wrap">	<div id="header">
+    <h1><a href="#">RoboPump - Group 12</a></h1>
+    		</div>	<div id="menu">
             <ul>
-                <li class="link" id="welcome.html"   > <a href="./index.html"     >Welcome     </a></li>			
-                <li class="link" id="system.html"    > <a href="./system.html"    >System      </a></li>	
-                <li class="link" id="howitworks.html"> <a href="./howitworks.html">How it works</a></li>				
-                <li class="link" id="evaluation.html"> <a href="./evaluation.html">Evaluation  </a></li>	
-                <li class="link" id="budget.html"    > <a href="./budget.html"    >Budget      </a></li> 		
-                <li class="link" id="team.html"      > <a href="./team.html"      >Team        </a></li>					
+                <li class="link" id="welcome.html"   > <a href="./index.html"     >Welcome     </a></li>
+                <li class="link" id="system.html"    > <a href="./system.html"    >System      </a></li>
+                <li class="link" id="howitworks.html"> <a href="./howitworks.html">How it works</a></li>
+                <li class="link" id="evaluation.html"> <a href="./evaluation.html">Evaluation  </a></li>
+                <li class="link" id="budget.html"    > <a href="./budget.html"    >Budget      </a></li>
+                <li class="link" id="team.html"      > <a href="./team.html"      >Team        </a></li>
             </ul>
-            </div>	
+            </div>
             <div id="content">
-			<div id="corps_central"> 
-				
+			<div id="corps_central">
+
             <h1>How Well Does Our System Perform?</h1><p></p>
-            
-            <h2><a href="#tests">Evaluation Tests</a></h2>
-			<p>Show the results of testing where available. This can include tables, graphs, videos etc. Be careful to present data in an appropriate manner and be clear about the conclusions drawn from whatever it is you present</p>    
-			  
-            <h3><a href="#usertests">Evaluation Tests</a></h3>
-			<p>Present any user testing you have performed for your product. The same advice about presenting data should be used as above      </p>      
-			
-			<h2><a href="#Diagrams">Main Areas of Improvement</a></h2>		
+
+            <h2><a href="#tests">Evaluation Tests - Robot Control</a></h2>
+
+          <p>All the tests we created were based off testing and safety specification we created at the begining of the project, this way
+          we knew what had to be tested, when it needed to be tested and how many tests would be sufficient. <br>
+          <br>The first main robot control feature which was tested was the robotic arm touching a set target representing a fuel hole. To test this
+      we first found the limits of where the target could be placed so that the robot could reach it and where it was not able to. Once we found these,
+    we created tests to check cooordinates of the target within the limits (normal), just inside the limits (limits) and outside the limits (exceptions). The number
+   of tests and results are displayed below:</p>
+
+
+   <div id="tab"><table>
+   <thead>
+     <tr>
+     <th align="center">Type of test</th>
+     <th align="center">No. of tests</th>
+     <th align="center">Passed</th>
+     <th align="center">Failed</th>
+     </tr>
+     </thead>
+     <tbody>
+     <tr>
+     <td align="center">Normal</td>
+     <td align="center">50</td>
+     <td align="center">50</td>
+     <td align="center">-</td>
+     </tr>
+     <tr>
+       <td align="center">Exceptions</td>
+       <td align="center">20</td>
+       <td align="center">-</td>
+       <td align="center">20</td>
+     </tr>
+     <tr>
+       <td align="center">Limits</td>
+       <td align="center">10</td>
+       <td align="center">10</td>
+       <td align="center">-</td>
+     </tr>
+
+
+   </tbody>
+   </table> </div>
+
+
+   <p>As shown, all the tests performed as expected. The limits and normal tests all successfully touched the target fuel cap and the
+     exceptions all failed causing
+   the robot to move out of control.</p>
+
+   <p>The next feature to be tested was the integration of the robot control with the vision algorithms. We wanted to find
+     the exact points where our system would fail as the fuel hatch would be out of reach. To do this we ran 55 tests checking the width
+     (z coordinates) and depth (x coordinates)
+      and seeing which were successfully detected by the robot and which ones were out of reach, as we were testing with one model car
+      in Webots, the height (y axis) of the fuel cap wasn't altered. The results are displayed in the table below:</p>
+
+      <div id="tab"><table>
+      <thead>
+        <tr>
+        <th align="center">Variable altered</th>
+        <th align="center">No. of tests</th>
+        <th align="center">Passed</th>
+        <th align="center">Failed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td align="center">Z</td>
+        <td align="center">35</td>
+        <td align="center">18</td>
+        <td align="center">17</td>
+        </tr>
+        <tr>
+          <td align="center">X</td>
+          <td align="center">20</td>
+          <td align="center">8</td>
+          <td align="center">12</td>
+        </tr>
+
+      </tbody>
+      </table> </div>
+
+      <p>Tests were carried out until the exact coordinates down to millimeter were determined. By finding the tests that passed and failed
+        with set coordinates, we were able to calculate the exact points where the fuel cap was out of the robots reach. The distances marked
+        below are the distances the car can be from the base of the robot, therefore a set of coordinates x: 0.034, y:0.32 and z:-0.12, are relative
+         to the base of the robot, no where else. The limits calculated for where the robot could reach in terms of z coordinates were
+         -0.1263 m through to -0.2605 m and x coordinates were 0.5340 m through to 0.5614 m. We were able to determine the exact millimeter
+         from the robot which made the tests pass, anything outside these limits resulted in a failed test. As seen in the results, there was
+         a leeway of roughly 14 cm on the z plane but only around 3 cm in the x plane.</p>
+
+         <p>Once we had calculated all the limits, we then moved onto testing the fully integrated system controlled via the app.
+           To do this we started the server between the app and robot control code and selected randomized values for the input and started
+           fuelling the car. This then activated the robot where the vision algorithm detected the coordinates of the cap and passed them to
+           the robot which then would move the arm to insert into the fuel hole. We ran 15 tests using coordinates within the limits (as we
+           were testing the connection via the app, not the vision algorithm) and they all passed successfully. </p>
+
+
+           <h2><a href="#usertests">Evaluation Tests - Vision</a></h2>
+
+           <p>VISION ASPECTS HERE!!!!!!!!!!!!!!!!!!</p>
+
+            <h2><a href="#usertests">Evaluation Tests - User Testing</a></h2>
+			<p>In terms of user testing, we carried out a user survey to evaluate the efficiency of our app, the app is how the user interacts
+      with the system. We first evaluated our progress via the CHECKLIST, this showed..... We then created the user survey, the questions
+    ranged from checking if the app was easy to navigate around, checking if there were any unclear function on the app and if there were any
+  possible improvements they suggested. Most of the results from the user survey which was given to 20+ possible end users of varied age, sex and physical ability,
+  found the app easy to nagivate and all around very well presented but some of out main
+  points of improvements are summarised below:
+
+
+<ul>
+  <li>When asked about the monochrome interface we designed to allow colour blind users to easy understand the app, most paricipants thought although some colour could
+    have been a nice feature, due to the accessibility we are catering for agreed monochrome was</li>
+  <li>Originally, the slider for selecting the correct amount of fuel was not labeled, users stuggled to figure out how to select the required amount
+  and suggested labeling the feature to make it clear</li>
+  <li>All the details (price, user account, type and amount of fuel select) were clearly marked to view at all times which was liked by the participants</li>
+</ul>
+
+</p>
+			<h2><a href="#Diagrams">Main Areas of Improvement</a></h2>
 			<p>What did you learn from your testing? How did your evaluation/user testing change your system?</p>
 
-            </div>	
-            <div style="clear: both;"> </div>		
+            </div>
+            <div style="clear: both;"> </div>
             <div id="footer">Page design based on a <a href="http://www.free-css-templates.com/">Free CSS Template</a></div>	</div></div>
 </body></html>
