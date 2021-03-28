@@ -417,7 +417,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
             //to account for first row
             count--;
-            Toast.makeText(this, "Number of users: " + count, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Number of users: " + count, Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -503,6 +503,10 @@ public class SettingsActivity extends AppCompatActivity {
             int count = 0; // to keep track of what reader is on
             String updatedInfo = (name + "," + email + "," + postcode + "," + cardNumber
                     + "," + expiryDate + "," + CVC );
+            // add newline if all users ahave been added and trying to edit user1/2
+            if (numUsers == 3 && (whichUser == 1 || whichUser == 2)){
+                updatedInfo += "\n";
+            }
             // Loops through all lines in file
             while((line = br.readLine()) != null) {
                 // if reached line we want to update fill in with new string
@@ -514,7 +518,6 @@ public class SettingsActivity extends AppCompatActivity {
                     sb.append(line + "\n");
                 }
                 count++;
-
             }
             System.out.println(sb.toString());
             // Now write whole string with updated line to file
