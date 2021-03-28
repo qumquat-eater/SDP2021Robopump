@@ -502,7 +502,7 @@ public class SettingsActivity extends AppCompatActivity {
             parseUserInput();
             int count = 0; // to keep track of what reader is on
             String updatedInfo = (name + "," + email + "," + postcode + "," + cardNumber
-                    + "," + expiryDate + "," + CVC + "\n");
+                    + "," + expiryDate + "," + CVC );
             // Loops through all lines in file
             while((line = br.readLine()) != null) {
                 // if reached line we want to update fill in with new string
