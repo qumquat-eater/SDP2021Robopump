@@ -108,12 +108,34 @@
 
               <li id="implementation">Implementation</li>
 
-
-
-
-
-
-              <br /> <br />
+              <p>To begin the development of our app, we focus on UI design. For the UI mock-up design tool, we use an application called Figma,
+                 which allowed us to simulate button functionality.<br />
+                 For app design, we focus working on Android device only. So we settle on programming our app in Android Studio, as it is free and
+                 widely used. Also, Figma gives us ability to easily export our UI design to Android XML.<br />
+                 The app is written in Java, as it is a popular and official language for Android development. Also, all members in software team
+                 have good experience with it.<br />
+                 After we convert UI design from Figma into Android Studio, we mainly focus on implementing necessary functionalities (See previous
+                 pictures in Functionality section). We also use SharedPreference clss to store the state of views so that every view does not
+                 disappear when switching between pages or closing the app.<br />
+                 Next, we implement a database to store users' information. As an abstraction for simplicity, we stored the data as a CSV file on
+                 the device’s internal storage. As an addi- tional benefit, this meant that only our app could access the file, while simultaneously
+                 we avoided the need to give the app extra permissions for storage access which would have been required when using external storage.
+                 Once the file was created and stored, methods for reading, writing and updating the files were created, which provide infrastructure
+                 for any future functionalities such as storing user data on server infrastructure instead of locally.<br />
+                 Then, we start working on establishing communication between app and the robot in webots, and we finally decide to do this through a
+                 web server, as it is more reliable and feasible than other methods, such as a Bluetooth connection. Since our project is fully simulated,
+                 we adapted a Java script to create a local web server, which can be started via a terminal command. The app and robot will act as clients
+                 to this server and will be able to send and receive requests to and from the server. In the future, this server could be run remotely
+                 rather than locally.<br />
+                 Finally, for the app we made a new class called AppClient, which uses Java’s Socket class to connect to a server and then handle the sending and
+                 receiving of requests from the server. To integrate this client class into the functionality of the app, we made it so that, upon the
+                 user confirming they want to start fuelling with the OK button, the App sends a request to the server containing the type and amount of fuel.
+                 This is then received by the robot in Webots which triggers the robot to begin the fuelling of the car.
+                 From the Webots perspective we used the same method for connecting to the server except it was coded in Python as opposed to Java like in the app.
+                 The robot will first connect to the server and then start listening for requests which will be forwarded from the app by the server. Once the robot
+                 has finished fuelling the car it can then send a success message to the app though the server.
+              </p>
+              <br />
 
                <li id="app_usage">Usage</li>
                <br />
@@ -138,6 +160,17 @@
                  <li>If users have any problems during fueling, click on Assistance button to ask for human help.</li>
 
                </ol>
+            <br /> <br />
+
+           <li id="video">Video</li>
+
+            <div>
+            <center/>
+              <p>A video to introduce how to use our App</p>
+            <video src="./app_video.mp4" width="600px"height="600px" controls></video>
+            </div>
+
+
 
             <br /> <br />
             <h3 id="vison">2.vision</h3>
