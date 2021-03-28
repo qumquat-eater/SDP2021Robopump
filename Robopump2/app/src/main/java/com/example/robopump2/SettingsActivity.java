@@ -4,6 +4,7 @@ package com.example.robopump2;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -27,11 +28,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageButton returnButton;
@@ -106,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
                     editor.apply();
                     // testRead(); uncomment to test if updating data correctly
                     updateUserInformation(selectedUser);
-                    testRead();
+                    //testRead();
                 }
             }
         });
@@ -165,6 +172,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     // Method to validate user input
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean checkUserInfoValid() {
         parseUserInput();
 
@@ -176,6 +184,16 @@ public class SettingsActivity extends AppCompatActivity {
         if (email.length() == 0 || email.length() > 40){
             emailInput.requestFocus();
             emailInput.setError("Email must be between 1 and 40 characters");
+            return false;
+        }
+        else if(email.contains(",")) {
+            emailInput.requestFocus();
+            emailInput.setError("Email must not contain any commas");
+            return false;
+        }
+        else if(!email.contains("@")) {
+            emailInput.requestFocus();
+            emailInput.setError("Email must contain @");
             return false;
         }
         if (postcode.length() == 0 || postcode.length() > 40){
@@ -192,6 +210,12 @@ public class SettingsActivity extends AppCompatActivity {
         if (expiryDate.length() == 0 || !expiryDate.matches("(?:0[1-9]|1[0-2])/[0-9]{2}")){
             expiryInput.requestFocus();
             expiryInput.setError("Expiry date must be in the form MM/YY");
+            return false;
+        }
+
+        else if (YearMonth.now(ZoneId.systemDefault()).isAfter(YearMonth.parse(expiryDate, DateTimeFormatter.ofPattern("MM/uu")))) {
+            expiryInput.requestFocus();
+            expiryInput.setError("Card is expired, please enter a valid expiry date");
             return false;
         }
         if (CVC.length() != 3) {
@@ -232,13 +256,14 @@ public class SettingsActivity extends AppCompatActivity {
 
             sharedPreferences.edit().putInt(key, View.VISIBLE).commit(); //store new visibility
 
+            System.out.println("Write record selected user: " + selectedUser);
             UserInformation newUser = addUser(); //get inputted user info
             String[] userInfoArray = getStringArrayFromUser(newUser);
             writeUserRecord(userInfoArray);
 
             switchUser((View) buttons.get(selectedUser-1));
 
-            testRead();
+            //testRead();
         }
         // Display error message if max users reached
         else if (numUsers == MAXUSERS){
@@ -267,14 +292,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
-
         clickedButton.setAlpha((float) 1);
         texts.get(selectedUser-1).setAlpha((float) 1);
 
         sharedPreferences.edit().putFloat(selectedUser + "Opa", (float) 1).commit(); //store opacity for selected button
         sharedPreferences.edit().putInt("selectedUser", selectedUser).commit(); //store newly selected user
 
-
+        System.out.println("Update summary selected user: " + selectedUser);
         updateSummaryFromRecord(selectedUser);
     }
 
@@ -360,6 +384,7 @@ public class SettingsActivity extends AppCompatActivity {
             // Adds the user information to the end of an existing file
             pw = openFileOutput(fileName, MODE_APPEND);
             pw.write(builder.toString().getBytes());
+            System.out.println(builder.toString());
             Toast.makeText(this, "User Added", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -443,8 +468,8 @@ public class SettingsActivity extends AppCompatActivity {
                 br.readLine();
             }
             record = br.readLine();
-            //System.out.println("Record: " + selectedUser + " is: " + record);
-            Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
+            System.out.println("Record: " + selectedUser + " is: " + record);
+            //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
             user = getUserFromString(record);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -491,7 +516,7 @@ public class SettingsActivity extends AppCompatActivity {
                 count++;
 
             }
-            //System.out.println(sb.toString());
+            System.out.println(sb.toString());
             // Now write whole string with updated line to file
             FileOutputStream fos = null;
             fos = openFileOutput(fileName, MODE_PRIVATE);
