@@ -1,5 +1,6 @@
 package com.example.robopump2;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -7,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean forceStop = false;
     private boolean finished = false;
     public static final String SHARED_PREF = "shared";
+    //private static final String PROGRESS = "SEEKBAR";
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
         fuelChosen= prefs.getBoolean("fuelChosen", false);
 
-
         //assistance button onClick
         assitanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        SharedPreferences seekPref = getSharedPreferences(" ", MODE_PRIVATE);
+        SharedPreferences.Editor seekEdit = seekPref.edit();
+        seekBar.setProgress(seekPref.getInt(SHARED_PREF,0));
         //begin: slide seekbar, and change amount
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             int progressChangedValue = 0;
@@ -125,17 +130,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                seekEdit.putInt(SHARED_PREF, seekBar.getProgress());
+                seekEdit.commit();
                 if (progressChangedValue>99){
                     textView.setText(String.valueOf("Full"));
                     orderSummary[4] = "Full"; //update selected fuel amount
+                    checkFull.setChecked(true);
                 }else {
                     textView.setText(String.valueOf(progressChangedValue) + "L");
                     orderSummary[4] = progressChangedValue + ""; //update selected fuel amount
+                    checkFull.setChecked(false);
                 }
+                SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                current_amount = findViewById(R.id.current_amount);
+                editor.putBoolean("checked", checkFull.isChecked());
+                editor.putString("amount",orderSummary[4]);
+                editor.apply();
                 updateOrderSummary();
-
             }
-
         });
         //end: slide seekbar,and change amount
 
@@ -147,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         selectedUser = sharedPreferences.getInt("selectedUser", selectedUser);
-
-
 
 
         TextView orderView = (TextView) findViewById(R.id.order_summary);
@@ -186,9 +197,6 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        else{
-            //NOP
-        }
 
         // if no user data found automatically switch user to settings page
         if (x.numberOfRecords(getApplicationContext()) < 2){
@@ -208,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
     //check-box to add full fuel
     public void onCheckboxClicked(View view) {
-        SharedPreferences sharedPref =getSharedPreferences("mypref", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         isChecked = ((CheckBox) view).isChecked();
         current_amount = findViewById(R.id.current_amount);
@@ -220,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("checked", checkFull.isChecked());
                 editor.putString("amount",orderSummary[4]);
                 editor.apply();
+                seekBar.setProgress(100);
+
             }else{
                 current_amount.setText("0");
                 orderSummary[4] = "0"; //update selected fuel amount
@@ -227,9 +237,14 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("checked", checkFull.isChecked());
                 editor.putString("amount",orderSummary[4]);
                 editor.apply();
+                seekBar.setProgress(0);
             }
-
-
+            SharedPreferences seekPref = getSharedPreferences(" ", MODE_PRIVATE);
+            SharedPreferences.Editor seekEdit = seekPref.edit();
+            //seekBar.setProgress(seekPref.getInt(SHARED_PREF,0));
+            System.out.println(seekBar.getProgress());
+            seekEdit.putInt(SHARED_PREF, seekBar.getProgress());
+            seekEdit.commit();
         }
 
     }
