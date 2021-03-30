@@ -159,16 +159,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int newSelectedUser = getIntent().getIntExtra("selectedUser",selectedUser); //replace this 0 with value from setting layout
-        //System.out.println("Main activity thinks: " + newSelectedUser);
-
-
 
         if(selectedUser!=newSelectedUser){
             selectedUser = newSelectedUser;
             sharedPreferences.edit().putInt("selectedUser", selectedUser).apply(); //store newly selected user
 
             updateUserInfo();
-
         }
 
         //this block is for setting fuel button opacity
@@ -186,13 +182,12 @@ public class MainActivity extends AppCompatActivity {
         if (!x.databaseExists(this)) {
             try {
                 x.createCSVFile(this);
-                System.out.println("database created");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         else{
-            //System.out.println("database exists");
+            //NOP
         }
 
         // if no user data found automatically switch user to settings page
@@ -313,11 +308,9 @@ public class MainActivity extends AppCompatActivity {
                         String request = fuelType + "," + orderSummary[4] +"#";
                         String response = AppClient.connect(request);
                         if (response.equalsIgnoreCase("error")){
-                            //System.out.println("error message received!!");
                             errorReceived = true;
                         }
                         if (response.equalsIgnoreCase("success")){
-                            //System.out.println("success message received!!");
                             finished = true;
                         }
                     }
@@ -462,7 +455,6 @@ public class MainActivity extends AppCompatActivity {
                 "\nTotal Price:" + "\n" + "£" + orderSummary[5];
 
         orderView.setText(displayString);
-        //System.out.println(displayString);
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         sharedPreferences.edit().putString("orderText", displayString).apply();

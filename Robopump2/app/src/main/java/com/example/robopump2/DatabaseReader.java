@@ -33,8 +33,6 @@ public class DatabaseReader {
                 br.readLine();
             }
             record = br.readLine();
-            System.out.println("Record: " + whichUser + " is: " + record);
-            //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
             user = getUserFromString(record);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -60,7 +58,6 @@ public class DatabaseReader {
             // Adds the user information to the end of an existing file
             pw = c.openFileOutput(fileName, c.MODE_APPEND);
             pw.write(builder.toString().getBytes());
-            System.out.println(builder.toString());
             Toast.makeText(c, "User Added", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -116,7 +113,6 @@ public class DatabaseReader {
             // Creates a new csv file with the correct column names
             pw = c.openFileOutput(fileName, c.MODE_PRIVATE);
             pw.write(builder.toString().getBytes());
-            System.out.println("File made");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

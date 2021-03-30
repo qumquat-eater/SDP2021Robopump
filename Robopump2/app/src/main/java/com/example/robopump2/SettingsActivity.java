@@ -97,9 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(TEXT, summary.getText().toString());
                     editor.apply();
-                    // testRead(); uncomment to test if updating data correctly
                     updateUserInformation(selectedUser);
-                    //testRead();
                 }
             }
         });
@@ -133,7 +131,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void returnToMainPage() {
         Intent intent = new Intent(this, MainActivity.class);
-        //System.out.println("Settings thinks selected user is: " + selectedUser);
         intent.putExtra("selectedUser", selectedUser);
         startActivity(intent);
     }
@@ -242,14 +239,11 @@ public class SettingsActivity extends AppCompatActivity {
 
             sharedPreferences.edit().putInt(key, View.VISIBLE).commit(); //store new visibility
 
-            //System.out.println("Write record selected user: " + selectedUser);
             UserInformation newUser = addUser(); //get inputted user info
             String[] userInfoArray = getStringArrayFromUser(newUser);
             x.writeUserRecord(userInfoArray, this);
 
             switchUser((View) buttons.get(selectedUser-1));
-
-            //testRead();
         }
         // Display error message if max users reached
         else if (numUsers == MAXUSERS){
@@ -284,7 +278,6 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPreferences.edit().putFloat(selectedUser + "Opa", (float) 1).commit(); //store opacity for selected button
         sharedPreferences.edit().putInt("selectedUser", selectedUser).commit(); //store newly selected user
 
-        //System.out.println("Update summary selected user: " + selectedUser);
         updateSummaryFromRecord(selectedUser);
     }
 
@@ -319,29 +312,6 @@ public class SettingsActivity extends AppCompatActivity {
         return userInfoArray;
     }
 
-    // test method to see if can read whole contents of file and print them
-    public void testRead(){
-        FileInputStream pw = null;
-        String info = "";
-        try {
-            pw = openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
-            StringBuffer sb = new StringBuffer();
-            // Reads each line of file and adds it to a string buffer
-            String line;
-            while((line = br.readLine()) != null){
-                sb.append(line + "\n");
-            }
-            //System.out.println("Details recovered: " + sb.toString());
-            //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     // updates the user record on the specified line
     public void updateUserInformation(int whichUser) {
         // First check if passed in arg is within range
@@ -357,31 +327,27 @@ public class SettingsActivity extends AppCompatActivity {
             parseUserInput();
             int count = 0; // to keep track of what reader is on
             String updatedInfo = (name + "," + email + "," + postcode + "," + cardNumber
-                    + "," + expiryDate + "," + CVC );
-            // add newline if all users ahave been added and trying to edit user1/2
-            //if (numUsers == 3 && (whichUser == 1 || whichUser == 2)){
-                //updatedInfo += "\n";
-            //}
+                    + "," + expiryDate + "," + CVC);
             // Loops through all lines in file
             while((line = br.readLine()) != null) {
                 // if reached line we want to update fill in with new string
                 if (count == whichUser) {
                     sb.append(updatedInfo);
                 }
-                // if not line we want just append to sb normally
+                // if not line we want just append to the old line to sb normally
                 else {
-                    sb.append(line + "\n");
+                    sb.append(line);
+                }
+                if (count < numUsers){
+                    sb.append("\n");
                 }
                 count++;
             }
-            System.out.println(sb.toString());
             // Now write whole string with updated line to file
             FileOutputStream fos = null;
             fos = openFileOutput(fileName, MODE_PRIVATE);
             fos.write(sb.toString().getBytes());
             fos.close();
-
-            //System.out.println("Record " + whichUser + " updated");
             Toast.makeText(this, "Updated user:" + whichUser, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

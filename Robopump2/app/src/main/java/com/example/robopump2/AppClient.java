@@ -6,7 +6,6 @@ import java.net.*;
 public class AppClient {
     public static String connect(String request) {
         // Request string must match the format expected by server
-        //String request=rollNumber+","+name+","+gender+"#";
         //"#" acts as a terminator
         try {
             Socket socket = new Socket("10.0.2.2", 5050);
@@ -35,7 +34,7 @@ public class AppClient {
                     response = stringBuffer.toString();
                     System.out.println(response);
                     if (response.equalsIgnoreCase("success") || response.equalsIgnoreCase("error") || response.equalsIgnoreCase("Stop")) {
-                        //System.out.println("breaking");
+                        System.out.println("Closing Connection");
                         break;
                     }
                     stringBuffer.delete(0, stringBuffer.length());
