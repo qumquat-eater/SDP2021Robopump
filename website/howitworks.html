@@ -19,7 +19,7 @@
         <div id="content">
 			       <div id="corps_central">
 
-               <h1><center>How does our System Work?</h1>
+               <h1>How does our System Work?</h1>
                <p>Summarise what your system does, its target market and uses cases here</p>
 
                <h2 id="table-of-contents">Table of Contents</h2>
@@ -44,7 +44,7 @@
 
               </ul>
 
-              <br /> <br /> <hr />
+              <br /> <br /> 
 
               <h2 id="hardware">Hardware</h2>
                 <p> contents needed!!! </p>
@@ -55,7 +55,7 @@
 
 
 
-              <br /> <br /> <hr />
+              <br /> <br /> 
               <h2 id="software">Software</h2>
               <br />
               <h3 id="app">1.App</h3>
@@ -95,15 +95,20 @@
                <li id="function">Functionalities</li>
                <br />
 
-               <img src= "./main_app.png" width=700px height="=900px"/>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page</p>
-                <br /> <br />
+               <img src= "./main_app.png" width=350px height="=400px"/>
+               <img src= "./setting_app.png" width=350px height="=400px"/>
+               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Setting Page</p>
 
-               <img src= "./setting_app.png" width=700px height="=900px"/>
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Setting Page</p>
+               <img src= "./warning.png" width=350px height="=400px"/>
+               <img src= "./fueling.png" width=360px height="=400px"/>
+               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Warning Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Fueling Page</p>
 
+               <img src= "./complete_new2.png" width=370px height="=400px"/>
+               <img src= "./assist_page2.png" width=340px height="=400px"/>
+               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Assistance Page</p>
                 <br /> <br />
 
               <li id="implementation">Implementation</li>
@@ -113,12 +118,12 @@
                  For our app, which we decided to use Android, as it's more popular than iOS and it's easier to work with. Since we created an Android app, we used Android Studio as our development tool as it is free and widely used.<br />
                  The app was coded in Java, as it is a widely supported and is the official language for Android development. Also, all members in software team
                  were experienced with it.<br />
-                 
+
 After we converted the UI design from Figma into Android Studio, we mainly focus on implementing the necessary functionalities (See previous
-                 pictures in Functionality section). We also use SharedPreference clss to store the state of views so that every view does not
+                 pictures in Functionality section). We also use SharedPreference class to store the state of views so that every view does not
                  disappear when switching between pages or closing the app.<br />
                  Next, we implement a database to store users' information. As an abstraction for simplicity, we stored the data as a CSV file on
-                 the device’s internal storage. As an addi- tional benefit, this meant that only our app could access the file, while simultaneously
+                 the device’s internal storage. As an additional benefit, this meant that only our app could access the file, while simultaneously
                  we avoided the need to give the app extra permissions for storage access which would have been required when using external storage.
                  Once the file was created and stored, methods for reading, writing and updating the files were created, which provide infrastructure
                  for any future functionalities such as storing user data on server infrastructure instead of locally.<br />
@@ -142,17 +147,18 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
 
                 <ol>
 
-                 <li>When users open the App for the first time, they start on the setting page and need to create a new user to
-                     access the main page for further operations.</li>
-                 <li>Users input their personal information (with relevant error messages popping up if any input is invalid)
-                     and click on Add User button, a new user will be created.</li>
-                 <li>If users want to change information details of any created users, they can click on that specific user button
-                     first and then re-input new information, followed by clicking on the Update User button. The currently selected users information
-                     will be shown on account summary.</li>
+                 <li>When opening the App for the first time, users will only have access to the Settings page, where users willl be required to create
+                     a new user account to access the Main page for further operations.</li>
+                 <li>Users input personal information (a relevant error mes- sage pops up if any input is in incorrect format), followed by clicking on ’Add User Button’
+                     and a new user will be created.</li>
+                 <li>If users want to change information details in any of their profiles, first click on the user button associated with that profile, then input the user
+                     details, followed by clicking the ’Update User’ button. The modified user information will now show in the ’Account Summary View’.</li>
                  <li>Users click on Return button to access main page.</li>
-                 <li>Users click on one of Fuel Type buttons and select fuel amount  using  either  “Full”  checkbox or amount slider
-                     (depends on how much gas they want), then click on Start Fuelling button to start. A prompt window will pop up for
-                     them to confirm everything is ready.</li>
+                 <li>Users select their desired fuel type by clicking on one of the Fuel Type buttons and select the amount of fuel they need using either the ’Full’ checkbox
+                     (for a full tank of fuel) or inputting their required amount with the slider. Then click on the ’Start Fuelling’ button to start the fuelling process.
+                     A prompt window will pop up for them to confirm everything is ready showing a ’Confirm Fuelling’ button. Please ensure the fuel
+                     hatch is open and engine is off before confirming. This confirmation triggers the robot to move towards the open fuel hatch, unscrew the fuel cap and
+                     begin fuelling the car.</li>
                  <li>After users confirm fuelling, they stay on fuelling page and can see a dynamic 'live' fuel and price counter, much like one found on a real fuel pump.
                      During this process, they can click on the Stop button at any time to stop fueling - although this should only occur during emergencies.</li>
                  <li>When  fueling  is  done,  users are shown a success page confirming that fuelling has been completed and can then click on the Finish button to return main page.
@@ -182,7 +188,7 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
               <br /> <br />
               <br /> <br />
               <br /> <br />
-            <hr />
+           
             <h2 id="whole_system">How It All Fits Together</h2>
               <p> contents needed!!! </p>
 
