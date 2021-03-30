@@ -7,11 +7,14 @@ body {
 <!--
 background: url("./hrp2hyq.png") ;
 -->
+
 background-position: 0 0;
+
 font-family: Verdana, Arial, Helvetica, sans-serif;
-font-size: 18px;
-line-height: 25px;
+font-size: 12px;
+line-height: 18px;
 color: #080032;;
+
 }
 
 img { border: none; }
@@ -27,7 +30,7 @@ width: 800px;
 padding: 10px 0 20px 0;
 }
 #header h1 {
-font-size: 34px;
+font-size: 36px;
 font-weight: 100;
 letter-spacing: -3px;
 padding: 12px 0 5px 10px;
@@ -41,7 +44,8 @@ color: #080032;
 text-decoration: none;
 }
 #header h2 {
-color: #5A569D;
+/*color: #5A569D;*/
+color: #4682B4;
 font-size: 16px;
 font-weight: 100;
 padding: 0 0 0 11px;
@@ -55,8 +59,9 @@ p {
 #menu {
 height: 40px;
 line-height: 40px;
-background: #57626a url(images/menu.jpg) no-repeat;
+/*background: #57626a url(images/menu.jpg) no-repeat;*/
 text-transform: uppercase;
+background-color: #4682B4
 }
 #menu ul {
 padding-left: 10px;
@@ -136,7 +141,7 @@ float: right;
 text-align: justify;
 }
 .right h2 {
-color: #FF4800;
+color: #A9A9A9;
 font-size: 20px;
 letter-spacing: -3px;
 font-weight: 100;
@@ -166,7 +171,7 @@ font-weight: 600;
 
 #footer {
 background: #eee;
-border-top: 3px solid #57626a;
+border-top: 3px solid #4682B4;
 margin-top: 20px;
 text-align: center;
 color: #333;
