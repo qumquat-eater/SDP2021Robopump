@@ -5,7 +5,9 @@
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 
 <body><div id="wrap">	<div id="header">
-    <h1><a href="#">RoboPump - Group 12</a></h1>
+    <h1><a href="#">RoboPump - Group 12</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <img class="avatar-img" src="./AnimeLogosmall.png" alt="Group Name" /></h1>
     	<h2>Pump of the Future </h2>	</div>	<div id="menu">
             <ul>
                 <li class="link" id="welcome.html"   > <a href="./index.html"     >Welcome     </a></li>
@@ -16,35 +18,14 @@
                 <li class="link" id="team.html"      > <a href="./team.html"      >Team        </a></li>
             </ul>
             </div>
+
         <div id="content">
 			       <div id="corps_central">
 
                <h1>How does our System Work?</h1>
                <p>Summarise what your system does, its target market and uses cases here</p>
 
-               <h2 id="table-of-contents">Table of Contents</h2>
-               <ul>
 
-                <li>Hardware</a>
-                <ul>
-                <li>A</li>
-                <li>B</li>
-                <li>C</a></li>
-                </ul>
-                </li>
-
-                <li>Software</a>
-                <ul>
-                <li>App</li>
-                <li>Vision</li>
-                </ul>
-                </li>
-
-                <li>How It All Fits Together</a></li>
-
-              </ul>
-
-              <br /> <br /> 
 
               <h2 id="hardware">Hardware</h2>
                 <p> contents needed!!! </p>
@@ -55,7 +36,7 @@
 
 
 
-              <br /> <br /> 
+              <br /> <br />
               <h2 id="software">Software</h2>
               <br />
               <h3 id="app">1.App</h3>
@@ -95,43 +76,38 @@
                <li id="function">Functionalities</li>
                <br />
 
-               <img src= "./main_app.png" width=350px height="=400px"/>
-               <img src= "./setting_app.png" width=350px height="=400px"/>
-               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Setting Page</p>
+               <img src= "./main_app.png" width=700px height="=900px"/>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page</p>
+                <br /> <br />
 
-               <img src= "./warning.png" width=350px height="=400px"/>
-               <img src= "./fueling.png" width=360px height="=400px"/>
-               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Warning Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Fueling Page</p>
+               <img src= "./setting_app.png" width=700px height="=900px"/>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Setting Page</p>
 
-               <img src= "./complete_new2.png" width=370px height="=400px"/>
-               <img src= "./assist_page2.png" width=340px height="=400px"/>
-               <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Assistance Page</p>
                 <br /> <br />
 
               <li id="implementation">Implementation</li>
 
               <p>To begin the development of our app, we focused on the UI design. For the UI mock-up design tool, we used an application called Figma,
-                 which allowed us to simulate button functionality.<br />
-                 For our app, which we decided to use Android, as it's more popular than iOS and it's easier to work with. Since we created an Android app, we used Android Studio as our development tool as it is free and widely used.<br />
+                 which allowed us to simulate button functionality.
+                 For our app, which we decided to use Android, as it's more popular than iOS and it's easier to work with. Since we created an Android app, we used Android Studio as our development tool as it is free and widely used.
                  The app was coded in Java, as it is a widely supported and is the official language for Android development. Also, all members in software team
-                 were experienced with it.<br />
+                 were experienced with it.<br /><br>
 
 After we converted the UI design from Figma into Android Studio, we mainly focus on implementing the necessary functionalities (See previous
-                 pictures in Functionality section). We also use SharedPreference class to store the state of views so that every view does not
-                 disappear when switching between pages or closing the app.<br />
+                 pictures in Functionality section). We also use SharedPreference clss to store the state of views so that every view does not
+                 disappear when switching between pages or closing the app.<br /><br>
                  Next, we implement a database to store users' information. As an abstraction for simplicity, we stored the data as a CSV file on
-                 the device’s internal storage. As an additional benefit, this meant that only our app could access the file, while simultaneously
+                 the device’s internal storage. As an addi- tional benefit, this meant that only our app could access the file, while simultaneously
                  we avoided the need to give the app extra permissions for storage access which would have been required when using external storage.
                  Once the file was created and stored, methods for reading, writing and updating the files were created, which provide infrastructure
-                 for any future functionalities such as storing user data on server infrastructure instead of locally.<br />
+                 for any future functionalities such as storing user data on server infrastructure instead of locally.<br /><br>
                  Then, we start working on establishing communication between app and the robot in webots, and we finally decide to do this through a
                  web server, as it is more reliable and feasible than other methods, such as a Bluetooth connection. Since our project is fully simulated,
                  we adapted a Java script to create a local web server, which can be started via a terminal command. The app and robot will act as clients
                  to this server and will be able to send and receive requests to and from the server. In the future, this server could be run remotely
-                 rather than locally.<br />
+                 rather than locally.<br /><br>
                  Finally, for the app we made a new class called AppClient, which uses Java’s Socket class to connect to a server and then handle the sending and
                  receiving of requests from the server. To integrate this client class into the functionality of the app, we made it so that, upon the
                  user confirming they want to start fuelling with the OK button, the App sends a request to the server containing the type and amount of fuel.
@@ -147,18 +123,17 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
 
                 <ol>
 
-                 <li>When opening the App for the first time, users will only have access to the Settings page, where users willl be required to create
-                     a new user account to access the Main page for further operations.</li>
-                 <li>Users input personal information (a relevant error mes- sage pops up if any input is in incorrect format), followed by clicking on ’Add User Button’
-                     and a new user will be created.</li>
-                 <li>If users want to change information details in any of their profiles, first click on the user button associated with that profile, then input the user
-                     details, followed by clicking the ’Update User’ button. The modified user information will now show in the ’Account Summary View’.</li>
+                 <li>When users open the App for the first time, they start on the setting page and need to create a new user to
+                     access the main page for further operations.</li>
+                 <li>Users input their personal information (with relevant error messages popping up if any input is invalid)
+                     and click on Add User button, a new user will be created.</li>
+                 <li>If users want to change information details of any created users, they can click on that specific user button
+                     first and then re-input new information, followed by clicking on the Update User button. The currently selected users information
+                     will be shown on account summary.</li>
                  <li>Users click on Return button to access main page.</li>
-                 <li>Users select their desired fuel type by clicking on one of the Fuel Type buttons and select the amount of fuel they need using either the ’Full’ checkbox
-                     (for a full tank of fuel) or inputting their required amount with the slider. Then click on the ’Start Fuelling’ button to start the fuelling process.
-                     A prompt window will pop up for them to confirm everything is ready showing a ’Confirm Fuelling’ button. Please ensure the fuel
-                     hatch is open and engine is off before confirming. This confirmation triggers the robot to move towards the open fuel hatch, unscrew the fuel cap and
-                     begin fuelling the car.</li>
+                 <li>Users click on one of Fuel Type buttons and select fuel amount  using  either  “Full”  checkbox or amount slider
+                     (depends on how much gas they want), then click on Start Fuelling button to start. A prompt window will pop up for
+                     them to confirm everything is ready.</li>
                  <li>After users confirm fuelling, they stay on fuelling page and can see a dynamic 'live' fuel and price counter, much like one found on a real fuel pump.
                      During this process, they can click on the Stop button at any time to stop fueling - although this should only occur during emergencies.</li>
                  <li>When  fueling  is  done,  users are shown a success page confirming that fuelling has been completed and can then click on the Finish button to return main page.
@@ -179,8 +154,14 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
 
 
             <br /> <br />
-            <h3 id="vison">2.vision</h3>
-              <p>add contents!!!!</p>
+            <h3 id="vison">2.Vision</h3>
+              <p>Our powerful vision algorithm can detect the fuel cap located in the open fuel hatch of a car. To create this algorithm,
+                 we first trained a pre-trained Tensorflow Object Detection API version 1 model on a variety of images to detect the open fuel
+                  hatch of the car and then retrieves us its bounding box coordinates. Using these coordinates, we then built an algorithm using
+                  the OpenCV library to recognize the fuel cap located within the bounding box and retrieves us the coordinates of the centre
+                   of the fuel cap as well as angles at which the fuel cap is titled. The robot using the coordinates and angles, as well as
+                    by using its laser distance sensor to measure the distance between the car and robot, it can move towards the car,
+                    unscrew the fuel cap and fuel the car.</p>
 
 
 
@@ -188,7 +169,7 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
               <br /> <br />
               <br /> <br />
               <br /> <br />
-           
+
             <h2 id="whole_system">How It All Fits Together</h2>
               <p> contents needed!!! </p>
 
@@ -199,12 +180,6 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
                <br /> <br />
                <br /> <br />
                <br /> <br />
-               <h2><a href="#Methods">Methods</a></h2>
-			         <p>Explain the key methods of how you got your system to work      </p>
-
-			         <h2><a href="#Diagrams">System Diagrams</a></h2>
-			         <p>You should include images (where available) which illustrate the methods you used, how the system works etc.
-			            This can include system diagrams, images of your system in certain states etc.</p>
 
             </div>
 
