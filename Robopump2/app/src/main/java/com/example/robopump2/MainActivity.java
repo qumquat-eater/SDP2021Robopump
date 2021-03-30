@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView current_amount;
     private CheckBox checkFull;
     boolean isChecked = false;
+    DatabaseReader x = new DatabaseReader();
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
@@ -180,8 +182,20 @@ public class MainActivity extends AppCompatActivity {
             fuelButtons.get(i).setAlpha(sharedPreferences.getFloat((String) fuelButtons.get(i).getText(),1));
         }
 
+        //on app creation, create the database if not already created
+        if (!x.databaseExists(this)) {
+            try {
+                x.createCSVFile(this);
+                System.out.println("database created");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            //System.out.println("database exists");
+        }
+
         // if no user data found automatically switch user to settings page
-        DatabaseReader x = new DatabaseReader();
         if (x.numberOfRecords(getApplicationContext()) < 2){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);

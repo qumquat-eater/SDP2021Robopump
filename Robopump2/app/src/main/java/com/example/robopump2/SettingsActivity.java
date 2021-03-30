@@ -54,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
     private int numUsers = 0; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
     final String fileName = "userInfo.csv";
+    DatabaseReader x = new DatabaseReader();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberOfRecords() < 1) {
+                if (x.numberOfRecords(getApplicationContext()) < 1) {
                     Toast.makeText(getApplicationContext(), "Must create a user", Toast.LENGTH_SHORT).show();
                 } else {
                     returnToMainPage();
@@ -75,31 +76,16 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //on app creation, create the database if not already created
-        if (!databaseExists()) {
-            try {
-                createCSVFile();
-                //System.out.println("database created");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            //System.out.println("database exists");
-        }
-
-
         //commit changes and output changes into Account Summary
-
         commitButton = (Button) findViewById(R.id.commit_changes);
         summary = (TextView) findViewById(R.id.account_summary);
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberOfRecords() < 1) {
+                if (x.numberOfRecords(getApplicationContext()) < 1) {
                     Toast.makeText(getApplicationContext(), "Must create a user first", Toast.LENGTH_SHORT).show();
                 }
-                if (checkUserInfoValid() && numberOfRecords() >= 1){
+                if (checkUserInfoValid() && x.numberOfRecords(getApplicationContext()) >= 1){
                     summary.setText("Account Summary:"+ "\n" +
                             "\nName: "+ name+ "\n" +
                             "\nEmail: "+email+ "\n" +
@@ -256,10 +242,10 @@ public class SettingsActivity extends AppCompatActivity {
 
             sharedPreferences.edit().putInt(key, View.VISIBLE).commit(); //store new visibility
 
-            System.out.println("Write record selected user: " + selectedUser);
+            //System.out.println("Write record selected user: " + selectedUser);
             UserInformation newUser = addUser(); //get inputted user info
             String[] userInfoArray = getStringArrayFromUser(newUser);
-            writeUserRecord(userInfoArray);
+            x.writeUserRecord(userInfoArray, this);
 
             switchUser((View) buttons.get(selectedUser-1));
 
@@ -298,7 +284,7 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPreferences.edit().putFloat(selectedUser + "Opa", (float) 1).commit(); //store opacity for selected button
         sharedPreferences.edit().putInt("selectedUser", selectedUser).commit(); //store newly selected user
 
-        System.out.println("Update summary selected user: " + selectedUser);
+        //System.out.println("Update summary selected user: " + selectedUser);
         updateSummaryFromRecord(selectedUser);
     }
 
@@ -319,42 +305,6 @@ public class SettingsActivity extends AppCompatActivity {
         return userTexts;
     }
 
-    // Creates a new csv file with the appropriate column names
-    public void createCSVFile() throws IOException {
-        FileOutputStream pw = null;
-        // Build String with column names
-        StringBuilder builder = new StringBuilder();
-        String columnNamesList = "Name, Email, Postcode, Card Number, Card Expiry Date, Card CVC";
-        builder.append(columnNamesList);
-        try {
-            // Creates a new csv file with the correct column names
-            pw = openFileOutput(fileName, MODE_PRIVATE);
-            pw.write(builder.toString().getBytes());
-            //System.out.println("File made");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (pw != null) {
-                try {
-                    pw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // Parses a String into a UserInformation object
-    public UserInformation getUserFromString(String userDetails){
-        String[] row = userDetails.split(",");
-        CardInformation card = new CardInformation(row[3], row[4], row[5]);
-        UserInformation user = new UserInformation(row[0], row[1], row[2], card);
-        return user;
-    }
-
     public String[] getStringArrayFromUser(UserInformation user) {
         // Parse UserInformation to a String array
         String name = user.getUserName();
@@ -367,64 +317,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         String[] userInfoArray = new String[] {name, email, postcode, cardNo, expiryDate, CVC};
         return userInfoArray;
-    }
-
-    //adds a record to the last line of the csv file
-    public void writeUserRecord(String[] userInfo) throws IOException {
-        FileOutputStream pw = null;
-        // Builds string from userInfo array
-        StringBuilder builder = new StringBuilder();
-        builder.append("\n");
-        for (String str: userInfo) {
-            builder.append(str + ",");
-        }
-        //this line removes the unnecessary final comma of the last record
-        builder.setLength(builder.length() - 1);
-        try {
-            // Adds the user information to the end of an existing file
-            pw = openFileOutput(fileName, MODE_APPEND);
-            pw.write(builder.toString().getBytes());
-            System.out.println(builder.toString());
-            Toast.makeText(this, "User Added", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (pw != null) {
-                try {
-                    pw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // returns the number of lines(records) in the csv file
-    // NOTE: this also counts the first line which are the column titles
-    public int numberOfRecords() {
-        FileInputStream pw = null;
-        int count =0;
-        try {
-            pw = openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
-            // Reads each line and increments counter while line is not null
-            String line;
-            while((line = br.readLine()) != null){
-                count++;
-            }
-            //to account for first row
-            count--;
-            //Toast.makeText(this, "Number of users: " + count, Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return count;
     }
 
     // test method to see if can read whole contents of file and print them
@@ -450,47 +342,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    // returns the user record which is on the line whichRecord
-    public UserInformation readUserRecord(int whichUser) {
-        UserInformation user = null;
-        // First check if passed in arg is within range
-        if (numberOfRecords() < whichUser){
-            Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
-            return user;
-        }
-        FileInputStream pw = null;
-        String record = "";
-        try {
-            pw = openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
-            // Loops through all previous lines before requested line
-            for(int i = 0; i < whichUser; i++) {
-                br.readLine();
-            }
-            record = br.readLine();
-            System.out.println("Record: " + selectedUser + " is: " + record);
-            //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
-            user = getUserFromString(record);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    // checks if database has already been created
-    // this possibly replaces need for numberOfRecords?
-    public boolean databaseExists(){
-        File f = new File(getFilesDir(), fileName);
-        return f.exists();
-    }
-
     // updates the user record on the specified line
     public void updateUserInformation(int whichUser) {
         // First check if passed in arg is within range
-        if (numberOfRecords() < whichUser){
+        if (x.numberOfRecords(this) < whichUser){
             Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
         }
         FileInputStream pw = null;
@@ -504,9 +359,9 @@ public class SettingsActivity extends AppCompatActivity {
             String updatedInfo = (name + "," + email + "," + postcode + "," + cardNumber
                     + "," + expiryDate + "," + CVC );
             // add newline if all users ahave been added and trying to edit user1/2
-            if (numUsers == 3 && (whichUser == 1 || whichUser == 2)){
-                updatedInfo += "\n";
-            }
+            //if (numUsers == 3 && (whichUser == 1 || whichUser == 2)){
+                //updatedInfo += "\n";
+            //}
             // Loops through all lines in file
             while((line = br.readLine()) != null) {
                 // if reached line we want to update fill in with new string
@@ -536,7 +391,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     private void updateSummaryFromRecord(int id){
-        UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
+        UserInformation user = x.readUserRecord(id, this); // the user record which is on the line of selected user in CSV file
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);
         summary.setText("Account Summary:"+ "\n" +
