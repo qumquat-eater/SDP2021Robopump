@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
-        current_amount.setText(sharedPref.getString("amount",""));
+        current_amount.setText(sharedPref.getString("amount","") + "L");
         isChecked = sharedPref.getBoolean("checked", false);
         if(isChecked){
             checkFull.setChecked(true);
