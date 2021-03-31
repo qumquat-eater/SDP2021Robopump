@@ -23,12 +23,27 @@
 			       <div id="corps_central">
 
                <h1>How does our System Work?</h1>
-               <p>Summarise what your system does, its target market and uses cases here</p>
-
+<br><br>
 
 
               <h2 id="hardware">Hardware</h2>
-                <p> contents needed!!! </p>
+                <p> Our robot works through the actuation of various rotary and linear motors, and use of laser and bumper
+                   sensors for distance and tactile sensing, respectively. In order to get the robotic arm to move towards the fuel
+                   cap, two types of inverse kinematic techniques are employed: numeric approach by use of the inverse Jacobian matrix
+                    with proportional – derivative control on the first 3 rotary actuators to move the fourth joint into an approximate
+                    but accurate offset from the target, and geometric approach by use of trigonometry to determine the exact angles and
+                     offsets at which the rest of the rotary actuators and links should be set. Once these angles and offsets have
+                     been determined, the robot moves the gripper towards the robot such that it is facing the fuel cap directly,
+                     and ready to move towards it to begin unscrewing. The robot must also know about the rotation of the fuel cap
+                      bar and the angle at which the fuel cap is tilted into the car so that it can move into the correct position
+                       and orientation. Next, the robot moves the gripper into the fuel cap until a bumper sensor detects a collision
+                  with the fuel cap, at which point it closes the gripper until another bumper sensor detects a collision with the fuel
+                  cap bar. Now, the gripper can rotate to unscrew and bring the nozzle into position to begin fuelling the vehicle.
+                 The reverse of these actions is carried out to bring the robot into its initial state. The pictures below show the robot
+                 in action and at its resting position. <br><br>
+                  <img src= "./12.png" width=350px />
+                  <img src= "./4.png" width=350px />
+               </p>
 
 
 
@@ -162,6 +177,10 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
                    of the fuel cap as well as angles at which the fuel cap is titled. The robot using the coordinates and angles, as well as
                     by using its laser distance sensor to measure the distance between the car and robot, it can move towards the car,
                     unscrew the fuel cap and fuel the car.</p>
+                    <p>
+                  <img src= "./output_image.png" width=200px height="=200px"/>
+                <img src= "./web_vision2.png" width=212px height="=200px"/>
+              <img src= "./web_vision3.png" width=222px height="=200px"/></p>
 
 
 
