@@ -5,7 +5,10 @@
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 
 <body><div id="wrap">	<div id="header">
-    <h1><a href="#">RoboPump - Group 12</a></h1>
+<h1>  <a href="#">RoboPump - Group 12</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <img class="avatar-img" src="./AnimeLogosmall.png" alt="Group Name" /></h1>
+
     		<h2>Pump of the Future</h2> </div>	<div id="menu">
             <ul>
                 <li class="link" id="welcome.html"   > <a href="./index.html"     >Welcome     </a></li>
@@ -22,11 +25,12 @@
 
                     <h1>How Well Does Our System Perform?</h1><p></p>
 
-                    <h2><a href="#tests">Evaluation Tests - Robot Control</a></h2>
+                    <h2>Evaluation Tests - Robot Control</h2>
 
                   <p>All the tests we created were based off testing and safety specification we created at the begining of the project, this way
-                  we knew what had to be tested, when it needed to be tested and how many tests would be sufficient. <br>
-                  <br>The first main robot control feature which was tested was the robotic arm touching a set target representing a fuel hole. To test this
+                  we knew what had to be tested, when it needed to be tested and how many tests would be sufficient. <br><br>The first main robot control feature which was tested was the
+                  robotic arm touching a set target representing a fuel hole, as shown below. <br><br><img class="avatar-img" src="./fuelcap.png" alt="Group Name" />
+                  <br><br>To test this
               we first found the limits of where the target could be placed so that the robot could reach it and where it was not able to. Once we found these,
             we created tests to check cooordinates of the target within the limits (normal), just inside the limits (limits) and outside the limits (exceptions). The number
            of tests and results are displayed below:</p>
@@ -65,10 +69,12 @@
            </tbody>
            </table> </div>
 
-
            <p>As shown, all the tests performed as expected. The limits and normal tests all successfully touched the target fuel cap and the
-             exceptions all failed causing
-           the robot to move out of control.</p>
+             exceptions all failed.</p>
+
+
+
+
 
            <p>The next feature to be tested was the integration of the robot control with the vision algorithms. We wanted to find
              the exact points where our system would fail as the fuel hatch would be out of reach. To do this we ran 55 tests checking the width
@@ -117,7 +123,7 @@
                    were testing the connection via the app, not the vision algorithm) and they all passed successfully. </p>
 
 
-                   <h2><a href="#usertests">Evaluation Tests - Vision</a></h2>
+                   <h2>Evaluation Tests - Vision</h2>
 
                    <p>The basic goal of computer vision is to recognise the cap so that the robot
                      could open it and continue with the fuelling actions. By considering the safety
@@ -131,8 +137,9 @@
                      and now, we have introduced a new algorithm which can reach all the goals that mentioned
                      above. The following images are showing the comparative results of detecting a same group
                      of model with two different algorithms:<br><br>
-                     <img src="./oldAlg.jpeg" width="350">
-                     <img src="./newAlg.jpeg" width="350">
+                     <img class="avatar-img" src="./oldAlg.jpg" width= 350 alt="Group Name" />
+                     <img class="avatar-img" src="./newAlg.jpg" width= 350 alt="Group Name" />
+                     <br>
                      <br>
                      We used the same set of models to give these results. From the images above, we can find
                      that the detection result with the new algorithm is much better than the one with the old algorithm.
@@ -168,9 +175,9 @@
                     The robot has a high possibility to stop detection when there is nothing to be detected.</p>
                     </p>
 
-                    <h2><a href="#usertests">Evaluation Tests - User Testing</a></h2>
+                    <h2>Evaluation Tests - User Testing</h2>
         			<p>In terms of user testing, we carried out a user survey to evaluate the efficiency of our app, the app is how the user interacts
-              with the system. The questions in our survey 
+              with the system. The questions in our survey
             ranged from checking if the app was easy to navigate around, checking if there were any unclear function on the app and if there were any
           possible improvements they suggested. Most of the results from the user survey which was given to 20+ possible end users of varied age, sex and physical ability,
           found the app easy to nagivate and all around very well presented but some of out main
@@ -187,7 +194,7 @@
         </ul>
 
         </p>
-        			<h2><a href="#Diagrams">Main Areas of Improvement</a></h2>
+        			<h2>Main Areas of Improvement</h2>
 
               <p>In terms of hardware, the main feature we which implemented as a result of the testing was adding the safety feature which
               only accepted coordinates which were inside the limits. This feature would check if the coordinates detected by the vision algorithm
