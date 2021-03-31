@@ -4,11 +4,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
 
-<body><div id="wrap">	<div id="header">
+
+<body><div id="wrap">        <div id="header">
     <h1><a href="#">RoboPump - Group 12</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        <img class="avatar-img" src="./AnimeLogosmall.png" alt="Group Name" /></h1>
-    	<h2>Pump of the Future </h2>	</div>	<div id="menu">
+            <h2>Pump of the Future </h2>        </div>        <div id="menu">
             <ul>
                 <li class="link" id="welcome.html"   > <a href="./index.html"     >Welcome     </a></li>
                 <li class="link" id="system.html"    > <a href="./system.html"    >System      </a></li>
@@ -19,11 +20,15 @@
             </ul>
             </div>
 
+
         <div id="content">
-			       <div id="corps_central">
+                               <div id="corps_central">
+
 
                <h1>How does our System Work?</h1>
 <br><br>
+
+
 
 
               <h2 id="hardware">Hardware</h2>
@@ -51,92 +56,74 @@
 
 
 
+
+
+
+
+
+
+
               <br /> <br />
               <h2 id="software">Software</h2>
               <br />
               <h3 id="app">1.App</h3>
                 <li id="app_goal">Goal</li>
                 <p>Our system's Android app is designed to let users start the robot which will fuel their car at the gas station.
-                When users arrive at the gas pump, they can activate our gas station assistant robot to fuel up
-                their car from inside of their vehicle via our Robopump app.</p>
+               </p>
+
 
                 <li id="app_layout">UI Design</li>
-                <p>The layout of the app consists of six fragments: Main Page, Setting Page, Warning Page, Fuelling Page,
-                  Complete Page and Assistance Page.</p>
+                <p>The layout of the app consists of 3 main pages: Main Page, Setting Page, Fuelling Page</p>
                 <div>
                 <center />
                 <img src= "./main_new.png" width=200px height="=200px"/>
                 <img src= "./setting_new.png" width=200px height="=200px"/>
-                <img src= "./warning_app.png" width=200px height="=200px"/>
+                <img src= "./fueling_app.png" width=200px height="=200px"/>
                 </div>
+
 
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Main Page
                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Setting Page
-                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Warning Page</p>
-
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fuelling Page</p>
                 <br /> <br />
-                <div>
-                <center />
-                <img src= "./fueling_app.png" width=200px height="=200px"/>
-                <img src= "./complete_new.png" width=203px height="=200px"/>
-                <img src= "./assist_page.png" width=202px height="=200px"/>
-                </div>
 
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fueling Page
-                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Complete Page
-                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assistance Page</p>
-
-                <br /> <br />
 
                <li id="function">Functionalities</li>
                <br />
+
 
                <img src= "./main_app.png" width=700px height="=900px"/>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page</p>
                 <br /> <br />
 
+
                <img src= "./setting_app.png" width=700px height="=900px"/>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Setting Page</p>
 
+
                 <br /> <br />
+
 
               <li id="implementation">Implementation</li>
 
-              <p>To begin the development of our app, we focused on the UI design. For the UI mock-up design tool, we used an application called Figma,
-                 which allowed us to simulate button functionality.
-                 For our app, which we decided to use Android, as it's more popular than iOS and it's easier to work with. Since we created an Android app, we used Android Studio as our development tool as it is free and widely used.
-                 The app was coded in Java, as it is a widely supported and is the official language for Android development. Also, all members in software team
-                 were experienced with it.<br /><br>
 
-After we converted the UI design from Figma into Android Studio, we mainly focus on implementing the necessary functionalities (See previous
-                 pictures in Functionality section). We also use SharedPreference clss to store the state of views so that every view does not
-                 disappear when switching between pages or closing the app.<br /><br>
-                 Next, we implement a database to store users' information. As an abstraction for simplicity, we stored the data as a CSV file on
-                 the device’s internal storage. As an addi- tional benefit, this meant that only our app could access the file, while simultaneously
-                 we avoided the need to give the app extra permissions for storage access which would have been required when using external storage.
-                 Once the file was created and stored, methods for reading, writing and updating the files were created, which provide infrastructure
-                 for any future functionalities such as storing user data on server infrastructure instead of locally.<br /><br>
-                 Then, we start working on establishing communication between app and the robot in webots, and we finally decide to do this through a
-                 web server, as it is more reliable and feasible than other methods, such as a Bluetooth connection. Since our project is fully simulated,
-                 we adapted a Java script to create a local web server, which can be started via a terminal command. The app and robot will act as clients
-                 to this server and will be able to send and receive requests to and from the server. In the future, this server could be run remotely
-                 rather than locally.<br /><br>
-                 Finally, for the app we made a new class called AppClient, which uses Java’s Socket class to connect to a server and then handle the sending and
-                 receiving of requests from the server. To integrate this client class into the functionality of the app, we made it so that, upon the
-                 user confirming they want to start fuelling with the OK button, the App sends a request to the server containing the type and amount of fuel.
-                 This is then received by the robot in Webots which triggers the robot to begin the fuelling of the car.
-                 From the Webots perspective we used the same method for connecting to the server except it was coded in Python as opposed to Java like in the app.
-                 The robot will first connect to the server and then start listening for requests which will be forwarded from the app by the server. Once the robot
-                 has finished fuelling the car it can then send a success message to the app though the server.
-              </p>
-              <br />
+              <p>Our app is created for Android phones, as they are more popular than iOS and Android is easier to work with. This meant we used Android Studio as our development tool as it is free and widely used. The app was coded in Java, as it is widely supported and is very suitable for Android development.
+Some of the things we did to create our app included: using Figma to create our initial UI design,  using SharedPreferences to store states of objects so they don’t change when switching pages, using Java’s Handler and Runnable classes to create the live fuel and price counter.
+A major function of the app is the ability to have multiple users. The data for these users is stored on a database locally on the device as a CSV file. Once the databse was created and stored, methods for reading, writing and updating the files were created, which provide infrastructure for any future functionalities such as storing user data on server infrastructure instead of locally.<br /><br>
+</p>
+<br />
+
+
+
 
                <li id="app_usage">Usage</li>
                <br />
 
+
                 <ol>
+
 
                  <li>When users open the App for the first time, they start on the setting page and need to create a new user to
                      access the main page for further operations.</li>
@@ -155,16 +142,22 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
                      Optionally, they could select the checkbox to receive an email receipt.</li>
                  <li>If users have any problems, they can click on Assistance button to ask for human help.</li>
 
+
                </ol>
             <br /> <br />
 
+
            <li id="video">Video</li>
+
 
             <div>
             <center/>
               <p>A video to introduce how to use our App</p>
             <video src="./app_video.mp4" width="600px"height="600px" controls></video>
             </div>
+
+
+
 
 
 
@@ -185,32 +178,37 @@ After we converted the UI design from Figma into Android Studio, we mainly focus
 
 
 
+
+
+
+
               <br /> <br />
               <br /> <br />
               <br /> <br />
+
 
             <h2 id="whole_system">How It All Fits Together</h2>
               <p> The RoboPump app and robot are integrated through a web server which they are both connected to. 
-		      This allows them to exchange and react to a wide variety of messages such as: instructions for the 
-		      amount of fuel, a fuelling successful message and an emergency stop fuelling message. In this way, 
-		      the app can inform users about the operations of the robot, leading to a more comfortable experience
-		      where the user is aware of the processes being carried out. Additionally, the messages are sent using
-		      the TCP messaging protocol which is known for its reliability leading to the smoothest experience possible
-		      with the least dropped messages.  </p>
-
-
-
-
-
+                      This allows them to exchange and react to a wide variety of messages such as: instructions for the 
+                      amount of fuel, a fuelling successful message and an emergency stop fuelling message. In this way, 
+                      the app can inform users about the operations of the robot, leading to a more comfortable experience
+                      where the user is aware of the processes being carried out. Additionally, the messages are sent using
+                      the TCP messaging protocol which is known for its reliability leading to the smoothest experience possible
+                      with the least dropped messages.  </p>
                <br /> <br />
                <br /> <br />
                <br /> <br />
+
 
             </div>
 
 
 
 
+
+
+
+
             <div style="clear: both;"> </div>
-            <div id="footer">Page design based on a <a href="http://www.free-css-templates.com/">Free CSS Template</a></div>	</div></div>
+            <div id="footer">Page design based on a <a href="http://www.free-css-templates.com/">Free CSS Template</a></div>        </div></div>
 </body></html>
