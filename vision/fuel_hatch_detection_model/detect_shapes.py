@@ -127,7 +127,8 @@ def find_shape(img):
 		# if slant_angle == 0:
 		# 	left_high = True
 		# 	if Xmin_y-Ymin < Xmax_y- Ymin
-		actualContour = [[[Xmin,Xmin_y]],[[Ymin_x,Ymin]],[[Xmax,Xmax_y]],[[Ymax_x,Ymax]]]
+		# actualContour = [[[Xmin,Xmin_y]],[[Ymin_x,Ymin]],[[Xmax,Xmax_y]],[[Ymax_x,Ymax]]]
+		actualContour = [[Xmin,Xmin_y],[Ymin_x,Ymin],[Xmax,Xmax_y],[Ymax_x,Ymax]]
 		print("Vertice (pixel):",actualContour)
 		print("Centroid (pixel):(",cX,",",cY,")")
 		angle = np.arctan((Xmin_y-Ymin)/(Xmax-Ymax_x))
@@ -148,10 +149,10 @@ def find_shape(img):
 		c = c.astype("float")
 		c *= rat
 		c = c.astype("int")
-		cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
+		cv2.drawContours(img, [c], -1, (0, 255,  ), 2)
 
-		cv2.putText(img, shape, (cX, cY), cv2.FONT_HERSHEY_SIMPLEX,
-			0.5, (255, 255, 255), 2)
+		cv2.putText(img, shape, (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 
+		2, (255, 255, 255), 2)
 
 		# show the output image
 		cv2.imwrite("output/fuel_cap.jpg", img)
@@ -160,6 +161,14 @@ def find_shape(img):
 			detect_circle = 1
 			print("Found the cap!")
 			return actualContour, (cX,cY), width, angle
+	
+
+		# try: 
+		# 	if shape != "circle":
+		# 		raise CapNotFoundError
+		#     break
+		# except CapNotFoundError:
+		# 	print("This value is too small, try again!")
 
 # # construct the argument parse and parse the arguments
 # ap = argparse.ArgumentParser()

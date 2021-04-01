@@ -300,7 +300,7 @@ def visualize_boxes_and_labels_on_image_array(
   for i in range(boxes.shape[0]):
     if max_boxes_to_draw == len(box_to_color_map):
       break
-    if scores is None or scores[i] == max:
+    if scores is None or (scores[i] == max and scores[i]>min_score_thresh):
       box = tuple(boxes[i].tolist())
       if instance_masks is not None:
         box_to_instance_masks_map[box] = instance_masks[i]
@@ -426,7 +426,7 @@ def return_coordinates(
   for i in range(boxes.shape[0]):
     if max_boxes_to_draw == len(box_to_color_map):
       break
-    if scores is None or scores[i] == max:
+    if scores is None or (scores[i] == max and scores[i]>min_score_thresh):
       box = tuple(boxes[i].tolist())
       if instance_masks is not None:
         box_to_instance_masks_map[box] = instance_masks[i]
@@ -504,7 +504,7 @@ def run(image_path):
             category_index,
             use_normalized_coordinates=True,
             line_thickness=8,
-            min_score_thresh=0.50)
+            min_score_thresh=0.75)
 
         coordinates = return_coordinates(
                     image_np,
@@ -514,15 +514,26 @@ def run(image_path):
                     category_index,
                     use_normalized_coordinates=True,
                     line_thickness=8,
-                    min_score_thresh=0.50)
+                    min_score_thresh=0.75)
         #Need to edit path to output coordinates directory
         img_coords = []
-        if(len(coordinates)!=0):
+        try:
             with open("output/output_coordinates.txt","w") as file:
                 for item in coordinates[0]:
                     img_coords.append(item)
                     file.write("%s\n" % item)
-          #Need to edit path to output images directory
+            # img_coords[0] =  img_coords[0]-40
+            # img_coords[1] =  img_coords[1]-40
+            # img_coords[2] =  img_coords[2]+40
+            # img_coords[3] =  img_coords[3]+40
+
+            im= Image.fromarray(image_np)
+            new_im = im.resize((1000, 1000))
+            new_im.save("output/output_image.png")
+            return image,image_np,img_coords
+        except IndexError:
+            return None
+        #Need to edit path to output images directory
         # plt.figure(figsize=IMAGE_SIZE)
         # plt.xticks([])
         # plt.yticks([])
@@ -530,11 +541,10 @@ def run(image_path):
         # plt.savefig("output/output_image.png")  # create an outputs folder for the images to be saved
 
 
-        im= Image.fromarray(image_np)
-        new_im = im.resize((1000, 1000))
-        new_im.save("output/output_image.png")
+        # im= Image.fromarray(image_np)
+        # new_im = im.resize((1000, 1000))
+        # new_im.save("output/output_image.png")
 
-        return image_np,img_coords
 
 
 
