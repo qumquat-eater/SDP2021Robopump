@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         fuelPrices.put("petrol",(double) 2);
         fuelPrices.put("premium petrol",(double) 4);
         fuelPrices.put("diesel",(double) 3);
-        fuelPrices.put("premium diesel",(double) 6);
+        fuelPrices.put("premium diesel",(double) 5);
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         selectedUser = sharedPreferences.getInt("selectedUser", selectedUser);
@@ -351,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
                             popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.INVISIBLE);
                             popupWindow.getContentView().findViewById(R.id.finish_button).setVisibility(View.VISIBLE);
                             popupWindow.getContentView().findViewById(R.id.checkbox_email).setVisibility(View.VISIBLE);
-                            Toast.makeText(getApplicationContext(), "Fuelling Complete", Toast.LENGTH_LONG).show();
                         }
                         if (errorReceived){
                             // showing error message and hide other info
@@ -399,9 +398,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // reset all booleans now that fuelling complete and close popup
-                finished = false;
-                forceStop = false;
-                errorReceived = false;
                 popupWindow.dismiss();
             }
         });
