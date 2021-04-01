@@ -1,5 +1,6 @@
 package com.example.robopump2;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -7,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.ScrollingMovementMethod;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView current_amount;
     private CheckBox checkFull;
     boolean isChecked = false;
+    DatabaseReader x = new DatabaseReader();
     private String[]  orderSummary  = {"","","","","",""}; //holds name, email, card number, fuel type, fuel amount, total cost
     Hashtable<String, Double> fuelPrices = new Hashtable<String,Double>(); //Holds fuel prices with fuel name as the key
     private int selectedUser = 0; //holds the currently selected user profile
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean forceStop = false;
     private boolean finished = false;
     public static final String SHARED_PREF = "shared";
+    //private static final String PROGRESS = "SEEKBAR";
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (fuelChosen&&seekBar.getProgress()!=0 || fuelChosen&&checkFull.isChecked()) {
+                    errorReceived = false;
+                    forceStop = false;
+                    finished = false;
                     showPopupWindow(v);
                     SharedPreferences prefs = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
                     prefs.edit().putBoolean("fuelChosen",fuelChosen).apply();
@@ -89,12 +98,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please choose fuel type and amount first", Toast.LENGTH_SHORT).show();
 
                 }
-
             }
         });
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
         fuelChosen= prefs.getBoolean("fuelChosen", false);
-
 
         //assistance button onClick
         assitanceButton.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +112,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        SharedPreferences seekPref = getSharedPreferences(" ", MODE_PRIVATE);
+        SharedPreferences.Editor seekEdit = seekPref.edit();
+        seekBar.setProgress(seekPref.getInt(SHARED_PREF,0));
         //begin: slide seekbar, and change amount
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             int progressChangedValue = 0;
@@ -121,17 +130,25 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                seekEdit.putInt(SHARED_PREF, seekBar.getProgress());
+                seekEdit.commit();
                 if (progressChangedValue>99){
                     textView.setText(String.valueOf("Full"));
                     orderSummary[4] = "Full"; //update selected fuel amount
+                    checkFull.setChecked(true);
                 }else {
                     textView.setText(String.valueOf(progressChangedValue) + "L");
                     orderSummary[4] = progressChangedValue + ""; //update selected fuel amount
+                    checkFull.setChecked(false);
                 }
+                SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                current_amount = findViewById(R.id.current_amount);
+                editor.putBoolean("checked", checkFull.isChecked());
+                editor.putString("amount",orderSummary[4]);
+                editor.apply();
                 updateOrderSummary();
-
             }
-
         });
         //end: slide seekbar,and change amount
 
@@ -139,12 +156,10 @@ public class MainActivity extends AppCompatActivity {
         fuelPrices.put("petrol",(double) 2);
         fuelPrices.put("premium petrol",(double) 4);
         fuelPrices.put("diesel",(double) 3);
-        fuelPrices.put("premium diesel",(double) 6);
+        fuelPrices.put("premium diesel",(double) 5);
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         selectedUser = sharedPreferences.getInt("selectedUser", selectedUser);
-
-
 
 
         TextView orderView = (TextView) findViewById(R.id.order_summary);
@@ -155,16 +170,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int newSelectedUser = getIntent().getIntExtra("selectedUser",selectedUser); //replace this 0 with value from setting layout
-        System.out.println("Main activity thinks: " + newSelectedUser);
-
-
 
         if(selectedUser!=newSelectedUser){
             selectedUser = newSelectedUser;
             sharedPreferences.edit().putInt("selectedUser", selectedUser).apply(); //store newly selected user
 
             updateUserInfo();
-
         }
 
         //this block is for setting fuel button opacity
@@ -178,15 +189,23 @@ public class MainActivity extends AppCompatActivity {
             fuelButtons.get(i).setAlpha(sharedPreferences.getFloat((String) fuelButtons.get(i).getText(),1));
         }
 
+        //on app creation, create the database if not already created
+        if (!x.databaseExists(this)) {
+            try {
+                x.createCSVFile(this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         // if no user data found automatically switch user to settings page
-        DatabaseReader x = new DatabaseReader();
         if (x.numberOfRecords(getApplicationContext()) < 2){
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         }
 
         SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
-        current_amount.setText(sharedPref.getString("amount",""));
+        current_amount.setText(sharedPref.getString("amount","") + "L");
         isChecked = sharedPref.getBoolean("checked", false);
         if(isChecked){
             checkFull.setChecked(true);
@@ -195,9 +214,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
- //check-box to add full fuel
+    //check-box to add full fuel
     public void onCheckboxClicked(View view) {
-        SharedPreferences sharedPref =getSharedPreferences("mypref", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("mypref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         isChecked = ((CheckBox) view).isChecked();
         current_amount = findViewById(R.id.current_amount);
@@ -209,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("checked", checkFull.isChecked());
                 editor.putString("amount",orderSummary[4]);
                 editor.apply();
+                seekBar.setProgress(100);
+
             }else{
                 current_amount.setText("0");
                 orderSummary[4] = "0"; //update selected fuel amount
@@ -216,9 +237,14 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("checked", checkFull.isChecked());
                 editor.putString("amount",orderSummary[4]);
                 editor.apply();
+                seekBar.setProgress(0);
             }
-
-
+            SharedPreferences seekPref = getSharedPreferences(" ", MODE_PRIVATE);
+            SharedPreferences.Editor seekEdit = seekPref.edit();
+            //seekBar.setProgress(seekPref.getInt(SHARED_PREF,0));
+            System.out.println(seekBar.getProgress());
+            seekEdit.putInt(SHARED_PREF, seekBar.getProgress());
+            seekEdit.commit();
         }
 
     }
@@ -240,14 +266,13 @@ public class MainActivity extends AppCompatActivity {
         fuelButtons.add((Button) findViewById(R.id.petrol));
 
         for(int i=0; i<fuelButtons.size();i++){ //fade all fuel buttons
-            fuelButtons.get(i).setAlpha((float) 0.4);
+            fuelButtons.get(i).setAlpha((float) 0.2);
             sharedPreferences.edit().putFloat((String) fuelButtons.get(i).getText(),(float) 0.4).apply();
         }
 
         clickedButton.setAlpha(1); //highlight clicked fuel button
         sharedPreferences.edit().putFloat((String) clickedButton.getText(),(float) 1).apply();
 
-        //TODO: Actually have it change fuel selection
         orderSummary[3] = ((String) clickedButton.getText()).toLowerCase(); //update fuel selection
         updateOrderSummary();
         fuelChosen = true;
@@ -282,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
                 popupWindow.getContentView().findViewById(R.id.liveFuel).setVisibility(View.VISIBLE);
                 popupWindow.getContentView().findViewById(R.id.ok_button).setVisibility(View.INVISIBLE);
                 popupWindow.getContentView().findViewById(R.id.popup_message).setVisibility(View.INVISIBLE);
+                popupWindow.getContentView().findViewById(R.id.warning_sign).setVisibility(View.INVISIBLE);
                 popupWindow.getContentView().findViewById(R.id.fuelling_message).setVisibility(View.VISIBLE);
                 popupWindow.getContentView().findViewById(R.id.livePrice).setVisibility(View.VISIBLE);
                 popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.VISIBLE);
@@ -296,15 +322,10 @@ public class MainActivity extends AppCompatActivity {
                         String fuelType = orderSummary[3];
                         String request = fuelType + "," + orderSummary[4] +"#";
                         String response = AppClient.connect(request);
-                        //
-                        // THIS PART NOT WORKING FOR SOME REASON CANT DETECT ERROR MESSAGE
-                        //
-                        if (response.equals("error")){
-                            System.out.println("error message received!!");
+                        if (response.equalsIgnoreCase("error")){
                             errorReceived = true;
                         }
-                        if (response.equals("success")){
-                            System.out.println("success message received!!");
+                        if (response.equalsIgnoreCase("success")){
                             finished = true;
                         }
                     }
@@ -324,20 +345,27 @@ public class MainActivity extends AppCompatActivity {
                         }
                         // change message to complete fuelling when server message success received or when counter reaches fuel amount chosen
                         if (finished || (!orderSummary[4].equals("Full") && count == Integer.parseInt(orderSummary[4]))) {
-                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Fuelling Complete");
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.liveFuel)).setText("Fuelling Complete!");
                             ((TextView) popupWindow.getContentView().findViewById(R.id.fuelling_message)).setText("Click finish to complete the fuelling process");
                             popupWindow.getContentView().findViewById(R.id.cancel_button1).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.INVISIBLE);
                             popupWindow.getContentView().findViewById(R.id.finish_button).setVisibility(View.VISIBLE);
-                            Toast.makeText(getApplicationContext(), "Fuelling Complete", Toast.LENGTH_LONG).show();
+                            popupWindow.getContentView().findViewById(R.id.checkbox_email).setVisibility(View.VISIBLE);
                         }
                         if (errorReceived){
-                            // do something - maybe print message saying error
+                            // showing error message and hide other info
+                            popupWindow.getContentView().findViewById(R.id.liveFuel).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.popup_message).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.fuelling_message).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.livePrice).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.liveType).setVisibility(View.INVISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.error_message).setVisibility(View.VISIBLE);
+                            popupWindow.getContentView().findViewById(R.id.warning_sign).setVisibility(View.VISIBLE);
+                            ((TextView) popupWindow.getContentView().findViewById(R.id.cancel_button1)).setText("Abort");
                         }
                     }
                 };
                 h.postDelayed(r, 1000); // one second in ms
-                //h.removeCallbacksAndMessages(null);
-                //popupWindow.dismiss();
             }
         });
 
@@ -357,7 +385,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
                 forceStop = true;
-                //popupWindow.dismiss();
+                Toast.makeText(getApplicationContext(), "Fuelling Stopped!", Toast.LENGTH_SHORT).show();
+                forceStop = false;
+                popupWindow.dismiss();
             }
         });
 
@@ -368,9 +398,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // reset all booleans now that fuelling complete and close popup
-                finished = false;
-                forceStop = false;
-                errorReceived = false;
                 popupWindow.dismiss();
             }
         });
@@ -406,7 +433,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUserInfo(){ //method for updating the user info fields of the orderSummary array
-        //SettingsActivity x = new SettingsActivity();
         DatabaseReader x = new DatabaseReader();
         UserInformation newUser = x.readUserRecord(selectedUser,getApplicationContext());
         orderSummary[0] = newUser.getUserName();
@@ -421,20 +447,9 @@ public class MainActivity extends AppCompatActivity {
             newPrice = fuelPrices.get(orderSummary[3]) * Double.parseDouble(orderSummary[4]); //calculate new price from fuel type and fuel amount
         }
 
-
-
         orderSummary[5] = newPrice +"";
 
         TextView orderView = (TextView) findViewById(R.id.order_summary);
-
-        String cardNum = orderSummary[2];
-
-        if(cardNum.length()>=4){
-            cardNum = cardNum.substring(0,4);
-            for(int i=0; i < orderSummary[2].length()-4;i++){
-                cardNum = cardNum +"*";
-            }
-        }
 
         String fuelAmount;
         if(orderSummary[4].equals("Full")){
@@ -446,20 +461,16 @@ public class MainActivity extends AppCompatActivity {
 
         String displayString = "ORDER SUMMARY:\n\n" +
                 "User: " + "\n" + orderSummary[0] + "\n" +
-                "\nCard Number: " + "\n" + cardNum + "\n" +
                 "\nFuel Type: " + "\n" + orderSummary[3] + "\n" +
-                "\nFuel Amount: " + fuelAmount + "\n" +
-                "\nTotal Price:" + "£" + orderSummary[5];
+                "\nFuel Amount: " + "\n" + fuelAmount + "\n" +
+                "\nTotal Price:" + "\n" + "£" + orderSummary[5];
 
         orderView.setText(displayString);
-        System.out.println(displayString);
 
         SharedPreferences sharedPreferences = getSharedPreferences("orderDetails", MODE_PRIVATE);
         sharedPreferences.edit().putString("orderText", displayString).apply();
         for(int i=0; i<orderSummary.length; i++){
             sharedPreferences.edit().putString(i+"", orderSummary[i]).apply(); //store the details
         }
-
     }
-
 }

@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Robopump2</string>
-    <string name="popup_message">Make Sure Your Engine is Off and the Fuel Hatch is Unlocked</string>
+    <string name="popup_message">Make Sure Your Engine is Off and the Fuel Hatch is Unlocked!</string>
     <string name="assistance_popup_message">Calling for assistance, please wait...</string>
     <string name="fuelling_popup_message">Fuelling in progress, please wait...</string>
     <string name="fuellingCancel_popup_message">To manually stop fuelling process, press the button below</string>
+    <string name="error_message">The robot encountered an error, please wait for assisstance or abort fuelling.</string>
 </resources>

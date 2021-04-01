@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<title>Title</title>
+<meta http-equiv="Content-Language" content="English" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+
+
+<body><div id="wrap">        <div id="header">
+    <h1><a href="#">RoboPump - Group 12</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <img class="avatar-img" src="./AnimeLogosmall.png" alt="Group Name" /></h1>
+            <h2>Pump of the Future </h2>        </div>        <div id="menu">
+            <ul>
+                <li class="link" id="welcome.html"   > <a href="./index.html"     >Welcome     </a></li>
+                <li class="link" id="system.html"    > <a href="./system.html"    >System      </a></li>
+                <li class="link" id="howitworks.html"> <a href="./howitworks.html">How it works</a></li>
+                <li class="link" id="evaluation.html"> <a href="./evaluation.html">Evaluation  </a></li>
+                <li class="link" id="budget.html"    > <a href="./budget.html"    >Budget      </a></li>
+                <li class="link" id="team.html"      > <a href="./team.html"      >Team        </a></li>
+            </ul>
+            </div>
+
+
+        <div id="content">
+                               <div id="corps_central">
+
+
+               <h1>How does our System Work?</h1>
+<br><br>
+
+
+
+
+              <h2 id="hardware">Hardware</h2>
+                <p> Our robot works through the actuation of various rotary and linear motors, and use of laser and bumper
+                   sensors for distance and tactile sensing, respectively. In order to get the robotic arm to move towards the fuel
+                   cap, two types of inverse kinematic techniques are employed: numeric approach by use of the inverse Jacobian matrix
+                    with proportional – derivative control on the first 3 rotary actuators to move the fourth joint into an approximate
+                    but accurate offset from the target, and geometric approach by use of trigonometry to determine the exact angles and
+                     offsets at which the rest of the rotary actuators and links should be set. Once these angles and offsets have
+                     been determined, the robot moves the gripper towards the robot such that it is facing the fuel cap directly,
+                     and ready to move towards it to begin unscrewing. The robot must also know about the rotation of the fuel cap
+                      bar and the angle at which the fuel cap is tilted into the car so that it can move into the correct position
+                       and orientation. Next, the robot moves the gripper into the fuel cap until a bumper sensor detects a collision
+                  with the fuel cap, at which point it closes the gripper until another bumper sensor detects a collision with the fuel
+                  cap bar. Now, the gripper can rotate to unscrew and bring the nozzle into position to begin fuelling the vehicle.
+                 The reverse of these actions is carried out to bring the robot into its initial state. The pictures below show the robot
+                 in action and at its resting position. <br><br>
+                  <img src= "./12.png" width=350px />
+                  <img src= "./4.png" width=350px />
+               </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <br /> <br />
+              <h2 id="software">Software</h2>
+              <br />
+              <h3 id="app">1.App</h3>
+                <li id="app_goal">Goal</li>
+                <p>Our system's Android app is designed to let users start the robot which will fuel their car at the gas station.
+               </p>
+
+
+                <li id="app_layout">UI Design</li>
+                <p>The layout of the app consists of 3 main pages: Main Page, Setting Page, Fuelling Page</p>
+                <div>
+                <center />
+                <img src= "./main_new.png" width=200px height="=200px"/>
+                <img src= "./setting_new.png" width=200px height="=200px"/>
+                <img src= "./fueling_app.png" width=200px height="=200px"/>
+                </div>
+
+
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Main Page
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Setting Page
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fuelling Page</p>
+                <br /> <br />
+
+
+               <li id="function">Functionalities</li>
+               <br />
+
+
+               <img src= "./main_app.png" width=700px height="=900px"/>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Main Page</p>
+                <br /> <br />
+
+
+               <img src= "./setting_app.png" width=700px height="=900px"/>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Functionality of Setting Page</p>
+
+
+                <br /> <br />
+
+
+              <li id="implementation">Implementation</li>
+
+
+              <p>Our app is created for Android phones, as they are more popular than iOS and Android is easier to work with. This meant we used Android Studio as our development tool as it is free and widely used. The app was coded in Java, as it is widely supported and is very suitable for Android development.
+Some of the things we did to create our app included: using Figma to create our initial UI design,  using SharedPreferences to store states of objects so they don’t change when switching pages, using Java’s Handler and Runnable classes to create the live fuel and price counter.
+A major function of the app is the ability to have multiple users. The data for these users is stored on a database locally on the device as a CSV file. Once the databse was created and stored, methods for reading, writing and updating the files were created, which provide infrastructure for any future functionalities such as storing user data on server infrastructure instead of locally.<br /><br>
+</p>
+<br />
+
+
+
+
+               <li id="app_usage">Usage</li>
+               <br />
+
+
+                <ol>
+
+
+                 <li>When users open the App for the first time, they start on the setting page and need to create a new user to
+                     access the main page for further operations.</li>
+                 <li>Users input their personal information (with relevant error messages popping up if any input is invalid)
+                     and click on Add User button, a new user will be created.</li>
+                 <li>If users want to change information details of any created users, they can click on that specific user button
+                     first and then re-input new information, followed by clicking on the Update User button. The currently selected users information
+                     will be shown on account summary.</li>
+                 <li>Users click on Return button to access main page.</li>
+                 <li>Users click on one of Fuel Type buttons and select fuel amount  using  either  “Full”  checkbox or amount slider
+                     (depends on how much gas they want), then click on Start Fuelling button to start. A prompt window will pop up for
+                     them to confirm everything is ready.</li>
+                 <li>After users confirm fuelling, they stay on fuelling page and can see a dynamic 'live' fuel and price counter, much like one found on a real fuel pump.
+                     During this process, they can click on the Stop button at any time to stop fueling - although this should only occur during emergencies.</li>
+                 <li>When  fueling  is  done,  users are shown a success page confirming that fuelling has been completed and can then click on the Finish button to return main page.
+                     Optionally, they could select the checkbox to receive an email receipt.</li>
+                 <li>If users have any problems, they can click on Assistance button to ask for human help.</li>
+
+
+               </ol>
+            <br /> <br />
+
+
+           <li id="video">Video</li>
+
+
+            <div>
+            <center/>
+              <p>A video to introduce how to use our App</p>
+            <video src="./app_video.mp4" width="600px"height="600px" controls></video>
+            </div>
+
+
+
+
+
+
+            <br /> <br />
+            <h3 id="vison">2.Vision</h3>
+              <p>Our powerful vision algorithm can detect the fuel cap located in the open fuel hatch of a car. 
+                  To create this algorithm, we first trained a pre-trained Tensorflow Object Detection API version 
+                  1 model on a variety of images to detect the open fuel hatch of the car and then retrieves us its bounding 
+                  box coordinates. We then crop the image containing only the bounding box. Using this cropped image, we then 
+                  \use an algorithm we built using the OpenCV library and hough ellipsis transformation, provided by the sci-kit 
+                  image package, to recognize the fuel cap edges located in the cropped image. This returns us the coordinates of 
+                  the centre of the fuel cap as well as angles at which the fuel cap is titled. The robot using the coordinates
+                  and angles, as well as by using its laser distance sensor to measure the distance between the car and robot,
+                  it can move towards the car, unscrew the fuel cap and fuel the car. The image on the left shows the robot recognizing 
+                  the open fuel hatch, enclosed by the bounding box, with 100% accuracy using Tensorflow Object Detection API and he middle 
+                    image shows the cropped image containing only the bounding box section. The picture on the right is detecting the 
+                  fuel cap edges with OpenCV and hough ellipsis transformation.</p>
+                    <p>
+                  <img src= "./output_image.png" width=200px height="=200px"/>
+               <img src= "./web_vision3.png" width=222px height="=200px"/>
+              <img src= "./web_vision2.png" width=212px height="=200px"/></p>
+
+
+
+
+
+
+
+
+              <br /> <br />
+              <br /> <br />
+              <br /> <br />
+
+
+            <h2 id="whole_system">How It All Fits Together</h2>
+              <p> The RoboPump app and robot are integrated through a web server which they are both connected to. 
+                      This allows them to exchange and react to a wide variety of messages such as: instructions for the 
+                      amount of fuel, a fuelling successful message and an emergency stop fuelling message. In this way, 
+                      the app can inform users about the operations of the robot, leading to a more comfortable experience
+                      where the user is aware of the processes being carried out. Additionally, the messages are sent using
+                      the TCP messaging protocol which is known for its reliability leading to the smoothest experience possible
+                      with the least dropped messages.  </p>
+               <br /> <br />
+               <br /> <br />
+               <br /> <br />
+
+
+            </div>
+
+
+
+
+
+
+
+
+            <div style="clear: both;"> </div>
+            <div id="footer">Page design based on a <a href="http://www.free-css-templates.com/">Free CSS Template</a></div>        </div></div>
+</body></html>

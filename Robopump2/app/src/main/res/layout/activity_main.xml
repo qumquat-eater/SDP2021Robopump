@@ -10,12 +10,12 @@
     <TextView
         android:id="@+id/order_summary"
         android:layout_width="182dp"
-        android:layout_height="330dp"
+        android:layout_height="305dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="132dp"
         android:background="@drawable/order_summary"
         android:scrollbars="vertical"
         android:text="     Order Summary:"
@@ -84,6 +84,7 @@
         android:onClick="switchFuel"
         android:text="DIESEL"
         android:textColor="@color/white"
+        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toTopOf="@+id/name" />
 
@@ -155,7 +156,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/start_fuelling"
         android:scaleType="fitStart"
         android:src="@drawable/ic_gas_station"
@@ -249,11 +250,13 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="24dp"
+        android:scaleX="1.5"
+        android:scaleY="1.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo2" />

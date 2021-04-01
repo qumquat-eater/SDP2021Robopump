@@ -4,6 +4,7 @@ package com.example.robopump2;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -27,11 +28,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageButton returnButton;
@@ -47,12 +54,13 @@ public class SettingsActivity extends AppCompatActivity {
     private int numUsers = 0; //holds the number of saved profiles. Will eventually have to be read from device.
     final private int MAXUSERS = 3; //holds the max number of users supported by the app
     final String fileName = "userInfo.csv";
+    DatabaseReader x = new DatabaseReader();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_page);
-        //scroll account summary
+          //scroll account summary
 //        TextView accountSum = findViewById(R.id.account_summary);
 //        accountSum.setMovementMethod(new ScrollingMovementMethod());
 
@@ -60,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberOfRecords() < 1) {
+                if (x.numberOfRecords(getApplicationContext()) < 1) {
                     Toast.makeText(getApplicationContext(), "Must create a user", Toast.LENGTH_SHORT).show();
                 } else {
                     returnToMainPage();
@@ -68,36 +76,20 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        //on app creation, create the database if not already created
-        if (!databaseExists()) {
-            try {
-                createCSVFile();
-                System.out.println("database created");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            System.out.println("database exists");
-        }
-
-
         //commit changes and output changes into Account Summary
-
         commitButton = (Button) findViewById(R.id.commit_changes);
         summary = (TextView) findViewById(R.id.account_summary);
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (numberOfRecords() < 1) {
+                if (x.numberOfRecords(getApplicationContext()) < 1) {
                     Toast.makeText(getApplicationContext(), "Must create a user first", Toast.LENGTH_SHORT).show();
                 }
-                if (checkUserInfoValid() && numberOfRecords() >= 1){
-//                    updateUserInformation(selectedUser);
-                    summary.setText("Account Summary:"+
-                            "\nName: "+name+
-                            "\nEmail: "+email+
-                            "\nPostcode: "+postcode+
+                if (checkUserInfoValid() && x.numberOfRecords(getApplicationContext()) >= 1){
+                    summary.setText("Account Summary:"+ "\n" +
+                            "\nName: "+ name+ "\n" +
+                            "\nEmail: "+email+ "\n" +
+                            "\nPostcode: "+postcode+ "\n" +
                             "\nCard Number: "+cardNumber);
 
                     //save values in viewText and prevent values disappearing once users click back to main page
@@ -105,11 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(TEXT, summary.getText().toString());
                     editor.apply();
-                    // testRead(); uncomment to test if updating data correctly
                     updateUserInformation(selectedUser);
-                    //writeUserRecord(userInfo);
-                    testRead();
-
                 }
             }
         });
@@ -143,7 +131,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void returnToMainPage() {
         Intent intent = new Intent(this, MainActivity.class);
-        System.out.println("Settings thinks selected user is: " + selectedUser);
         intent.putExtra("selectedUser", selectedUser);
         startActivity(intent);
     }
@@ -168,6 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     // Method to validate user input
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean checkUserInfoValid() {
         parseUserInput();
 
@@ -179,6 +167,16 @@ public class SettingsActivity extends AppCompatActivity {
         if (email.length() == 0 || email.length() > 40){
             emailInput.requestFocus();
             emailInput.setError("Email must be between 1 and 40 characters");
+            return false;
+        }
+        else if(email.contains(",")) {
+            emailInput.requestFocus();
+            emailInput.setError("Email must not contain any commas");
+            return false;
+        }
+        else if(!email.contains("@")) {
+            emailInput.requestFocus();
+            emailInput.setError("Email must contain @");
             return false;
         }
         if (postcode.length() == 0 || postcode.length() > 40){
@@ -195,6 +193,12 @@ public class SettingsActivity extends AppCompatActivity {
         if (expiryDate.length() == 0 || !expiryDate.matches("(?:0[1-9]|1[0-2])/[0-9]{2}")){
             expiryInput.requestFocus();
             expiryInput.setError("Expiry date must be in the form MM/YY");
+            return false;
+        }
+
+        else if (YearMonth.now(ZoneId.systemDefault()).isAfter(YearMonth.parse(expiryDate, DateTimeFormatter.ofPattern("MM/uu")))) {
+            expiryInput.requestFocus();
+            expiryInput.setError("Card is expired, please enter a valid expiry date");
             return false;
         }
         if (CVC.length() != 3) {
@@ -235,14 +239,11 @@ public class SettingsActivity extends AppCompatActivity {
 
             sharedPreferences.edit().putInt(key, View.VISIBLE).commit(); //store new visibility
 
-            //THE TWO FUNCTIONS BELOW ARE NECESSARY BUT COMMENTED OUT DUE TO BUG CAUSED BY addUser() MEANING IF ANY FIELDS ARE EMPTY THE APP CRASHES
             UserInformation newUser = addUser(); //get inputted user info
             String[] userInfoArray = getStringArrayFromUser(newUser);
-            writeUserRecord(userInfoArray);
+            x.writeUserRecord(userInfoArray, this);
 
             switchUser((View) buttons.get(selectedUser-1));
-
-            testRead();
         }
         // Display error message if max users reached
         else if (numUsers == MAXUSERS){
@@ -258,8 +259,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 
-        //update selected user here
-
+        // Update selected user here
         for(int i=0; i<buttons.size();i++){ //set opacity low for all
             buttons.get(i).setAlpha((float) 0.4);
             texts.get(i).setAlpha((float) 0.4);
@@ -272,13 +272,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         }
 
-
         clickedButton.setAlpha((float) 1);
         texts.get(selectedUser-1).setAlpha((float) 1);
 
         sharedPreferences.edit().putFloat(selectedUser + "Opa", (float) 1).commit(); //store opacity for selected button
         sharedPreferences.edit().putInt("selectedUser", selectedUser).commit(); //store newly selected user
-
 
         updateSummaryFromRecord(selectedUser);
     }
@@ -300,42 +298,6 @@ public class SettingsActivity extends AppCompatActivity {
         return userTexts;
     }
 
-    // Creates a new csv file with the appropriate column names
-    public void createCSVFile() throws IOException {
-        FileOutputStream pw = null;
-        // Build String with column names
-        StringBuilder builder = new StringBuilder();
-        String columnNamesList = "Name, Email, Postcode, Card Number, Card Expiry Date, Card CVC";
-        builder.append(columnNamesList);
-        try {
-            // Creates a new csv file with the correct column names
-            pw = openFileOutput(fileName, MODE_PRIVATE);
-            pw.write(builder.toString().getBytes());
-            System.out.println("File made");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (pw != null) {
-                try {
-                    pw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    // Parses a String into a UserInformation object
-    public UserInformation getUserFromString(String userDetails){
-        String[] row = userDetails.split(",");
-        CardInformation card = new CardInformation(row[3], row[4], row[5]);
-        UserInformation user = new UserInformation(row[0], row[1], row[2], card);
-        return user;
-    }
-
     public String[] getStringArrayFromUser(UserInformation user) {
         // Parse UserInformation to a String array
         String name = user.getUserName();
@@ -350,146 +312,10 @@ public class SettingsActivity extends AppCompatActivity {
         return userInfoArray;
     }
 
-    //adds a record to the last line of the csv file
-    public void writeUserRecord(String[] userInfo) throws IOException {
-        FileOutputStream pw = null;
-        // Builds string from userInfo array
-        StringBuilder builder = new StringBuilder();
-        builder.append("\n");
-        for (String str: userInfo) {
-            builder.append(str + ",");
-        }
-        //this line removes the unnecessary final comma of the last record
-        builder.setLength(builder.length() - 1);
-        try {
-            // Adds the user information to the end of an existing file
-            pw = openFileOutput(fileName, MODE_APPEND);
-            pw.write(builder.toString().getBytes());
-            Toast.makeText(this, "User Added", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (pw != null) {
-                try {
-                    pw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        //////TESTING//////////
-        /* numberOfRecords(); //to see if length of csv file correct
-        //testRead(); // see if reading info correctly
-        if (selectedUser == 1){
-            UserInformation u1 = readUserRecord(1);
-            for (String s: getStringArrayFromUser(u1)){
-                System.out.println(s);
-            }
-        }if (selectedUser == 2){
-            UserInformation u2 = readUserRecord(2);
-            for (String s: getStringArrayFromUser(u2)){
-                System.out.println(s);
-            }
-        }if (selectedUser == 3){
-            UserInformation u3 = readUserRecord(3);
-            for (String s: getStringArrayFromUser(u3)){
-                System.out.println(s);
-            }
-        }*/
-    }
-
-    // returns the number of lines(records) in the csv file
-    // NOTE: this also counts the first line which are the column titles
-    public int numberOfRecords() {
-        FileInputStream pw = null;
-        int count =0;
-        try {
-            pw = openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
-            // Reads each line and increments counter while line is not null
-            String line;
-            while((line = br.readLine()) != null){
-                count++;
-            }
-            //to account for first row
-            count--;
-            Toast.makeText(this, "Number of users: " + count, Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return count;
-    }
-
-    // test method to see if can read whole contents of file and print them
-    public void testRead(){
-        FileInputStream pw = null;
-        String info = "";
-        try {
-            pw = openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
-            StringBuffer sb = new StringBuffer();
-            // Reads each line of file and adds it to a string buffer
-            String line;
-            while((line = br.readLine()) != null){
-                sb.append(line + "\n");
-            }
-            System.out.println("Details recovered: " + sb.toString());
-            //Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // returns the user record which is on the line whichRecord
-    public UserInformation readUserRecord(int whichUser) {
-        UserInformation user = null;
-        // First check if passed in arg is within range
-        if (numberOfRecords() < whichUser){
-            Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
-            return user;
-        }
-        FileInputStream pw = null;
-        String record = "";
-        try {
-            pw = openFileInput(fileName);
-            BufferedReader br = new BufferedReader(new InputStreamReader(pw));
-            // Loops through all previous lines before requested line
-            for(int i = 0; i < whichUser; i++) {
-                br.readLine();
-            }
-            record = br.readLine();
-            System.out.println("Record: " + selectedUser + " is: " + record);
-            Toast.makeText(this, "User info read", Toast.LENGTH_SHORT).show();
-            user = getUserFromString(record);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return user;
-    }
-
-    // checks if database has already been created
-    // this possibly replaces need for numberOfRecords?
-    public boolean databaseExists(){
-        File f = new File(getFilesDir(), fileName);
-        return f.exists();
-    }
-
     // updates the user record on the specified line
     public void updateUserInformation(int whichUser) {
         // First check if passed in arg is within range
-        if (numberOfRecords() < whichUser){
+        if (x.numberOfRecords(this) < whichUser){
             Toast.makeText(this, "That user doesn't exist", Toast.LENGTH_SHORT).show();
         }
         FileInputStream pw = null;
@@ -501,28 +327,27 @@ public class SettingsActivity extends AppCompatActivity {
             parseUserInput();
             int count = 0; // to keep track of what reader is on
             String updatedInfo = (name + "," + email + "," + postcode + "," + cardNumber
-                    + "," + expiryDate + "," + CVC + "\n");
+                    + "," + expiryDate + "," + CVC);
             // Loops through all lines in file
             while((line = br.readLine()) != null) {
                 // if reached line we want to update fill in with new string
                 if (count == whichUser) {
                     sb.append(updatedInfo);
                 }
-                // if not line we want just append to sb normally
+                // if not line we want just append to the old line to sb normally
                 else {
-                    sb.append(line + "\n");
+                    sb.append(line);
+                }
+                if (count < numUsers){
+                    sb.append("\n");
                 }
                 count++;
-
             }
-            //System.out.println(sb.toString());
             // Now write whole string with updated line to file
             FileOutputStream fos = null;
             fos = openFileOutput(fileName, MODE_PRIVATE);
             fos.write(sb.toString().getBytes());
             fos.close();
-
-            //System.out.println("Record " + whichUser + " updated");
             Toast.makeText(this, "Updated user:" + whichUser, Toast.LENGTH_LONG).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -532,13 +357,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     private void updateSummaryFromRecord(int id){
-        UserInformation user = readUserRecord(id); // the user record which is on the line of selected user in CSV file
+        UserInformation user = x.readUserRecord(id, this); // the user record which is on the line of selected user in CSV file
         String[] userInfo = getStringArrayFromUser(user); // Parse UserInformation to a String array
         summary = (TextView) findViewById(R.id.account_summary);
-        summary.setText("Account Summary:"+
-                "\nName: "+userInfo[0]+
-                "\nEmail: "+userInfo[1]+
-                "\nPostcode: "+userInfo[2]+
+        summary.setText("Account Summary:"+ "\n" +
+                "\nName: "+userInfo[0]+ "\n" +
+                "\nEmail: "+userInfo[1]+ "\n" +
+                "\nPostcode: "+userInfo[2]+ "\n" +
                 "\nCard Number: "+userInfo[3]);
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
