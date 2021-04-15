@@ -1,4 +1,5 @@
 import sympy as sym
+from joint_rotator_test import getLinkLengths
 
 def transMatrix():
     theta, d, a, alpha = sym.symbols('theta, d, a, alpha')
@@ -33,7 +34,7 @@ def TM12():
     theta, d, a, alpha = sym.symbols('theta, d, a, alpha')
     matrix = matrix.subs(theta, theta1)
     matrix = matrix.subs(d, 0)
-    matrix = matrix.subs(a, 0.189999)
+    matrix = matrix.subs(a, getLinkLengths()[0])
     matrix = matrix.subs(alpha, 0)
     return matrix
 
@@ -41,13 +42,9 @@ def TM23():
     matrix = transMatrix()
     theta2 = sym.symbols('theta2')
     theta, d, a, alpha = sym.symbols('theta, d, a, alpha')
-<<<<<<< HEAD
-    matrix = matrix.subs(theta, theta2 - sym.pi/2)
-=======
     matrix = matrix.subs(theta, theta2)
->>>>>>> 9c593a7e1e9e205e2acb7b44c78db8ad92ee9a62
     matrix = matrix.subs(d, 0)
-    matrix = matrix.subs(a, 0.139)
+    matrix = matrix.subs(a, getLinkLengths()[1])
     matrix = matrix.subs(alpha, 0)
     return matrix
 
@@ -65,8 +62,4 @@ def FKWB():
     x = final_col.row(0)
     y = final_col.row(1)
     z = final_col.row(2)
-<<<<<<< HEAD
     return sym.Array([x, y, z])
-=======
-    return sym.Array([x, y, z])
->>>>>>> 9c593a7e1e9e205e2acb7b44c78db8ad92ee9a62
