@@ -4,4 +4,4 @@ Our system, RoboPump, was designed as an assistive robot to help users with the 
 
 Here is also a short demo video!
 
-[Robo Pump] (https://youtu.be/J2MpruzZd5U)
+[Robo Pump](https://youtu.be/J2MpruzZd5U)
